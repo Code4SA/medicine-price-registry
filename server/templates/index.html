@@ -1,12 +1,18 @@
 {% extends "base.html" %}
 {% block body %}
-    <div class="jumbotron">
-        <h1>South African Medicine Prices</h1>
-        <p>
-        <ul>
-            <li><a href="/product/">Product Price</a></li>
-            <li><a href="/generic/">Product Alternatives</a></li>
-        </ul>
-        </p>
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+        <h1>South Africa Medicine Price Registry</h1>
+        </div>
+        <div class="col-lg-2"></div>
     </div>
+
+    <div class="row">
+        <div class="col-lg-2"></div>
+        <div class="col-lg-8">
+              <input type="text" class="form-control" placeholder="Type in a medicine">
+        </div><!-- /.col-lg-6 -->
+        <div class="col-lg-2"></div>
+    </div><!-- /.row -->
 {% endblock %}
