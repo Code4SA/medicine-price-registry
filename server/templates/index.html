@@ -1,4 +1,12 @@
-{% extends 'admin/master.html' %}
+{% extends "base.html" %}
 {% block body %}
-    Hello World from MyView!
+    <div class="jumbotron">
+        <h1>South African Medicine Prices</h1>
+        <p>
+        <ul>
+            <li><a href="/product/">Product Price</a></li>
+            <li><a href="/generic/">Product Alternatives</a></li>
+        </ul>
+        </p>
+    </div>
 {% endblock %}
