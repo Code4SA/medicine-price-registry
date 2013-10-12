@@ -12,38 +12,29 @@
     <div class="row">
         <div class="col-lg-2"></div>
         <div class="col-lg-8">
-              <input type="text" id="entrybox" class="form-control" placeholder="Type in a medicine">
+              <input type="text" id="entrybox" class="form-control" placeholder="Type in the generic name for a medicine (e.g. paracetamol)">
         </div><!-- /.col-lg-6 -->
         <div class="col-lg-2"></div>
     </div><!-- /.row -->
     <div class="row">
         <div class="col-lg-2"></div>
-        <div class="col-lg-8">
-           <h3>Projects containing your selected ingredient: </h3>
-        </div><!-- /.col-lg-6 -->
-        <div class="col-lg-2"></div>
-    </div>
-    <div class="row">
-        <div class="col-lg-2"></div>
         <div class="col-lg-8 products">
            <img src="/static/images/loader.gif" id="loading-indicator" style="display:none" />
+           <h3 id="resultsheader" style="display:none">Products containing your selected ingredient: </h3>
             <div class="template productrow row">
                 <div class="col-lg-7 details">
                     <h4>Details</h4>
-                    <div>Medicine Name : <span>Migril</span></div>
-                    <div>Maximum price: <span>R10.23</span></div>
-                    <div>Registration Number : <span>h516</span></div>
-                    <div>Schedule : <span>S5</span></div>
-                    <div>Dosage Form: <span>60</span></div>
-                    <div>Units in a pack (e.g. tablets, ml, capsules): <span>Tab</span></div>
-                    <div>Number of Packs: <span>1</span></div>
-                    <div>Generic/Innovator : <span>Innovator</span></div>
+                    <div>Medicine Name : <span></span></div>
+                    <div>Maximum price: <span></span></div>
+                    <div>Registration Number : <span></span></div>
+                    <div>Schedule : <span></span></div>
+                    <div>Dosage Form: <span></span></div>
+                    <div>Units in a pack (e.g. tablets, ml, capsules): <span></span></div>
+                    <div>Number of Packs: <span></span></div>
+                    <div>Generic/Innovator : <span></span></div>
                 </div>
                 <div class="col-lg-5 ingredients">
                     <h4>Ingredients</h4>
-                    <div>Paracetamol : <span>200mg</span></div>
-                    <div>Paracetamol : <span>200mg</span></div>
-                    <div>Paracetamol : <span>200mg</span></div>
                 </div>
             </div>
         </div><!-- /.col-lg-6 -->
@@ -52,7 +43,7 @@
     <div class="row">
         <div class="col-lg-2"></div>
         <div class="col-lg-8">
-        <p>
+        <p style="margin-top:10px">
         The single exit price (SEP) mechanism in South Africa defines the maximum price that a medicine can be charged at. Dispensers may charge an additional dispensing fee depending on the price of the medicine. The Medicines and Related Substances Act allows for the following charges:
         <ul>
             <li>Where the SEP is less than R81.00, the maximum dispensing fee is R6.30 + 46% of the SEP.</li>
@@ -77,7 +68,7 @@
 
 {% block bodybottom %}
 <script>
-    map = {
+    var map = {
         0 : "name",
         1 : "sep",
         2 : "regno",
@@ -88,15 +79,16 @@
         7 : "is_generic",
     }
 
-    process_ingredient = function(js) {
+    var process_ingredient = function(js) {
         d3.select("#loading-indicator").style("display", "none");
-        d3.selectAll(".products").classed("template", true);
+        d3.selectAll(".template").classed("template", true);
         d3.selectAll(".products .product").remove();
 
         if (js.length > 0) {
+            d3.select("#resultsheader").style("display", "block");
             d3.selectAll(".products").classed("template", false);
 
-            row = d3.select(".products .template")[0][0];
+            var row = d3.select(".products .template")[0][0];
 
             d3.selectAll(".products").selectAll("div.product")
                 .data(js)
@@ -110,7 +102,7 @@
                 .each(function(el, i) {
                     var data = el;
                     d3.select(this).selectAll("div.details span").text(function(el, i) {
-                        key = map[i];
+                        var key = map[i];
                         return data[key];
                     })
                     d3.select(this).selectAll("div.ingredients div").remove()
@@ -127,11 +119,12 @@
     }
 
     var timer;
-    entermedicine = function(el) {
-        text = d3.event.target.value;
+    var entermedicine = function(el) {
+        var text = d3.event.target.value;
 
-        load = function() {
+        var load = function() {
             d3.select("#loading-indicator").style("display", "block");
+            d3.select("#resultsheader").style("display", "none");
             d3.json("/api/?ingredient=" + text, process_ingredient)
         }
 
