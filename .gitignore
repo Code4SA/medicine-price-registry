@@ -1,3 +1,5 @@
+fabdefs.py
+server/static
 *.py[cod]
 
 # C extensions
