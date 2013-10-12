@@ -1,0 +1,24 @@
+.template {
+    display: none;
+}
+
+.product {
+    margin: 10px;
+    border: solid thin black;
+}
+
+div.ingredients div div {
+    font-weight: bold;
+}
+
+div.ingredients div div span {
+    font-weight: normal;
+}
+
+div.details div {
+    font-weight: bold;
+}
+
+div.details div span {
+    font-weight: normal;
+}
