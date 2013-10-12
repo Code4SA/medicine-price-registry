@@ -2,13 +2,6 @@ import json
 from django.http import HttpResponse, Http404
 from mpr import models
 
-def as_currency(x):
-    try:
-        x = float(x)
-        return "R %.2f" % x
-    except (ValueError, TypeError):
-        return "-"
-
 dosage_form = {
     "Liq" : "liquid",
     "Tab" : "tablet",
@@ -26,6 +19,26 @@ dosage_form = {
     "Inh" : "Inhaler",
     "Inf" : "Infusion",
 }
+
+def calc_max_fee(x):
+    try:
+        if x < 81:
+            return x * 1.46 + 6.3
+        elif x < 216:
+            return x * 1.33 + 16
+        elif x < 756:
+            return x * 1.15 + 52
+        else:
+            return x * 1.05 + 123
+    except (ValueError, TypeError):
+        return "-"
+
+def as_currency(x):
+    try:
+        x = float(x)
+        return "R %.2f" % x
+    except (ValueError, TypeError):
+        return "-"
 
 def int_or_float(x):
     try:
@@ -51,7 +64,7 @@ def serialize_product(product):
         "dosage_form" : dosage_form.get(product.dosage_form, product.dosage_form),
         "pack_size" : product.pack_size,
         "num_packs" : product.num_packs,
-        "sep" : as_currency(product.sep),
+        "sep" : as_currency(calc_max_fee(product.sep)),
         "is_generic" : "Generic" if product.is_generic else "Innovator",
         "ingredients" : [
             serialize_ingredient(pi.ingredient, pi.strength)
