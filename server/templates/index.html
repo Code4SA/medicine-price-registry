@@ -18,13 +18,14 @@
     <div class="row">
         <div class="col-lg-2"></div>
         <div class="col-lg-8">
-           <h3>Projects containing your selected ingredient</h3> 
+           <h3>Projects containing your selected ingredient: </h3>
         </div><!-- /.col-lg-6 -->
         <div class="col-lg-2"></div>
     </div>
     <div class="row">
         <div class="col-lg-2"></div>
         <div class="col-lg-8 products">
+           <img src="/static/images/loader.gif" id="loading-indicator" style="display:none" />
             <div class="template productrow row">
                 <div class="col-lg-7 details">
                     <h4>Details</h4>
@@ -32,8 +33,9 @@
                     <div>Single Exit Price : <span>R10.23</span></div>
                     <div>Registration Number : <span>h516</span></div>
                     <div>Schedule : <span>S5</span></div>
-                    <div>Dosage Form : <span>Tab</span></div>
-                    <div>Num Packs : <span>1</span></div>
+                    <div>Dosage Form: <span>60</span></div>
+                    <div>Units in a pack (e.g. tablets, ml, capsules): <span>Tab</span></div>
+                    <div>Number of Packs: <span>1</span></div>
                     <div>Generic/Innovator : <span>Innovator</span></div>
                 </div>
                 <div class="col-lg-5 ingredients">
@@ -62,6 +64,7 @@
     }
 
     process_ingredient = function(js) {
+        d3.select("#loading-indicator").style("display", "none");
         d3.selectAll(".products").classed("template", true);
         d3.selectAll(".products .product").remove();
 
@@ -98,9 +101,18 @@
         }
     }
 
+    var timer;
     entermedicine = function(el) {
         text = d3.event.target.value;
-        d3.json("/api/?ingredient=" + text, process_ingredient)
+
+        load = function() {
+            d3.select("#loading-indicator").style("display", "block");
+            d3.json("/api/?ingredient=" + text, process_ingredient)
+        }
+
+        clearTimeout(timer)
+        timer = setTimeout(load, 500);
+
     }
     d3.select("#entrybox").on("keyup", entermedicine);
 </script>

@@ -3,8 +3,11 @@ from django.http import HttpResponse, Http404
 from mpr import models
 
 def as_currency(x):
-    x = float(x)
-    return "R %.2f" % x
+    try:
+        x = float(x)
+        return "R %.2f" % x
+    except (ValueError, TypeError):
+        return "-"
 
 dosage_form = {
     "Liq" : "liquid",
@@ -49,7 +52,7 @@ def serialize_product(product):
         "pack_size" : product.pack_size,
         "num_packs" : product.num_packs,
         "sep" : as_currency(product.sep),
-        "is_generic" : product.is_generic,
+        "is_generic" : "Generic" if product.is_generic else "Innovator",
         "ingredients" : [
             serialize_ingredient(pi.ingredient, pi.strength)
             for pi in product.product_ingredients.all()
