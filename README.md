@@ -13,9 +13,13 @@ Running the damn thing
 
 If you want to run the code locally.
 
-assuming $PROJECT_ROOT is where you've clone the repo
+    git clone https://github.com/Code4SA/medicine-price-registry.git
+    cd medicine-price-registry
+    virtualenv $VIRTUALENV_HOME/mpr # (i.e. put it wherever you usually put your virtual environments)
+    source $VIRTUALENV_HOME/mpr/bin/active # (or if you're using virtualenvwrapper you can mkvirtualenv mpr; workon mpr)
+    pip install -r deploy/base.txt
+    cd server
 
-    cd $PROJECT_ROOT/server
     python manage.py runserver --settings=settings.development
 
 Deployment
