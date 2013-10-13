@@ -14,10 +14,9 @@ Contributing
 To work on this project locally, you'll need the following:
 - Python
 - Django
-- django-pipeline
-- yuglify (npm install -g yuglify)
+- yuglify (sudo npm install -g yuglify)
 
-If you want to run the code locally.
+If you want to run the code locally:
 
     git clone https://github.com/Code4SA/medicine-price-registry.git
     cd medicine-price-registry
@@ -44,4 +43,3 @@ TODO
 * Create a script that downloads the latest database instead of shipping a sqlite db with the repo
 * It might be useful to compare prices over time
 * Add CSS pre-compilers
-* Add the JS to django-pipeline
