@@ -46,3 +46,8 @@ TODO
 * Add CSS pre-compilers
 * Add the JS to django-pipeline
 * Seems like there are some spelling errors in the database - e.g. paracetamol and paracetemol. Might need to clean the database through some sort of fuzzy match and possibly report those errors back to mpr
+
+Contributors
+============
+Adi Eyal - @soapsudtycoon
+Shaun O'Connell - @ndorfin
