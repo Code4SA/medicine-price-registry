@@ -11,6 +11,6 @@ def deploy():
         api.run("%s install -r %s/deploy/production.txt --quiet" % (pip, code_dir))
 
         with api.cd(os.path.join(code_dir, "server")):
-            api.run("%s manage.py collectstatic --noinput" % python)
+            api.run("%s manage.py collectstatic --noinput --settings=settings.production" % python)
 
         api.sudo("supervisorctl restart mpr")
