@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Bootstrap 101 Template</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" media="screen">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css" media="screen">
-    <link rel="stylesheet" href="/static/css/custom.css" media="screen">
+    <meta charset="UTF-8">
+    <title>MPR (Medicine Price Registry) - Code4SA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% load compressed %}
+    {% compressed_css 'mpr' %}
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -14,9 +15,9 @@
     <![endif]-->
   </head>
   <body>
-    <div class="container">
+    <main class="container">
     {% block body %}{% endblock %}
-    </div>
+    </main>
 
     <script src="//code.jquery.com/jquery.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
