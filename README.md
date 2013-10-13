@@ -26,3 +26,8 @@ I've written a basic deployment script to my production server using $PROJECT_RO
 I run the code using gunicorn and supervisord with nginx working as a reverse proxy. The fabfile assumes that the application is called mpr and is run using supervisord. If you're setting it up in the same way, you need to copy fabdefs.sample.py to fabdefs.py and change the relevant settings inside that file. 
 
 At some point I'll add the nginx and supervisord config files to the repo in case anyone cares (and I guess it's probably good practice too).
+
+TODO
+====
+
+One really important feature that's missing is the ability to search by brand name. It would be cool to be able to search for the brand that you generally buy, then ask for all the similar products for that specific medicine. 
