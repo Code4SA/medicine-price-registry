@@ -17,3 +17,12 @@ assuming $PROJECT_ROOT is where you've clone the repo
 
     cd $PROJECT_ROOT/server
     python manage.py runserver --settings=settings.development
+
+Deployment
+==========
+
+I've written a basic deployment script to my production server using $PROJECT_ROOT/fabfile.py.
+
+I run the code using gunicorn and supervisord with nginx working as a reverse proxy. The fabfile assumes that the application is called mpr and is run using supervisord. If you're setting it up in the same way, you need to copy fabdefs.sample.py to fabdefs.py and change the relevant settings inside that file. 
+
+At some point I'll add the nginx and supervisord config files to the repo in case anyone cares (and I guess it's probably good practice too).
