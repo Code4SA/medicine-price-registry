@@ -49,5 +49,5 @@ TODO
 
 Contributors
 ============
-Adi Eyal - @soapsudtycoon
-Shaun O'Connell - @ndorfin
+- Adi Eyal - @soapsudtycoon
+- Shaun O'Connell - @ndorfin
