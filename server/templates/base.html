@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Bootstrap 101 Template</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" media="screen">
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-theme.min.css" media="screen">
-    <link rel="stylesheet" href="/static/css/custom.css" media="screen">
+    <meta charset="UTF-8">
+    <title>MPR (Medicine Price Registry) - Code4SA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {% load compressed %}
+    {% compressed_css 'mpr' %}
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
@@ -14,14 +15,19 @@
     <![endif]-->
   </head>
   <body>
-    <div class="container">
+    <main class="container">
     {% block body %}{% endblock %}
-    </div>
+    </main>
 
-    <script src="//code.jquery.com/jquery.js"></script>
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-
+    {% compressed_js 'mpr-base' %}
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-44046318-2', 'code4sa.org');
+      ga('send', 'pageview');
+    </script>
     {% block bodybottom %}{% endblock %}
   </body>
 </html>

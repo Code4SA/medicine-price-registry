@@ -1,21 +1,21 @@
 var map = {
-    0 : "name",
-    1 : "sep",
-    2 : "regno",
-    3 : "schedule",
-    4 : "dosage_form",
-    5 : "pack_size",
-    6 : "num_packs",
-    7 : "is_generic",
+    // 0 was name
+    0 : "sep",
+    1 : "regno",
+    2 : "schedule",
+    3 : "dosage_form",
+    4 : "pack_size",
+    5 : "num_packs",
+    6 : "is_generic",
 }
-
 var process_ingredient = function(js) {
-    d3.select("#loading-indicator").style("display", "none");
+
+    $("#search-container").toggleClass("js-loading");
     d3.selectAll(".template").classed("template", true);
-    d3.selectAll(".products .product").remove();
+    $(".products .product").remove();
 
     if (js.length > 0) {
-        d3.select("#resultsheader").style("display", "block");
+        $("#resultsheader").show();
         d3.selectAll(".products").classed("template", false);
 
         var row = d3.select(".products .template")[0][0];
@@ -31,18 +31,22 @@ var process_ingredient = function(js) {
             })
             .each(function(el, i) {
                 var data = el;
-                d3.select(this).selectAll("div.details span").text(function(el, i) {
+                d3.select(this).selectAll(".product-name").html(function(){
+                    return data.name;
+                });
+                d3.select(this).selectAll(".details dd").text(function(el, i) {
                     var key = map[i];
                     return data[key];
                 })
-                d3.select(this).selectAll("div.ingredients div").remove()
-                d3.select(this).selectAll("div.ingredients").selectAll("div")
+                d3.select(this).selectAll(".ingredients dt, .ingredients dd").remove()
+                d3.select(this).selectAll(".ingredients").selectAll("div")
                     .data(data.ingredients) 
                     .enter()
                     .append("div")
                     .html(function(el, i) {
-                        return "<div>" + el.name + ": <span>" + el.strength + el.unit + "</span></div>"
+                        return "<dt>" + el.name + ":</dt><dd>" + el.strength + el.unit + "</dd>"
                     })
+                // need to find a better way to generate the ingredient definition list
             })
         
     }
@@ -53,8 +57,8 @@ var entermedicine = function(el) {
     var text = d3.event.target.value;
 
     var load = function() {
-        d3.select("#loading-indicator").style("display", "block");
-        d3.select("#resultsheader").style("display", "none");
+        $("#search-container").toggleClass("js-loading");
+        $("#resultsheader").hide();
         d3.json("/api/?ingredient=" + text, process_ingredient)
     }
 

@@ -118,8 +118,39 @@ INSTALLED_APPS = (
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.admin",
+    "pipeline",
     "mpr",
 )
+
+STATICFILES_STORAGE = "pipeline.storage.PipelineCachedStorage"
+
+PIPELINE_CSS = {
+    'mpr': {
+        'source_filenames': (
+          'css/bootstrap.css',
+          'css/bootstrap-theme.css',
+          'css/custom.css',
+        ),
+        'output_filename': 'css/mpr.css',
+    },
+}
+
+PIPELINE_JS = {
+    'mpr-base': {
+        'source_filenames': (
+          'js/jquery-1.10.2.js',
+          'js/bootstrap.js',
+          'js/d3.v3.js',
+          'js/medloader.js',
+        ),
+        'output_filename': 'js/mpr-base.js',
+    }
+}
+
+PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
+PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
+
+PIPELINE = True
 
 SESSION_SERIALIZER = "django.contrib.sessions.serializers.JSONSerializer"
 
