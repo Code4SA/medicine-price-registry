@@ -144,7 +144,14 @@ PIPELINE_JS = {
           'js/medloader.js',
         ),
         'output_filename': 'js/mpr-base.js',
-    }
+    },
+    'oldie': {
+        'source_filenames': (
+          'js/html5shiv.js',
+          'js/respond.src.js',
+        ),
+        'output_filename': 'js/oldie.js',
+    },
 }
 
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'

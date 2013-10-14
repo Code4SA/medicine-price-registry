@@ -16,7 +16,7 @@ var process_ingredient = function(js) {
 
     if (js.length > 0) {
         $("#resultsheader").show();
-        d3.selectAll(".products").classed("template", false);
+        $('.products').removeClass("template");
 
         var row = d3.select(".products .template")[0][0];
 
@@ -25,7 +25,6 @@ var process_ingredient = function(js) {
             .enter()
             .append("div")
             .classed("product", true)
-            .classed("row", true)
             .html(function(el, i) {
                 return row.innerHTML;
             })
