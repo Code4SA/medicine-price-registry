@@ -26,6 +26,20 @@ class Product(models.Model):
     def __unicode__(self):
         return self.name
 
+    @property
+    def max_fee(self):
+        try:
+            if self.sep < 81:
+                return self.sep * 1.46 + 6.3
+            elif self.sep < 216:
+                return self.sep * 1.33 + 16
+            elif self.sep < 756:
+                return self.sep * 1.15 + 52
+            else:
+                return self.sep * 1.05 + 123
+        except (ValueError, TypeError):
+            return self.sep
+
 class ProductIngredient(models.Model):
     product = models.ForeignKey(Product, related_name="product_ingredients")
     ingredient = models.ForeignKey(Ingredient)
