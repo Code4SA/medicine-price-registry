@@ -16,7 +16,8 @@ To work on this project locally, you'll need the following:
 - yuglify (sudo npm install -g yuglify)
 - virtualenv (optional)
 
-Setting up your environment (if you're using virtualenv - which you should be)
+Setting up your environment (if you're using virtualenv - which you should be):
+
     git clone https://github.com/Code4SA/medicine-price-registry.git
     cd medicine-price-registry
     virtualenv $VIRTUALENV_HOME/mpr # (i.e. put it wherever you usually put your virtual environments)
