@@ -54,3 +54,6 @@ def serialize_product(product):
             for pi in product.product_ingredients.all()
         ]
     }
+
+def serialize_products(products):
+    return [serialize_product(p) for p in products]

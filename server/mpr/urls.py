@@ -8,7 +8,9 @@ admin.autodiscover()
 
 urlpatterns = patterns("",
     url(r'^$', TemplateView.as_view(template_name="index.html"), name="home"),
-    url(r"^api/$", "mpr.views.api", name="api"),
+    url(r"^api/search/by_product$", "mpr.views.search_by_product", name="api_search_by_product"),
+    url(r"^api/search/by_ingredient$", "mpr.views.search_by_ingredient", name="api_search_by_ingredient"),
+    url(r"^api/search$", "mpr.views.search", name="api_search"),
     url(r"^admin/", include(admin.site.urls)),
 )
 

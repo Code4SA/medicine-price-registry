@@ -59,7 +59,7 @@ var entermedicine = function(el) {
     var load = function() {
         $("#search-container").toggleClass("js-loading");
         $("#resultsheader").hide();
-        d3.json("/api/?ingredient=" + text, process_ingredient)
+        d3.json("/api/search?q=" + text, process_ingredient)
     }
 
     clearTimeout(timer)

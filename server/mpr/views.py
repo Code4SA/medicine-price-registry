@@ -3,22 +3,42 @@ from django.http import HttpResponse, Http404
 from mpr import models
 import serialisers
 
-def api(request):
-    ingredsearch = request.GET.get("ingredient", "").strip()
+def search_by_ingredient(request):
+    q = request.GET.get("q", "").strip()
 
-    if len(ingredsearch) < 3:
+    if len(q) < 3:
         products = []
     else:
-        ingredients = models.Ingredient.objects.filter(name__icontains=ingredsearch)
-
-        products = set()
-        for i in ingredients:
-            products |= set(i.product_set.all())
-
-        products = sorted(products, key=lambda x: x.sep)
-        products = [serialisers.serialize_product(p) for p in products]
-
+        products = models.Product.objects.search_by_ingredient(q)
+        products = serialisers.serialize_products(products)
     return HttpResponse(
         json.dumps(products, indent=4), mimetype="application/json"
     )
 
+def search_by_product(request):
+    q = request.GET.get("q", "").strip()
+
+    if len(q) < 3:
+        products = []
+    else:
+        products = models.Product.objects.search_by_product(q)
+        products = serialisers.serialize_products(products)
+    return HttpResponse(
+        json.dumps(products, indent=4), mimetype="application/json"
+    )
+
+def search(request):
+    q = request.GET.get("q", "").strip()
+
+    all_products = set()
+    if len(q) < 3:
+        products = []
+    else:
+        products1 = set(models.Product.objects.search_by_product(q))
+        products2 = set(models.Product.objects.search_by_ingredient(q))
+        all_products |= products1 | products2
+        all_products = sorted(all_products, key=lambda x: x.sep)
+        products = serialisers.serialize_products(all_products)
+    return HttpResponse(
+        json.dumps(products, indent=4), mimetype="application/json"
+    )
