@@ -1,24 +1,14 @@
-.template {
-    display: none;
-}
+.js-loading #entrybox {background:url(../images/loader.gif) 99% 50% no-repeat;}
 
-.product {
-    margin: 10px;
-    border: solid thin black;
-}
+.template {display:none;}
 
-div.ingredients div div {
-    font-weight: bold;
-}
-
-div.ingredients div div span {
-    font-weight: normal;
-}
-
-div.details div {
-    font-weight: bold;
-}
-
-div.details div span {
-    font-weight: normal;
-}
+.product {margin:10px; border:solid 1px #ccc; padding:10px;}
+	.product-name {font-size:2em; font-weight:bold;}
+	.product dt {font-weight:bold; float:left; margin-right:5px; clear:left;}
+	.product dd {margin:0; text-align:right;}
+	.ingredients {}
+		.ingredients dt {}
+		.ingredients dd {}
+	.details {}
+		.details dt {}
+		.details dd {}

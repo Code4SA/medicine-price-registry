@@ -127,25 +127,25 @@ STATICFILES_STORAGE = "pipeline.storage.PipelineCachedStorage"
 PIPELINE_CSS = {
     'mpr': {
         'source_filenames': (
-          'css/bootstrap.min.css',
-          'css/bootstrap-theme.min.css',
+          'css/bootstrap.css',
+          'css/bootstrap-theme.css',
           'css/custom.css',
         ),
         'output_filename': 'css/mpr.css',
     },
 }
 
-#PIPELINE_JS = {
-#    'stats': {
-#        'source_filenames': (
-#          'js/jquery.js',
-#          'js/d3.js',
-#          'js/collections/*.js',
-#          'js/application.js',
-#        ),
-#        'output_filename': 'js/stats.js',
-#    }
-#}
+PIPELINE_JS = {
+    'mpr-base': {
+        'source_filenames': (
+          'js/jquery-1.10.2.js',
+          'js/bootstrap.js',
+          'js/d3.v3.js',
+          'js/medloader.js',
+        ),
+        'output_filename': 'js/mpr-base.js',
+    }
+}
 
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
