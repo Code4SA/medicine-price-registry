@@ -38,7 +38,7 @@ At some point I'll add the nginx and supervisord config files to the repo in cas
 TODO
 ====
 
-* One really important feature that's missing is the ability to search by brand name. It would be cool to be able to search for the brand that you generally buy, then ask for all the similar products for that specific medicine. 
+* Allow for searching of related products
 * Create a script that downloads the latest database instead of shipping a sqlite db with the repo
 * It might be useful to compare prices over time
 * Add CSS pre-compilers
