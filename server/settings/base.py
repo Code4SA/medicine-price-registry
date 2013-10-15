@@ -122,8 +122,8 @@ INSTALLED_APPS = (
     "mpr",
 )
 
+PIPELINE = True
 STATICFILES_STORAGE = "pipeline.storage.PipelineCachedStorage"
-
 PIPELINE_CSS = {
     'mpr': {
         'source_filenames': (
@@ -134,15 +134,14 @@ PIPELINE_CSS = {
         'output_filename': 'css/mpr.css',
     },
 }
-
 PIPELINE_JS = {
-    'mpr-base': {
+    'mprbase': {
         'source_filenames': (
           'js/jquery-1.10.2.js',
           'js/bootstrap.js',
           'js/medloader.js',
         ),
-        'output_filename': 'js/mpr-base.js',
+        'output_filename': 'js/mprbase.js',
     },
     'oldie': {
         'source_filenames': (
@@ -152,11 +151,9 @@ PIPELINE_JS = {
         'output_filename': 'js/oldie.js',
     },
 }
-
 PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
 PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
-
-PIPELINE = True
+PIPELINE_DISABLE_WRAPPER = True
 
 SESSION_SERIALIZER = "django.contrib.sessions.serializers.JSONSerializer"
 

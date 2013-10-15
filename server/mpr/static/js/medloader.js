@@ -1,3 +1,7 @@
+/**
+ * medloader - code4sa.org
+ */
+
 var log = function(obj) {
     if (window.console) {
         window.console.log(obj);
@@ -11,7 +15,7 @@ var map = {
     3 : "dosage_form",
     4 : "pack_size",
     5 : "num_packs",
-    6 : "is_generic",
+    6 : "is_generic"
 };
 
 var process_ingredient = function(result) {
@@ -40,7 +44,7 @@ var process_ingredient = function(result) {
             });
 
             // Add ingredients to each product item
-            $product.find(".ingredients dt, .ingredients dd").remove()
+            $product.find(".ingredients dt, .ingredients dd").remove();
             var $ingredientsList = $(".ingredients dl", $product);
             var productIngredients = productItemData.ingredients;
             var productIngredientsLength = productIngredients.length;
@@ -65,4 +69,4 @@ var entermedicine = function(e) {
     }
     clearTimeout(timer);
     timer = setTimeout(load, 500);
-}
+};
