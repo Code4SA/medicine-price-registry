@@ -1,35 +1,21 @@
 {% extends "base.html" %}
 {% block body %}
-    <a href="https://github.com/Code4SA/medicine-price-registry" class="hidden-xs"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_green_007200.png" alt="Fork me on GitHub"></a>
+<div id="search-container">
     <div class="row">
-        <div class="col-lg-2"></div>
-        <div class="col-lg-8">
-            <h1>South African Medicine Price Registry</h1>
-        </div>
-        <div class="col-lg-2"></div>
+        <label id="label-entrybox" for="entrybox">Search for a medicine:</label>
+        <input type="text" id="entrybox" aria-labelled-by="label-entrybox" class="form-control input-lg" placeholder="e.g. paracetamol or panado">
     </div>
-
-    <div id="search-container">
-        <div class="row">
-            <div class="col-lg-2"></div>
-            <div class="col-lg-8">
-                <label id="label-entrybox" for="entrybox">Search for a medicine:</label>
-                <input type="text" id="entrybox" aria-labelled-by="label-entrybox" class="form-control input-lg" placeholder="e.g. paracetamol or panado">
-            </div>
-            <div class="col-lg-2"></div>
-        </div>
-        <div class="row">
-            <div class="col-lg-2"></div>
-            <div class="col-lg-8 products">
-               <h3 id="resultsheader" style="display:none">Products containing your selected ingredient: </h3>
-
-                <div class="template productrow row">
-                    <div class="col-lg-12">
-                        <p class="product-name"></p>    
-                    </div>
-                    <div class="col-lg-7 details">
-                        <h4>Details</h4>
-                        <dl>
+    <div class="row products">
+        <p id="resultsheader"><b>Matching products and/or ingredients: <span></span></b></p>
+        <div class="template productrow">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title product-name"></h3>
+                </div>
+                <div class="panel-body">
+                    <div class="col-md-6 details">
+                        <h4>Product details</h4>
+                        <dl class="dl-horizontal">
                             <dt>Maximum price:</dt>
                             <dd></dd>
                             <dt>Registration number:</dt>
@@ -38,7 +24,7 @@
                             <dd></dd>
                             <dt>Dosage form:</dt>
                             <dd></dd>
-                            <dt>Units in a pack (e.g. tablets, ml, capsules): </dt>
+                            <dt>Pack quantity/ml:</dt>
                             <dd></dd>
                             <dt>Number of packs:</dt>
                             <dd></dd>
@@ -46,42 +32,23 @@
                             <dd></dd>
                         </dl>
                     </div>
-                    <div class="col-lg-5 ingredients">
+                    <div class="col-md-6 ingredients">
                         <h4>Ingredients</h4>
+                        <dl class="dl-horizontal"></dl>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-2"></div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-lg-2"></div>
-        <div class="col-lg-8">
-        <p style="margin-top:10px">
-        The single exit price (SEP) mechanism in South Africa specifies the maximum price that a medicine can be charged at. Dispensers may charge an additional dispensing fee depending on the price of the medicine. The Medicines and Related Substances Act allows for the following charges:
-        <ul>
-            <li>Where the SEP is less than R81.00, the maximum dispensing fee is R6.30 + 46% of the SEP.</li>
-            <li>Where the SEP is less than R216.00, the maximum dispensing fee is R16.00 + 33% of the SEP.</li>
-            <li>Where the SEP is less than R756.00, the maximum dispensing fee is R52.00 + 15% of the SEP.</li>
-            <li>Where the SEP is greater than or equal to R756.00, the maximum dispensing fee is R123.00 + 5% of the SEP.</li>
-        </ul>
-        </p>
-        <p>
-        This prices listed here include the maximum allowed dispensing fee. Charging more than this amount is a contravention of the Mediciens and Related Substances Act.
-        </p>
-
-        <p>More information can be found at <a href="http://www.mpr.gov.za/">the Medicine Price Registry</a></p>
-        </div>
-        <div class="col-lg-2"> </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-8"></div>
-        <div class="col-lg-4"><a href="http://www.code4sa.org"><img src="/static/images/logo.png" alt="Code for South Africa"></a></div>
-    </div>
+</div>
 {% endblock %}
 
 {% block bodybottom %}
 <script>
-    d3.select("#entrybox").on("keyup", entermedicine);
+    $(document).ready(function(){
+        $("#entrybox").on("keyup", function(e){
+            entermedicine(e);
+        });
+    });
 </script>
 {% endblock %}

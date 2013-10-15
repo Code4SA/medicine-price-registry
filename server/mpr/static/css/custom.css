@@ -1,14 +1,14 @@
-.js-loading #entrybox {background:url(../images/loader.gif) 99% 50% no-repeat;}
+main {}
+	main > header {}
+	main > article {}
+	main > aside {}
+	main > footer {border-top:solid 1px #eee; padding-top:9px; margin-top:20px; clear:both;}
 
+.js-loading #entrybox {background:url(../images/loader.gif) 99% 50% no-repeat;}
+#resultsheader {visibility:hidden; margin-top:20px; margin-bottom:5px;}
+.js-results #resultsheader {visibility:visible;}
 .template {display:none;}
 
-.product {margin:10px; border:solid 1px #ccc; padding:10px;}
-	.product-name {font-size:2em; font-weight:bold;}
-	.product dt {font-weight:bold; float:left; margin-right:5px; clear:left;}
-	.product dd {margin:0; text-align:right;}
-	.ingredients {}
-		.ingredients dt {}
-		.ingredients dd {}
-	.details {}
-		.details dt {}
-		.details dd {}
+.product {}
+	.product-name {margin-top:0;}
+	.product dl {margin-bottom:0;}

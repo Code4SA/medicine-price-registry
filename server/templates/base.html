@@ -2,24 +2,52 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>MPR (Medicine Price Registry) - Code4SA</title>
+    <title>MPR (Medicine Price Registry) - Code for South Africa</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     {% load compressed %}
     {% compressed_css 'mpr' %}
-
-    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
-      <script src="../../assets/js/html5shiv.js"></script>
-      <script src="../../assets/js/respond.min.js"></script>
+      {% compressed_js 'oldie' %}
     <![endif]-->
   </head>
   <body>
     <main class="container">
-    {% block body %}{% endblock %}
+      <header role="banner" class="container page-header">
+        <h1>South African Medicine Price Registry</h1>
+      </header>
+      <article role="main" class="col-md-8">
+      {% block body %}{% endblock %}
+      </article>
+      <aside class="col-md-4">
+        <section class="panel panel-info">
+          <header class="panel-heading">
+            <h3 class="panel-title">What is the <abbr title="Medicine Price Registry">MPR</abbr>?</h3>
+          </header>
+          <div class="panel-body">
+            <p>The single exit price (SEP) mechanism in South Africa defines the maximum price that a medicine can be charged at. Dispensers may charge an additional dispensing fee depending on the price of the medicine. The Medicines and Related Substances Act allows for the following charges:</p>
+            <ul>
+                <li>Where the SEP is less than R81.00, the maximum dispensing fee is R6.30 + 46% of the SEP.</li>
+                <li>Where the SEP is less than R216.00, the maximum dispensing fee is R16.00 + 33% of the SEP.</li>
+                <li>Where the SEP is less than R756.00, the maximum dispensing fee is R52.00 + 15% of the SEP.</li>
+                <li>Where the SEP is greater than or equal to R756.00, the maximum dispensing fee is R123.00 + 5% of the SEP.</li>
+            </ul>
+            <p>This prices listed in this database represent the maximum allowed amount for charging for the relevant medicines. <b>A pharmacy is not legally allowed to charge more.</b></p>
+            <p>More information can be found at the <a href="http://www.mpr.gov.za/"> Medicine Price Registry</a></p>
+          </div>
+        </section>
+        <section>
+          <p class="text-center"><a href="http://www.code4sa.org"><img src="/static/images/logo.png" alt="Code for South Africa"></a></p>
+        </section>
+      </aside>
+      <footer role="contentinfo" class="container">
+        <ul class="list-inline">
+          <li><a href="/">MPR</a> is powered by <a href="http://www.code4sa.org/">Code for South Africa</a>.</li>
+          <li><a href="https://github.com/Code4SA/medicine-price-registry">Pull requests are welcome</a></li>
+        </ul>
+      </footer>
     </main>
 
-    {% compressed_js 'mpr-base' %}
+    {% compressed_js 'mprbase' %}
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
