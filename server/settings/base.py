@@ -140,7 +140,6 @@ PIPELINE_JS = {
         'source_filenames': (
           'js/jquery-1.10.2.js',
           'js/bootstrap.js',
-          'js/d3.v3.js',
           'js/medloader.js',
         ),
         'output_filename': 'js/mpr-base.js',

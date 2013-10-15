@@ -3,17 +3,17 @@
 <div id="search-container">
     <div class="row">
         <label id="label-entrybox" for="entrybox">Search for a medicine:</label>
-        <input type="text" id="entrybox" aria-labelled-by="label-entrybox" class="form-control input-lg" placeholder="e.g. paracetamol">
+        <input type="text" id="entrybox" aria-labelled-by="label-entrybox" class="form-control input-lg" placeholder="e.g. paracetamol or panado">
     </div>
     <div class="row products">
-        <p id="resultsheader" style="display:none"><b>Products containing your selected ingredient</b></p>
+        <p id="resultsheader"><b>Matching products and/or ingredients: <span></span></b></p>
         <div class="template productrow">
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title product-name"></h3>
                 </div>
                 <div class="panel-body">
-                    <div class="col-md-7 details">
+                    <div class="col-md-6 details">
                         <h4>Product details</h4>
                         <dl class="dl-horizontal">
                             <dt>Maximum price:</dt>
@@ -32,46 +32,23 @@
                             <dd></dd>
                         </dl>
                     </div>
-                    <div class="col-md-5 ingredients">
+                    <div class="col-md-6 ingredients">
                         <h4>Ingredients</h4>
-
+                        <dl class="dl-horizontal"></dl>
                     </div>
                 </div>
             </div>
         </div>
-        <!--div class="template productrow row">
-            <div class="col-lg-12">
-                <p class="product-name"></p>    
-            </div>
-            <div class="col-lg-7 details">
-                <h4>Details</h4>
-                <dl>
-                    <dt>Maximum price:</dt>
-                    <dd></dd>
-                    <dt>Registration number:</dt>
-                    <dd></dd>
-                    <dt>Schedule:</dt>
-                    <dd></dd>
-                    <dt>Dosage form:</dt>
-                    <dd></dd>
-                    <dt>Units in a pack (e.g. tablets, ml, capsules): </dt>
-                    <dd></dd>
-                    <dt>Number of packs:</dt>
-                    <dd></dd>
-                    <dt>Generic/Innovator:</dt>
-                    <dd></dd>
-                </dl>
-            </div>
-            <div class="col-lg-5 ingredients">
-                <h4>Ingredients</h4>
-            </div>
-        </div-->
     </div>
 </div>
 {% endblock %}
 
 {% block bodybottom %}
 <script>
-    d3.select("#entrybox").on("keyup", entermedicine);
+    $(document).ready(function(){
+        $("#entrybox").on("keyup", function(e){
+            entermedicine(e);
+        });
+    });
 </script>
 {% endblock %}

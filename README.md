@@ -13,16 +13,16 @@ Contributing
 
 To work on this project locally, you'll need the following:
 - Python
-- Django
 - yuglify (sudo npm install -g yuglify)
+- virtualenv (optional)
 
-If you want to run the code locally:
+Setting up your environment (if you're using virtualenv - which you should be):
 
     git clone https://github.com/Code4SA/medicine-price-registry.git
     cd medicine-price-registry
     virtualenv $VIRTUALENV_HOME/mpr # (i.e. put it wherever you usually put your virtual environments)
     source $VIRTUALENV_HOME/mpr/bin/active # (or if you're using virtualenvwrapper you can mkvirtualenv mpr; workon mpr)
-    pip install -r deploy/base.txt
+    pip install -r deploy/development.txt
     cd server
 
     python manage.py runserver --settings=settings.development
@@ -39,7 +39,7 @@ At some point I'll add the nginx and supervisord config files to the repo in cas
 TODO
 ====
 
-* One really important feature that's missing is the ability to search by brand name. It would be cool to be able to search for the brand that you generally buy, then ask for all the similar products for that specific medicine. 
+* Allow for searching of related products
 * Create a script that downloads the latest database instead of shipping a sqlite db with the repo
 * It might be useful to compare prices over time
 * Add CSS pre-compilers

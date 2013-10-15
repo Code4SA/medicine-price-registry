@@ -11,6 +11,23 @@ class Ingredient(models.Model):
     def __unicode__(self):
         return self.name
 
+class ProductManager(models.Manager):
+    def search_by_ingredient(self, pattern):
+
+        ingredients = Ingredient.objects.filter(name__icontains=pattern)
+
+        products = set()
+        for i in ingredients:
+            products |= set(i.product_set.all())
+
+        products = sorted(products, key=lambda x: x.sep)
+        return products
+
+    def search_by_product(self, pattern):
+
+        products = Product.objects.filter(name__icontains=pattern).order_by("sep")
+        return products
+
 class Product(models.Model):
     regno = models.CharField(max_length=50, null=True)
     name = models.CharField(max_length=100)
@@ -23,8 +40,24 @@ class Product(models.Model):
 
     ingredients = models.ManyToManyField(Ingredient, through='ProductIngredient')
 
+    objects = ProductManager()
+
     def __unicode__(self):
         return self.name
+
+    @property
+    def max_fee(self):
+        try:
+            if self.sep < 81:
+                return self.sep * 1.46 + 6.3
+            elif self.sep < 216:
+                return self.sep * 1.33 + 16
+            elif self.sep < 756:
+                return self.sep * 1.15 + 52
+            else:
+                return self.sep * 1.05 + 123
+        except (ValueError, TypeError):
+            return self.sep
 
 class ProductIngredient(models.Model):
     product = models.ForeignKey(Product, related_name="product_ingredients")

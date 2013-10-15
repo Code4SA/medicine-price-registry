@@ -5,16 +5,10 @@ main {}
 	main > footer {border-top:solid 1px #eee; padding-top:9px; margin-top:20px; clear:both;}
 
 .js-loading #entrybox {background:url(../images/loader.gif) 99% 50% no-repeat;}
-#resultsheader {margin-top:20px;}
+#resultsheader {visibility:hidden; margin-top:20px; margin-bottom:5px;}
+.js-results #resultsheader {visibility:visible;}
 .template {display:none;}
 
 .product {}
 	.product-name {margin-top:0;}
-	.product dt {}
-	.product dd {}
-	.ingredients {}
-		.ingredients dt {}
-		.ingredients dd {}
-	.details {}
-		.details dt {}
-		.details dd {}
+	.product dl {margin-bottom:0;}
