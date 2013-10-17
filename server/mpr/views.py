@@ -1,4 +1,5 @@
 import json
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, Http404
 from mpr import models
 import serialisers
@@ -42,3 +43,14 @@ def search(request):
     return HttpResponse(
         json.dumps(products, indent=4), mimetype="application/json"
     )
+
+def related_products(request):
+    product_id = request.GET.get("product", "").strip()
+    product = get_object_or_404(models.Product, id=product_id)
+
+    return HttpResponse(
+        json.dumps(
+            serialisers.serialize_products(product.related_products), indent=4
+        ), mimetype="application/json"
+    )
+    

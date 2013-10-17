@@ -46,6 +46,14 @@ class Product(models.Model):
         return self.name
 
     @property
+    def related_products(self):
+        iq = models.Q()
+        for pi in self.product_ingredients.all():
+            iq &= models.Q(product_ingredients__ingredient=pi.ingredient, product_ingredients__strength=pi.strength)
+
+        return Product.objects.filter(iq)
+
+    @property
     def max_fee(self):
         try:
             if self.sep < 81:

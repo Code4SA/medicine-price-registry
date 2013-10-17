@@ -41,6 +41,7 @@ def serialize_ingredient(ingredient, strength):
 
 def serialize_product(product):
     return {
+        "id" : product.id,
         "regno" : product.regno,
         "schedule" : product.schedule,
         "name" : product.name,
