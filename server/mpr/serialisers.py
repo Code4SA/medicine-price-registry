@@ -49,7 +49,7 @@ def serialize_product(product):
         "pack_size" : product.pack_size,
         "num_packs" : product.num_packs,
         "sep" : as_currency(product.max_fee),
-        "is_generic" : "Generic" if product.is_generic else "Innovator",
+        "is_generic" : "Innovator" if product.is_generic == False else "Generic",
         "ingredients" : [
             serialize_ingredient(pi.ingredient, pi.strength)
             for pi in product.product_ingredients.all()
