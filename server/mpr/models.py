@@ -62,9 +62,9 @@ class Product(models.Model):
             elif self.sep < 216:
                 return self.sep + (self.sep * 0.33 + 16) * VAT
             elif self.sep < 756:
-                return self.sep + (self.sep * 0.15 + 52) * VAT
+                return self.sep + (self.sep * 0.15 + 55) * VAT
             else:
-                return self.sep + (self.sep * 0.05 + 123) * VAT
+                return self.sep + (self.sep * 0.05 + 131) * VAT
         except (ValueError, TypeError):
             return self.sep
 
