@@ -23,13 +23,45 @@ var loading_data = function() {
 }
 
 var loaded_data = function() {
-    $("#search-container").removeClass("js-results");
+    $("#search-container").removeClass("js-loading");
+}
+
+Product = function(data, block) { 
+    this.data = data;
+    this.block = block.addClass("product");
+}
+
+Product.prototype = {
+    set_name : function() {
+        $(".product-name", this.block).html(this.data.name);
+    },
+    add_details : function() {
+        var data = this.data;
+        $(".details dd", this.block).each(function(idx) {
+            var key = map[idx];
+            $(this).html(data[key]);
+        });
+    },
+    add_ingredients : function() {
+        this.block.find(".ingredients dt, .ingredients dd").remove();
+        var $ingredientsList = $(".ingredients dl", this.block);
+        var productIngredients = this.data.ingredients;
+        var productIngredientsLength = productIngredients.length;
+        for (var j = 0; j < productIngredientsLength; j++) {
+            $ingredientsList.append("<dt>" + productIngredients[j].name + ":</dt>");
+            $ingredientsList.append("<dd>" + productIngredients[j].strength + productIngredients[j].unit + "</dd>");
+        }
+    },
+    build_product : function() {
+        this.set_name();
+        this.add_details();
+        this.add_ingredients();
+    }
 }
 
 var process_request = function(result) {
-    //log(result);
-    loaded_data();
     $(".products .product").remove();
+    $("#search-container").removeClass("js-results");
 
     var resultLength = result.length;
     if (resultLength) {
@@ -39,33 +71,15 @@ var process_request = function(result) {
         var $templateRow = $(".products .template");
 
         for (var i = 0; i < resultLength; i++) {
-            var $product = $templateRow.clone().removeClass('template').addClass('product');        
-            var productItemData = result[i];
+            $product = new Product(result[i], $templateRow.clone().removeClass("template"));
+            $product.build_product();
 
-            // Set the product name
-            $(".product-name", $product).html(productItemData.name);
-
-            // Add the product details to each product item
-            $(".details dd", $product).each(function(idx){
-                var key = map[idx];
-                $(this).html(productItemData[key]);
-            });
-
-            // Add ingredients to each product item
-            $product.find(".ingredients dt, .ingredients dd").remove();
-            var $ingredientsList = $(".ingredients dl", $product);
-            var productIngredients = productItemData.ingredients;
-            var productIngredientsLength = productIngredients.length;
-            for (var j=0; j<productIngredientsLength; j++) {
-                $ingredientsList.append("<dt>" + productIngredients[j].name + ":</dt>");
-                $ingredientsList.append("<dd>" + productIngredients[j].strength + productIngredients[j].unit + "</dd>");
-            }
-
-            $('.products').append($product);
+            $('.products').append($product.block);
         }
     }
-    $("#search-container").removeClass("js-loading");
+    loaded_data();
 }
+
 var timer;
 var searchTerm = '';
 var delay = 500;
