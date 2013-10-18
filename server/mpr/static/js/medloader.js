@@ -19,11 +19,12 @@ var map = {
     6 : "is_generic"
 };
 
-var on_loading = function() {
+var on_loading = function(searchTerm) {
     $("#search-container").addClass("js-loading");
+    mixpanel.track("Search", {"query": searchTerm});
 }
 
-var on_loaded = function() {
+var on_loaded = function(result) {
     $("#search-container").removeClass("js-loading");
 }
 
@@ -83,7 +84,7 @@ var process_request = function(result) {
             $('.products').append($product.build_product());
         }
     }
-    on_loaded();
+    on_loaded(result);
 }
 
 var timer;
@@ -96,7 +97,7 @@ var entermedicine = function(e) {
 
     var load_data = function() {
         var query = api_url + "?q=" + searchTerm;
-        on_loading();
+        on_loading(searchTerm);
         $.getJSON(query, process_request);
     }
 
