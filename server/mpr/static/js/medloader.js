@@ -7,6 +7,7 @@ var log = function(obj) {
         window.console.log(obj);
     }
 };
+
 var map = {
     // 0 was name
     0 : "sep",
@@ -18,11 +19,11 @@ var map = {
     6 : "is_generic"
 };
 
-var loading_data = function() {
+var on_loading = function() {
     $("#search-container").addClass("js-loading");
 }
 
-var loaded_data = function() {
+var on_loaded = function() {
     $("#search-container").removeClass("js-loading");
 }
 
@@ -32,9 +33,11 @@ Product = function(data, block) {
 }
 
 Product.prototype = {
+
     set_name : function() {
         $(".product-name", this.block).html(this.data.name);
     },
+
     add_details : function() {
         var data = this.data;
         $(".details dd", this.block).each(function(idx) {
@@ -42,6 +45,7 @@ Product.prototype = {
             $(this).html(data[key]);
         });
     },
+
     add_ingredients : function() {
         this.block.find(".ingredients dt, .ingredients dd").remove();
         var $ingredientsList = $(".ingredients dl", this.block);
@@ -52,10 +56,12 @@ Product.prototype = {
             $ingredientsList.append("<dd>" + productIngredients[j].strength + productIngredients[j].unit + "</dd>");
         }
     },
+
     build_product : function() {
         this.set_name();
         this.add_details();
         this.add_ingredients();
+        return this.block;
     }
 }
 
@@ -74,10 +80,10 @@ var process_request = function(result) {
             $product = new Product(result[i], $templateRow.clone().removeClass("template"));
             $product.build_product();
 
-            $('.products').append($product.block);
+            $('.products').append($product.build_product());
         }
     }
-    loaded_data();
+    on_loaded();
 }
 
 var timer;
@@ -90,7 +96,7 @@ var entermedicine = function(e) {
 
     var load_data = function() {
         var query = api_url + "?q=" + searchTerm;
-        loading_data();
+        on_loading();
         $.getJSON(query, process_request);
     }
 
