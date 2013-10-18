@@ -21,10 +21,11 @@ class Command(BaseCommand):
                 if product: yield product
                 
                 generic_value = worksheet.cell_value(idx, 20) 
-                if "Originator" in generic_value:
-                    is_generic = False
-                elif "Generic" in generic_value:
-                    is_generic = True
+                name = worksheet.cell_value(idx, 6).title()
+                if "originator" in generic_value.lower():
+                    is_generic = "Originator"
+                elif "generic" in generic_value.lower():
+                    is_generic = "Generic"
                 else:
                     is_generic = None
 
