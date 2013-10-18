@@ -18,9 +18,17 @@ var map = {
     6 : "is_generic"
 };
 
-var process_ingredient = function(result) {
-    //log(result);
+var loading_data = function() {
+    $("#search-container").addClass("js-loading");
+}
+
+var loaded_data = function() {
     $("#search-container").removeClass("js-results");
+}
+
+var process_request = function(result) {
+    //log(result);
+    loaded_data();
     $(".products .product").remove();
 
     var resultLength = result.length;
@@ -30,7 +38,7 @@ var process_ingredient = function(result) {
 
         var $templateRow = $(".products .template");
 
-        for (var i=0; i<resultLength; i++){
+        for (var i = 0; i < resultLength; i++) {
             var $product = $templateRow.clone().removeClass('template').addClass('product');        
             var productItemData = result[i];
 
@@ -55,18 +63,27 @@ var process_ingredient = function(result) {
 
             $('.products').append($product);
         }
-        
     }
     $("#search-container").removeClass("js-loading");
 }
 var timer;
 var searchTerm = '';
+var delay = 500;
+var api_url = "/api/search";
+
 var entermedicine = function(e) {
     searchTerm = e.target.value;
-    var load = function(){
-        $("#search-container").addClass("js-loading");
-        $.getJSON("/api/search?q=" + searchTerm, process_ingredient);
+
+    var load_data = function() {
+        var query = api_url + "?q=" + searchTerm;
+        loading_data();
+        $.getJSON(query, process_request);
     }
-    clearTimeout(timer);
-    timer = setTimeout(load, 500);
+
+    var reset_delay_before_requesting = function() {
+        clearTimeout(timer);
+        timer = setTimeout(load_data, delay);
+    }
+
+    reset_delay_before_requesting();
 };
