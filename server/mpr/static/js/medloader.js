@@ -94,6 +94,7 @@ var api_url = "/api/search";
 
 var entermedicine = function(e) {
     searchTerm = e.target.value;
+    if (searchTerm.length < 4) return;
 
     var load_data = function() {
         var query = api_url + "?q=" + searchTerm;
