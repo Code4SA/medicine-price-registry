@@ -51,7 +51,7 @@ class Product(models.Model):
         for pi in self.product_ingredients.all():
             qs = qs.filter(product_ingredients__ingredient=pi.ingredient, product_ingredients__strength=pi.strength)
 
-        return qs
+        return qs.order_by("sep")
 
     @property
     def max_fee(self):
