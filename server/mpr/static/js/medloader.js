@@ -2,6 +2,13 @@
  * medloader - code4sa.org
  */
 
+var timer;
+var delay = 750;
+var animate_speed = 1000;
+var search_url = function(term) { return "/api/search?q=" + term; }
+var related_url = function(id) { return "/api/related?product=" + id };
+
+
 var log = function(obj) {
     if (window.console) {
         window.console.log(obj);
@@ -18,18 +25,6 @@ var map = {
     5 : "num_packs",
     6 : "is_generic"
 };
-
-var on_loading = function(searchTerm) {
-    $("#search-container").addClass("js-loading");
-
-    $('html, body').animate({
-        scrollTop: $("#top").offset().top
-    }, 500);
-}
-
-var on_loaded = function(result) {
-    $("#search-container").removeClass("js-loading");
-}
 
 Product = function(data, block) { 
     this.data = data;
@@ -76,12 +71,29 @@ Product.prototype = {
     }
 }
 
+var on_loading = function(key, value) {
+    $("#search-container").addClass("js-loading");
+    mixpanel.track(key, {"query": value});
+
+    $('html, body').animate({
+        scrollTop: $("#top").offset().top
+    }, animate_speed);
+}
+
+var on_loaded = function(result) {
+    $("#search-container").removeClass("js-loading");
+}
+
+
 var process_request = function(result) {
     $(".products .product").remove();
     $("#search-container").removeClass("js-results");
+    $("#noresults").css("display", "none")
+    $("#resultsheader").css("display", "none")
 
     var resultLength = result.length;
     if (resultLength) {
+        $("#resultsheader").css("display", "block")
         $("#resultsheader span").html(resultLength);
         $("#search-container").addClass("js-results");
 
@@ -93,16 +105,11 @@ var process_request = function(result) {
 
             $('.products').append($product.build_product());
         }
+    } else {
+        $("#noresults").css("display", "block")
     }
     on_loaded(result);
 }
-
-var timer;
-var searchTerm = '';
-var delay = 500;
-var api_url = "/api/search";
-var search_url = function(term) { return "/api/search?q=" + term; }
-var related_url = function(id) { return "/api/related?product=" + id };
 
 var entermedicine = function(e) {
     searchTerm = e.target.value;
@@ -127,12 +134,10 @@ var handlehash = function(value) {
         var value = s[1]
 
         if (key == "#related") {
-            on_loading(value);
-            mixpanel.track("Search", {"query": value});
+            on_loading(key, value);
             $.getJSON(related_url(value), process_request);
         } else if (key == "#search") {
-            on_loading(value);
-            mixpanel.track("Related", {"query": value});
+            on_loading(key, value);
             $.getJSON(search_url(value), process_request);
         }
     }
