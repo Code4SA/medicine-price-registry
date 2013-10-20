@@ -3,8 +3,8 @@
  */
 
 var timer;
-var delay = 750;
-var animate_speed = 1000;
+var delay = 500;
+var animate_speed = 750;
 var search_url = function(term) { return "/api/search?q=" + term; }
 var related_url = function(id) { return "/api/related?product=" + id };
 
