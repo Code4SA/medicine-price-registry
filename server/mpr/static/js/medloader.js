@@ -21,17 +21,10 @@ var map = {
 
 var on_loading = function(searchTerm) {
     $("#search-container").addClass("js-loading");
-    mixpanel.track("Search", {"query": searchTerm});
 
     $('html, body').animate({
         scrollTop: $("#top").offset().top
     }, 500);
-    /*
-    $("a[href='#top']").click(function() {
-        $("html, body").animate({ scrollTop: 0 }, "slow");
-        return false;
-    });
-    */
 }
 
 var on_loaded = function(result) {
@@ -135,10 +128,11 @@ var handlehash = function(value) {
 
         if (key == "#related") {
             on_loading(value);
+            mixpanel.track("Search", {"query": searchTerm});
             $.getJSON(related_url(value), process_request);
         } else if (key == "#search") {
             on_loading(value);
-            console.log(search_url(value));
+            mixpanel.track("Related", {"id": value});
             $.getJSON(search_url(value), process_request);
         }
     }
