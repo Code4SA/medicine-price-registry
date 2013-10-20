@@ -128,11 +128,11 @@ var handlehash = function(value) {
 
         if (key == "#related") {
             on_loading(value);
-            mixpanel.track("Search", {"query": searchTerm});
+            mixpanel.track("Search", {"query": value});
             $.getJSON(related_url(value), process_request);
         } else if (key == "#search") {
             on_loading(value);
-            mixpanel.track("Related", {"id": value});
+            mixpanel.track("Related", {"query": value});
             $.getJSON(search_url(value), process_request);
         }
     }
