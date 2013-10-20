@@ -22,6 +22,16 @@ var map = {
 var on_loading = function(searchTerm) {
     $("#search-container").addClass("js-loading");
     mixpanel.track("Search", {"query": searchTerm});
+
+    $('html, body').animate({
+        scrollTop: $("#top").offset().top
+    }, 500);
+    /*
+    $("a[href='#top']").click(function() {
+        $("html, body").animate({ scrollTop: 0 }, "slow");
+        return false;
+    });
+    */
 }
 
 var on_loaded = function(result) {
@@ -58,10 +68,17 @@ Product.prototype = {
         }
     },
 
+    add_related : function() {
+        var related_link = $(".related", this.block);
+        id = this.data.id;
+        related_link.attr("href", "#related:" + id);
+    },
+
     build_product : function() {
         this.set_name();
         this.add_details();
         this.add_ingredients();
+        this.add_related();
         return this.block;
     }
 }
@@ -91,15 +108,15 @@ var timer;
 var searchTerm = '';
 var delay = 500;
 var api_url = "/api/search";
+var search_url = function(term) { return "/api/search?q=" + term; }
+var related_url = function(id) { return "/api/related?product=" + id };
 
 var entermedicine = function(e) {
     searchTerm = e.target.value;
     if (searchTerm.length < 4) return;
 
     var load_data = function() {
-        var query = api_url + "?q=" + searchTerm;
-        on_loading(searchTerm);
-        $.getJSON(query, process_request);
+        location.hash = "search:" + searchTerm;
     }
 
     var reset_delay_before_requesting = function() {
@@ -109,3 +126,20 @@ var entermedicine = function(e) {
 
     reset_delay_before_requesting();
 };
+
+var handlehash = function(value) {
+    if (value.indexOf(":") >= 0) {
+        var s = value.split(":")
+        var key = s[0]
+        var value = s[1]
+
+        if (key == "#related") {
+            on_loading(value);
+            $.getJSON(related_url(value), process_request);
+        } else if (key == "#search") {
+            on_loading(value);
+            console.log(search_url(value));
+            $.getJSON(search_url(value), process_request);
+        }
+    }
+}

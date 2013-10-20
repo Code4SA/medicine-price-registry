@@ -140,6 +140,7 @@ PIPELINE_JS = {
           'js/jquery-1.10.2.js',
           'js/bootstrap.js',
           'js/medloader.js',
+          'js/jquery.ba-hashchange.min.js',
         ),
         'output_filename': 'js/mprbase.js',
     },

@@ -12,3 +12,7 @@ main {}
 .product {}
 	.product-name {margin-top:0;}
 	.product dl {margin-bottom:0;}
+
+a.related {
+    text-decoration: none;
+}

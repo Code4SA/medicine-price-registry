@@ -11,6 +11,8 @@
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <h3 class="panel-title product-name"></h3>
+                    <!-- Someone better at css please fix this inline style below -->
+                    <a style="margin-top:-15px; float:right" class="related" href="#">Related Products</a>
                 </div>
                 <div class="panel-body">
                     <div class="col-md-6 details">
@@ -48,6 +50,16 @@
     $(document).ready(function(){
         $("#entrybox").on("keyup", function(e){
             entermedicine(e);
+        });
+
+        $(function(){
+            // Bind the event.
+            $(window).hashchange( function(){
+                handlehash(location.hash);
+            })
+
+            // Trigger the event (useful on page load).
+            $(window).hashchange();
         });
     });
 </script>

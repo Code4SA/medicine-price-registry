@@ -47,11 +47,11 @@ class Product(models.Model):
 
     @property
     def related_products(self):
-        iq = models.Q()
+        qs = Product.objects.all()
         for pi in self.product_ingredients.all():
-            iq &= models.Q(product_ingredients__ingredient=pi.ingredient, product_ingredients__strength=pi.strength)
+            qs = qs.filter(product_ingredients__ingredient=pi.ingredient, product_ingredients__strength=pi.strength)
 
-        return Product.objects.filter(iq)
+        return qs
 
     @property
     def max_fee(self):
