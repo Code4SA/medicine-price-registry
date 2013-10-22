@@ -110,7 +110,6 @@ var on_loading = function(key, value) {
 
 var on_loaded = function(result) {
     $("#search-container").removeClass("js-loading");
-    $('.product .panel-collapse').collapse();
 }
 
 
@@ -134,9 +133,10 @@ var process_request = function(result) {
 
             $('.products').append($product.build_product());
         }
-        $('.accordion-toggle').on('click', function(e){
+        $('.product .accordion-toggle').on('click', function(e){
             e.preventDefault();
         });
+        $('.product .panel-collapse').collapse();
     } else {
         $("#noresults").show();
     }
