@@ -5,19 +5,40 @@ main {}
 	main > footer {border-top:solid 1px #eee; padding-top:9px; margin-top:20px; clear:both;}
 
 .js-loading #entrybox {background:url(../images/loader.gif) 99% 50% no-repeat;}
+#product_results {margin-bottom:3em;}
 #resultsheader {display:none; margin-top:20px; margin-bottom:5px;}
 .js-results #resultsheader {visibility:visible;}
+#noresults {display:none; margin-top:10px;}
 .template {display:none;}
 
 .product {}
-	.product-name {margin-top:0;}
+	.product .panel-heading {overflow:hidden;}
+	.product-name {margin-top:0; color:#000; text-decoration:none; display:inline-block; float:left; margin:0 10px 0 0;}
+	.product-price {display:inline-block; width:100px; float:right; white-space:nowrap; text-align:right;}
 	.product dl {margin-bottom:0;}
+	.product dt {float:left; clear:left;}
+	.product dd {text-align:right;}
+	.product .panel-footer {overflow:hidden; background-color:#fcfcfc; color:#999; border-top:1px solid #ddd;}
+		.product .panel-footer p {margin:0;}
+			a.related {float:right; text-decoration:none; margin:0 0 0 10px;}
 
-a.related {
-    text-decoration: none;
-}
 
-#noresults {
-    display:none;
-    margin-top: 10px;
+/* Icons */
+.product > .panel-heading {padding-left:50px; background-repeat:no-repeat; background-position:12px 50%;}
+.df_capsule .panel-heading    {background-image:url(../images/icons/capsule_24.png);}
+.df_tablet .panel-heading     {background-image:url(../images/icons/pill_24.png);}
+.df_syrup .panel-heading      {background-image:url(../images/icons/syrup_24.png);}
+.df_solution .panel-heading,
+.df_drops .panel-heading,
+.df_suspension .panel-heading {background-image:url(../images/icons/pipette_24.png);}
+.df_injection .panel-heading  {background-image:url(../images/icons/syringe_24.png);}
+.df_infusion .panel-heading   {background-image:url(../images/icons/iv_24.png);}
+.df_ointment .panel-heading,
+.df_gel .panel-heading        {background-image:url(../images/icons/paste_24.png);}
+.df_nebuliser .panel-heading  {background-image:url(../images/icons/inhaler_24.png);}
+.df_spray .panel-heading      {background-image:url(../images/icons/spray_24.png);}
+
+@media (min-width:768px) {
+	.dl-horizontal dt {}
+	.dl-horizontal dd {text-align:left;}
 }

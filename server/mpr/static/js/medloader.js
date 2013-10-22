@@ -16,14 +16,12 @@ var log = function(obj) {
 };
 
 var map = {
-    // 0 was name
     0 : "sep",
-    1 : "regno",
-    2 : "schedule",
-    3 : "dosage_form",
-    4 : "pack_size",
-    5 : "num_packs",
-    6 : "is_generic"
+    1 : "schedule",
+    2 : "dosage_form",
+    3 : "pack_size",
+    4 : "num_packs",
+    5 : "is_generic"
 };
 
 Product = function(data, block) { 
@@ -35,6 +33,27 @@ Product.prototype = {
 
     set_name : function() {
         $(".product-name", this.block).html(this.data.name);
+        log(this.data);
+    },
+
+    set_price : function() {
+        $(".product-price", this.block).html(this.data.sep);
+    },
+
+    add_meta_data: function(){
+        $('.product-reg-number', this.block).html(this.data.regno);
+    },
+
+    set_class_names: function() {
+        // We can't assume all data returned is of type: string :(
+        if (typeof this.data.is_generic == 'string') {
+            var classNameGeneric = 'type_' + this.data.is_generic.toLowerCase();
+            $(this.block).addClass(classNameGeneric);
+        }
+        if (typeof this.data.dosage_form == 'string') {
+            var classNameDosageForm = 'df_' + this.data.dosage_form.toLowerCase();
+            $(this.block).addClass(classNameDosageForm);
+        }
     },
 
     add_details : function() {
@@ -62,11 +81,21 @@ Product.prototype = {
         related_link.attr("href", "#related:" + id);
     },
 
+    set_collapse_toggle: function() {
+        var productBodyTarget = 'product_body_' + this.data.id;
+        $('.product-name', this.block).attr('href', '#' + productBodyTarget).attr('data-target', '#' + productBodyTarget);
+        $('.panel-collapse', this.block).attr('id', productBodyTarget);
+    },
+
     build_product : function() {
         this.set_name();
+        this.set_price();
+        this.set_class_names();
         this.add_details();
         this.add_ingredients();
         this.add_related();
+        this.add_meta_data();
+        this.set_collapse_toggle();
         return this.block;
     }
 }
@@ -88,12 +117,12 @@ var on_loaded = function(result) {
 var process_request = function(result) {
     $(".products .product").remove();
     $("#search-container").removeClass("js-results");
-    $("#noresults").css("display", "none")
-    $("#resultsheader").css("display", "none")
+    $("#noresults").hide();
+    $("#resultsheader").hide();
 
     var resultLength = result.length;
     if (resultLength) {
-        $("#resultsheader").css("display", "block")
+        $("#resultsheader").show();
         $("#resultsheader span").html(resultLength);
         $("#search-container").addClass("js-results");
 
@@ -105,8 +134,12 @@ var process_request = function(result) {
 
             $('.products').append($product.build_product());
         }
+        $('.accordion-toggle').on('click', function(e){
+            e.preventDefault();
+        });
+        $('.collapse').collapse('hide');
     } else {
-        $("#noresults").css("display", "block")
+        $("#noresults").show();
     }
     on_loaded(result);
 }
