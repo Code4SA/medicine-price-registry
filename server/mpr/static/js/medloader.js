@@ -2,9 +2,9 @@
  * medloader - code4sa.org
  */
 
-var timer;
-var delay = 500;
-var animate_speed = 750;
+var timer,
+    delay = 500,
+    animate_speed = 750;
 var search_url = function(term) { return "/api/search?q=" + term; }
 var related_url = function(id) { return "/api/related?product=" + id };
 
@@ -33,7 +33,6 @@ Product.prototype = {
 
     set_name : function() {
         $(".product-name", this.block).html(this.data.name);
-        log(this.data);
     },
 
     set_price : function() {
@@ -111,6 +110,7 @@ var on_loading = function(key, value) {
 
 var on_loaded = function(result) {
     $("#search-container").removeClass("js-loading");
+    $('.product .panel-collapse').collapse();
 }
 
 
@@ -137,7 +137,6 @@ var process_request = function(result) {
         $('.accordion-toggle').on('click', function(e){
             e.preventDefault();
         });
-        $('.collapse').collapse('hide');
     } else {
         $("#noresults").show();
     }
