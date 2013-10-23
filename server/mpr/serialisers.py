@@ -14,6 +14,11 @@ dosage_form = {
     "Neb" : "Nebuliser",
     "Inh" : "Inhaler",
     "Inf" : "Infusion",
+    "Chg" : "Chewing Gum",
+    "Vac" : "Vacutainer",
+    "Vag" : "Vaginal Gel",
+    "Eyo" : "Eye ointment",
+    "Vat" : "Vaginal Cream",
 }
 
 def as_currency(x):
