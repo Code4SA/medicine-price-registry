@@ -129,7 +129,8 @@ STATICFILES_STORAGE = "pipeline.storage.PipelineCachedStorage"
 PIPELINE_CSS = {
     'mpr': {
         'source_filenames': (
-          'css/bootstrap-theme.css',
+          'css/bootstrap.css',
+          #'css/bootstrap-theme.css',
           'css/custom.css',
         ),
         'output_filename': 'css/mpr.css',
@@ -138,6 +139,9 @@ PIPELINE_CSS = {
 PIPELINE_JS = {
     'mprbase': {
         'source_filenames': (
+          'js/jquery-1.10.2.js',
+          'js/bootstrap.js',
+          'js/jquery.ba-hashchange.js',
           'js/medloader.js',
         ),
         'output_filename': 'js/mprbase.js',

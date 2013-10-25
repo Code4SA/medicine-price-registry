@@ -22,7 +22,7 @@ Setting up your environment (if you're using virtualenv - which you should be):
     cd medicine-price-registry
     virtualenv $VIRTUALENV_HOME/mpr # (i.e. put it wherever you usually put your virtual environments)
     source $VIRTUALENV_HOME/mpr/bin/active # (or if you're using virtualenvwrapper you can mkvirtualenv mpr; workon mpr)
-    pip install -r deploy/development.txt
+    pip install -r requirements/development.txt
     cd server
 
     python manage.py runserver --settings=settings.development
