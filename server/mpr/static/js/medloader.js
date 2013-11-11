@@ -7,6 +7,7 @@ var timer,
     animate_speed = 750;
 var search_url = function(term) { return "/api/search?q=" + term; }
 var related_url = function(id) { return "/api/related?product=" + id };
+var product_detail_url = function(id) { return "/api/detail?product=" + id };
 
 
 var log = function(obj) {
@@ -32,15 +33,11 @@ Product = function(data, block) {
 Product.prototype = {
 
     set_name : function() {
-        $(".product-name", this.block).html(this.data.name);
+        $(".product-name", this.block).html(this.data.name).attr('href', '#product-detail-' + this.data.id);
     },
 
     set_price : function() {
         $(".product-price", this.block).html(this.data.sep);
-    },
-
-    add_meta_data: function(){
-        $('.product-reg-number', this.block).html(this.data.regno);
     },
 
     set_class_names: function() {
@@ -55,46 +52,10 @@ Product.prototype = {
         }
     },
 
-    add_details : function() {
-        var data = this.data;
-        $(".details dd", this.block).each(function(idx) {
-            var key = map[idx];
-            $(this).html(data[key]);
-        });
-    },
-
-    add_ingredients : function() {
-        this.block.find(".ingredients dt, .ingredients dd").remove();
-        var $ingredientsList = $(".ingredients dl", this.block);
-        var productIngredients = this.data.ingredients;
-        var productIngredientsLength = productIngredients.length;
-        for (var j = 0; j < productIngredientsLength; j++) {
-            $ingredientsList.append("<dt>" + productIngredients[j].name + ":</dt>");
-            $ingredientsList.append("<dd>" + productIngredients[j].strength + productIngredients[j].unit + "</dd>");
-        }
-    },
-
-    add_related : function() {
-        var related_link = $(".related", this.block);
-        id = this.data.id;
-        related_link.attr("href", "#related:" + id);
-    },
-
-    set_collapse_toggle: function() {
-        var productBodyTarget = 'product_body_' + this.data.id;
-        $('.product-name', this.block).attr('href', '#' + productBodyTarget).attr('data-target', '#' + productBodyTarget);
-        $('.panel-collapse', this.block).attr('id', productBodyTarget);
-    },
-
     build_product : function() {
         this.set_name();
         this.set_price();
         this.set_class_names();
-        this.add_details();
-        this.add_ingredients();
-        this.add_related();
-        this.add_meta_data();
-        this.set_collapse_toggle();
         return this.block;
     }
 }
@@ -126,21 +87,70 @@ var process_request = function(result) {
         $("#search-container").addClass("js-results");
 
         var $templateRow = $(".products .template");
-
         for (var i = 0; i < resultLength; i++) {
-            $product = new Product(result[i], $templateRow.clone().removeClass("template"));
-            $product.build_product();
-
+            var $product = new Product(result[i], $templateRow.clone().removeClass("template"));
             $('.products').append($product.build_product());
         }
-        $('.product .accordion-toggle').on('click', function(e){
+        
+        $('.product .product-name').on('click', function(e){
             e.preventDefault();
+            add_product_detail($(this));
         });
-        $('.product .panel-collapse').collapse();
     } else {
         $("#noresults").show();
     }
     on_loaded(result);
+}
+
+var $templateDetail = $(".products .template-panel-body");
+var add_product_detail = function(elem){
+    var target_id = elem.attr('href').split('#product-detail-')[1];
+    $.getJSON(product_detail_url(target_id), function(data){
+
+        // Switch off any further event bindings to the source anchor, so that we don't get two results
+        elem.off();
+
+        // Set up the template
+        var $product_detail = $templateDetail.clone().removeClass('template-panel-body');
+
+        // Add product detail
+        $(".details dd", $product_detail).each(function(idx) {
+            var key = map[idx];
+            $(this).html(data[key]);
+        });
+
+        // Add ingredients
+        var $ingredientsList = $(".ingredients dl", $product_detail);
+        var productIngredients = data.ingredients;
+        var productIngredientsLength = productIngredients.length;
+        for (var j = 0; j < productIngredientsLength; j++) {
+            $ingredientsList.append("<dt>" + productIngredients[j].name.trim() + ":</dt>");
+            $ingredientsList.append("<dd>" + productIngredients[j].strength + productIngredients[j].unit + "</dd>");
+        }
+
+        // Add related products link
+        var related_link = $(".related", $product_detail);
+        related_link.attr("href", "#related:" + target_id);
+
+        // Add meta data
+        $('.product-reg-number', $product_detail).html(data.regno);
+
+        // Add product-detail ID so that we have something to target with collapse()
+        $product_detail.attr('id', 'product-detail-' + target_id);
+        
+        // Append the detail to the product in question
+        elem.parents('.product').append($product_detail);
+
+        // Add collapse toggle to the source anchor
+        elem.on("click", function(){
+            $(this).collapse();
+        });
+    })
+    .error(function() {
+        // What to do on error?
+        alert('There was a problem getting the details for this medicine. :(\nPlease try again later.');
+    });
+    
 }
 
 var entermedicine = function(e) {
