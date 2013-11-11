@@ -9,7 +9,8 @@ main {}
 #resultsheader {display:none; margin-top:20px; margin-bottom:5px;}
 .js-results #resultsheader {visibility:visible;}
 #noresults {display:none; margin-top:10px;}
-.template {display:none;}
+.template,
+.template-panel-body {position:absolute; left:-9999em;}
 
 .product {}
 	.product .panel-heading {overflow:hidden;}
@@ -18,6 +19,7 @@ main {}
 	.product dl {margin-bottom:0;}
 	.product dt {float:left; clear:left;}
 	.product dd {text-align:right;}
+	.product .collapsing {-webkit-transition:none; transition:none;}
 	.product .panel-footer {overflow:hidden; background-color:#fcfcfc; color:#999; border-top:1px solid #ddd;}
 		.product .panel-footer p {margin:0;}
 			a.related {float:right; text-decoration:none; margin:0 0 0 10px;}

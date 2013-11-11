@@ -54,3 +54,12 @@ def related_products(request):
         ), mimetype="application/json"
     )
     
+def product_detail(request):
+    product_id = request.GET.get("product", "").strip()
+    product = get_object_or_404(models.Product, id=product_id)
+
+    return HttpResponse(
+        json.dumps(
+            serialisers.serialize_product(product), indent=4
+        ), mimetype="application/json"
+    )
