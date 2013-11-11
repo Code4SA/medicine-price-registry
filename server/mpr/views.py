@@ -28,7 +28,7 @@ def search_by_product(request):
         json.dumps(products, indent=4), mimetype="application/json"
     )
 
-def search(request):
+def search(request, serialiser=serialisers.serialize_products):
     q = request.GET.get("q", "").strip()
 
     all_products = set()
@@ -39,10 +39,13 @@ def search(request):
         products2 = set(models.Product.objects.search_by_ingredient(q))
         all_products |= products1 | products2
         all_products = sorted(all_products, key=lambda x: x.sep)
-        products = serialisers.serialize_products(all_products)
+        products = serialiser(all_products)
     return HttpResponse(
         json.dumps(products, indent=4), mimetype="application/json"
     )
+
+def search_lite(request):
+    return search(request, serialisers.serialize_products_lite)
 
 def related_products(request):
     product_id = request.GET.get("product", "").strip()

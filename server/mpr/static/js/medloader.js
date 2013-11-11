@@ -5,7 +5,7 @@
 var timer,
     delay = 500,
     animate_speed = 750;
-var search_url = function(term) { return "/api/search?q=" + term; }
+var search_url = function(term) { return "/api/search-lite?q=" + term; }
 var related_url = function(id) { return "/api/related?product=" + id };
 var product_detail_url = function(id) { return "/api/detail?product=" + id };
 

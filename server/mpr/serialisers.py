@@ -63,3 +63,14 @@ def serialize_product(product):
 
 def serialize_products(products):
     return [serialize_product(p) for p in products]
+
+def serialize_product_lite(product):
+    return {
+        "id" : product.id,
+        "name" : product.name,
+        "dosage_form" : dosage_form.get(product.dosage_form, product.dosage_form),
+        "sep" : as_currency(product.max_fee),
+    }
+
+def serialize_products_lite(products):
+    return [serialize_product_lite(p) for p in products]
