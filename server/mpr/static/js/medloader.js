@@ -103,9 +103,9 @@ var process_request = function(result) {
 }
 
 var $templateDetail = $(".products .template-panel-body");
-var add_product_detail = function(elem){
+var add_product_detail = function(elem) {
     var target_id = elem.attr('href').split('#product-detail-')[1];
-    $.getJSON(product_detail_url(target_id), function(data){
+    $.getJSON(product_detail_url(target_id), function(data) {
 
         // Switch off any further event bindings to the source anchor, so that we don't get two results
         elem.off();
