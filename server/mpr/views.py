@@ -1,8 +1,15 @@
 import json
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, Http404
+from django.conf import settings
 from mpr import models
 import serialisers
+
+def log_analytics(session, event, properties):
+    if settings.DEBUG: return
+    import analytics
+    analytics.init('wdfkolf5dkr7gwh12jq7')
+    analytics.track(user_id=session.session_key, event=event, properties=properties)
 
 def search_by_ingredient(request):
     q = request.GET.get("q", "").strip()
@@ -31,6 +38,10 @@ def search_by_product(request):
 def search(request, serialiser=serialisers.serialize_products):
     q = request.GET.get("q", "").strip()
 
+    log_analytics(request.session, "#search", {
+        "search_string" : q
+    })
+
     all_products = set()
     if len(q) < 3:
         products = []
@@ -50,6 +61,9 @@ def search_lite(request):
 def related_products(request):
     product_id = request.GET.get("product", "").strip()
     product = get_object_or_404(models.Product, id=product_id)
+    log_analytics(request.session, "#related", {
+        "product" : product.name
+    })
 
     return HttpResponse(
         json.dumps(
@@ -60,6 +74,10 @@ def related_products(request):
 def product_detail(request):
     product_id = request.GET.get("product", "").strip()
     product = get_object_or_404(models.Product, id=product_id)
+
+    log_analytics(request.session, "#product-detail", {
+        "product" : product.name
+    })
 
     return HttpResponse(
         json.dumps(

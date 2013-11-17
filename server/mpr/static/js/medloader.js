@@ -25,8 +25,8 @@ var map = {
     5 : "is_generic"
 };
 
-var load_data = function(key, value, url, foo) {
-    on_loading(key, value);
+var load_data = function(url, foo) {
+    on_loading();
     return $.getJSON(url, function(data) {
         on_loaded(data);
         foo(data);
@@ -68,12 +68,8 @@ Product.prototype = {
     }
 }
 
-var on_loading = function(key, value) {
+var on_loading = function() {
     $("#search-container").addClass("js-loading");
-    if (!debug) {
-        mixpanel.track(key, {"query": value});
-    }
-
 }
 
 var on_loaded = function(result) {
@@ -112,7 +108,8 @@ var process_request = function(result) {
 var $templateDetail = $(".products .template-panel-body");
 var add_product_detail = function(elem) {
     var target_id = elem.attr('href').split('#product-detail-')[1];
-    load_data("#product-detail", target_id, product_detail_url(target_id), function(data) {
+
+    load_data(product_detail_url(target_id), function(data) {
         // Switch off any further event bindings to the source anchor, so that we don't get two results
         elem.off();
 
@@ -182,9 +179,9 @@ var load_medicines = function(value) {
         var value = s[1]
 
         if (key == "#related") {
-            load_data(key, value, related_url(value), process_request);
+            load_data(related_url(value), process_request);
         } else if (key == "#search") {
-            load_data(key, value, search_url(value), process_request);
+            load_data(search_url(value), process_request);
         }
 
         $('html, body').animate({
