@@ -61,9 +61,7 @@ def search_lite(request):
 def related_products(request):
     product_id = request.GET.get("product", "").strip()
     product = get_object_or_404(models.Product, id=product_id)
-    log_analytics(request.session, "#related", {
-        "product" : product.name
-    })
+    log_analytics(request.session, "#related", product_properties(product))
 
     return HttpResponse(
         json.dumps(
@@ -71,13 +69,19 @@ def related_products(request):
         ), mimetype="application/json"
     )
     
+def product_properties(product):
+    return {
+        "product" : product.name,
+        "product_id" : product.id,
+        "dosage_form" : product.dosage_form,
+        "is_generic" : product.is_generic
+    }
+
 def product_detail(request):
     product_id = request.GET.get("product", "").strip()
     product = get_object_or_404(models.Product, id=product_id)
 
-    log_analytics(request.session, "#product-detail", {
-        "product" : product.name
-    })
+    log_analytics(request.session, "#product-detail", product_properties(product))
 
     return HttpResponse(
         json.dumps(
