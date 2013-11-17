@@ -1,6 +1,7 @@
 fabdefs.py
 server/static
 *.py[cod]
+mpr.db
 
 # C extensions
 *.so
