@@ -72,9 +72,6 @@ var on_loading = function(key, value) {
     $("#search-container").addClass("js-loading");
     mixpanel.track(key, {"query": value});
 
-    $('html, body').animate({
-        scrollTop: $("#top").offset().top
-    }, animate_speed);
 }
 
 var on_loaded = function(result) {
@@ -176,7 +173,7 @@ var entermedicine = function(e) {
     reset_delay_before_requesting();
 };
 
-var handlehash = function(value) {
+var load_medicines = function(value) {
     if (value.indexOf(":") >= 0) {
         var s = value.split(":")
         var key = s[0]
@@ -187,5 +184,9 @@ var handlehash = function(value) {
         } else if (key == "#search") {
             load_data(key, value, search_url(value), process_request);
         }
+
+        $('html, body').animate({
+            scrollTop: $("#top").offset().top
+        }, animate_speed);
     }
 }
