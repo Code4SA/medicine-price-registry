@@ -27,7 +27,7 @@ var map = {
 
 var load_data = function(key, value, url, foo) {
     on_loading(key, value);
-    $.getJSON(url, function(data) {
+    return $.getJSON(url, function(data) {
         on_loaded(data);
         foo(data);
     });
