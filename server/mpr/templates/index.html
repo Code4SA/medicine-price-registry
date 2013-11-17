@@ -55,6 +55,7 @@
 
 {% block bodybottom %}
 <script>
+    var debug = {{ debug|lower }};
     $(document).ready(function(){
         $("#entrybox").on("keyup", function(e){
             entermedicine(e);

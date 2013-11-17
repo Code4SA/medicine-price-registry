@@ -70,7 +70,9 @@ Product.prototype = {
 
 var on_loading = function(key, value) {
     $("#search-container").addClass("js-loading");
-    mixpanel.track(key, {"query": value});
+    if (!debug) {
+        mixpanel.track(key, {"query": value});
+    }
 
 }
 

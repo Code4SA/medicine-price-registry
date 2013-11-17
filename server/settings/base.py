@@ -1,4 +1,5 @@
 import os
+from django.conf import global_settings
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -110,6 +111,13 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don"t forget to use absolute paths, not relative paths.
     os.path.join(PROJECT_ROOT, "templates")
+)
+
+def settings_context(context):
+    return { "debug" : DEBUG }
+
+TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+    'settings.base.settings_context',    
 )
 
 INSTALLED_APPS = (
