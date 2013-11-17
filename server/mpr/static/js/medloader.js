@@ -25,6 +25,14 @@ var map = {
     5 : "is_generic"
 };
 
+var load_data = function(key, value, url, foo) {
+    on_loading(key, value);
+    $.getJSON(url, function(data) {
+        on_loaded(data);
+        foo(data);
+    });
+}
+
 Product = function(data, block) { 
     this.data = data;
     this.block = block.addClass("product");
@@ -105,8 +113,7 @@ var process_request = function(result) {
 var $templateDetail = $(".products .template-panel-body");
 var add_product_detail = function(elem) {
     var target_id = elem.attr('href').split('#product-detail-')[1];
-    $.getJSON(product_detail_url(target_id), function(data) {
-
+    load_data("#product-detail", target_id, product_detail_url(target_id), function(data) {
         // Switch off any further event bindings to the source anchor, so that we don't get two results
         elem.off();
 
@@ -176,11 +183,9 @@ var handlehash = function(value) {
         var value = s[1]
 
         if (key == "#related") {
-            on_loading(key, value);
-            $.getJSON(related_url(value), process_request);
+            load_data(key, value, related_url(value), process_request);
         } else if (key == "#search") {
-            on_loading(key, value);
-            $.getJSON(search_url(value), process_request);
+            load_data(key, value, search_url(value), process_request);
         }
     }
 }
