@@ -55,7 +55,7 @@ Product.prototype = {
             $(this.block).addClass(classNameGeneric);
         }
         if (typeof this.data.dosage_form == 'string') {
-            var classNameDosageForm = 'df_' + this.data.dosage_form.toLowerCase();
+            var classNameDosageForm = 'df_' + this.data.dosage_form.toLowerCase().replace(" ", "_");
             $(this.block).addClass(classNameDosageForm);
         }
     },

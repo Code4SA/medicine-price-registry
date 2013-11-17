@@ -30,16 +30,28 @@ main {}
 .df_capsule .panel-heading       {background-image:url(../images/icons/capsule_24.png);}
 .df_effervescent .panel-heading,
 .df_tablet .panel-heading        {background-image:url(../images/icons/pill_24.png);}
-.df_syrup .panel-heading         {background-image:url(../images/icons/syrup_24.png);}
+.df_liquid .panel-heading,
+.df_syrup .panel-heading,
+.df_sachet .panel-heading,
+.df_suspension .panel-heading, 
 .df_solution .panel-heading,
-.df_drops .panel-heading,
-.df_suspension .panel-heading    {background-image:url(../images/icons/pipette_24.png);}
+.df_suspension .panel-heading    {background-image:url(../images/icons/syrup_24.png);}
+.df_eye_ointment .panel-heading,  
+.df_drops .panel-heading         {background-image:url(../images/icons/pipette_24.png);}
+.df_penset .panel-heading,   
 .df_injection .panel-heading     {background-image:url(../images/icons/syringe_24.png);}
 .df_infusion .panel-heading      {background-image:url(../images/icons/iv_24.png);}
 .df_ointment .panel-heading,
-.df_gel .panel-heading           {background-image:url(../images/icons/paste_24.png);}
+.df_gel .panel-heading,           
+.df_vaginal_gel .panel-heading,           
+.df_vaginal_cream .panel-heading,           
+.df_lotion .panel-heading,           
+.df_cream .panel-heading         {background-image:url(../images/icons/paste_24.png);}
+.df_inhaler .panel-heading,    
 .df_nebuliser .panel-heading     {background-image:url(../images/icons/inhaler_24.png);}
 .df_spray .panel-heading         {background-image:url(../images/icons/spray_24.png);}
+.df_ampoule .panel-heading,
+.df_vial .panel-heading          {background-image:url(../images/icons/ampoules_24.png);}
 
 @media (min-width:768px) {
 	.dl-horizontal dt {}
