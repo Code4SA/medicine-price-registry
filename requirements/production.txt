@@ -2,3 +2,4 @@
 gunicorn
 python-memcached
 analytics-python
+psycopg2
