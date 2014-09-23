@@ -16,3 +16,14 @@ def deploy():
             api.run("%s manage.py collectstatic --noinput --settings=settings.production" % python)
 
         api.sudo("supervisorctl restart mpr")
+
+def update_database(url):
+    """
+    Update the database remotely. Expects a url to the updated xls file which can usually be foundat http://mpr.gov.za
+    e.g.
+    fab update_database:'http://mpr.gov.za/Publish/ViewDocument.aspx?DocumentPublicationId\=1488'
+    """
+    api.run("curl %s > /tmp/meds.xls" % url)
+    with api.cd(code_dir):
+        api.run("%s manage.py loaddata /tmp/meds.xls --settings=settings.production" % python)
+    

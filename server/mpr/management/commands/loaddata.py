@@ -66,6 +66,7 @@ class Command(BaseCommand):
         with transaction.commit_on_success():
             count += 1
             sys.stdout.write(r"\r%s" % count)
+            sys.stdout.flush()
             if count % 100 == 0: sys.stdout.flush()
             for p in self.parse(filename):
                 product = models.Product.objects.create(
@@ -79,3 +80,4 @@ class Command(BaseCommand):
                     models.ProductIngredient.objects.get_or_create(
                         product=product, ingredient=ingredient, strength=i["strength"]
                     )
+            models.LastUpdated.objects.create()

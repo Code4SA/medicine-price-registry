@@ -78,3 +78,9 @@ class ProductIngredient(models.Model):
 
     def __unicode__(self):
         return "%s %s" % (self.ingredient, self.strength)
+
+class LastUpdated(models.Model):
+    update_date = models.DateField(auto_now_add=True)
+
+    def __unicode__(self):
+        return str(self.update_date)
