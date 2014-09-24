@@ -15,11 +15,12 @@ def log_analytics(session, event, properties):
         if settings.DEBUG: return
         import analytics
         
-        session.setdefault("uid", names.get_full_name())
+        name = names.get_full_name()
+        uid = session.get("uid", name)
         analytics.init('wdfkolf5dkr7gwh12jq7')
-        analytics.identify(session.setdefault("uid"))
-        analytics.track(user_id=session["uid"], event=event, properties=properties)
-    except Exception e:
+        analytics.identify(uid)
+        analytics.track(uid, event=event, properties=properties)
+    except Exception, e:
         logger.exception("Error handling analytics")
     
 
