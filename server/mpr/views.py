@@ -2,14 +2,19 @@ import json
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, Http404
 from django.conf import settings
+import names
+
 from mpr import models
 import serialisers
 
 def log_analytics(session, event, properties):
     if settings.DEBUG: return
     import analytics
+    
+    session.setdefault("uid", names.get_full_name())
     analytics.init('wdfkolf5dkr7gwh12jq7')
-    analytics.track(user_id=session.session_key, event=event, properties=properties)
+    analytics.track(user_id=session["uid"], event=event, properties=properties)
+    analytics.identify(session.setdefault("uid"))
 
 def search_by_ingredient(request):
     q = request.GET.get("q", "").strip()
