@@ -39,8 +39,8 @@ def log_analytics(request, event, properties):
         analytics.init('wdfkolf5dkr7gwh12jq7')
         analytics.identify(uid, {
             "ip" : ip,
-            "country" : country,
-            "city" : city,
+            "country" : data.get("country", None),
+            "city" : data.get("city", None),
         })
         analytics.track(uid, event=event, properties=properties)
     except Exception, e:
