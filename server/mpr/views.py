@@ -38,7 +38,8 @@ def log_analytics(request, event, properties):
         uid = request.session.get("uid", name)
         analytics.init('wdfkolf5dkr7gwh12jq7')
         analytics.identify(uid, {
-            "ip" : ip,
+            "$ip" : ip,
+            "$name" : uid,
             "country" : data.get("country_name", None),
             "city" : data.get("city", None),
         })
