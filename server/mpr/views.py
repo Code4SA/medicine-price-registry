@@ -20,7 +20,6 @@ def get_location(ip):
         if data:
             city = data.get("city", None)
             country = data.get("country_name", None)
-            print city, country
         else:
             data = {}
     return data
