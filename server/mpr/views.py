@@ -39,7 +39,7 @@ def log_analytics(request, event, properties):
         analytics.init('wdfkolf5dkr7gwh12jq7')
         analytics.identify(uid, {
             "ip" : ip,
-            "country" : data.get("country", None),
+            "country" : data.get("country_name", None),
             "city" : data.get("city", None),
         })
         analytics.track(uid, event=event, properties=properties)
