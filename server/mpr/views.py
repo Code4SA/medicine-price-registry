@@ -37,12 +37,14 @@ def log_analytics(request, event, properties):
         name = names.get_full_name()
         uid = request.session.get("uid", name)
         analytics.init('wdfkolf5dkr7gwh12jq7')
-        analytics.identify(uid, {
-            "$ip" : ip,
-            "$name" : uid,
-            "country" : data.get("country_name", None),
-            "city" : data.get("city", None),
-        })
+        analytics.identify(uid,
+            {
+                "$name" : uid,
+                "country" : data.get("country_name", None),
+                "city" : data.get("city", None),
+            },
+            { "$ip" : ip}
+        )
         analytics.track(uid, event=event, properties=properties)
     except Exception, e:
         logger.exception("Error handling analytics")
