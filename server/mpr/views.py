@@ -27,6 +27,10 @@ def get_location(ip):
 def log_analytics(request, event, properties):
     try:
         if settings.DEBUG: return
+        if "pingdom" in request.META.get("HTTP_USER_AGENT", ""):
+            logger.warning("ignored pingdom bot")
+            return
+
         import analytics
         from ipware.ip import get_ip as get_ip
 
@@ -35,6 +39,7 @@ def log_analytics(request, event, properties):
 
         name = names.get_full_name()
         uid = request.session.get("uid", name)
+        request.session["uid"] = uid
         analytics.init('wdfkolf5dkr7gwh12jq7')
         analytics.identify(uid,
             {
