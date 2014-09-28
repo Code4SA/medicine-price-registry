@@ -64,6 +64,7 @@ class Command(BaseCommand):
         count = 0
         filename = args[0]
         with transaction.commit_on_success():
+            models.Product.objects.all().delete()
             count += 1
             sys.stdout.write(r"\r%s" % count)
             sys.stdout.flush()
