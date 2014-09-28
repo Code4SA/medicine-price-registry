@@ -221,3 +221,4 @@ CACHES = {
         'TIMEOUT' : 60*60*24*7
     }
 }
+GEOIP_PATH = os.path.join(STATIC_ROOT, "geoip")

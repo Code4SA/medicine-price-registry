@@ -9,16 +9,46 @@ import serialisers
 import logging
 
 logger = logging.getLogger(__name__)
+
+def get_location(ip):
+    from django.contrib.gis.geoip import GeoIP
+    data = {}
+    if ip:
+        g = GeoIP()
+
+        data = g.city(ip)
+        if data:
+            city = data.get("city", None)
+            country = data.get("country_name", None)
+        else:
+            data = {}
+    return data
  
-def log_analytics(session, event, properties):
+def log_analytics(request, event, properties):
     try:
         if settings.DEBUG: return
+        if "pingdom" in request.META.get("HTTP_USER_AGENT", ""):
+            logger.warning("ignored pingdom bot")
+            return
+
         import analytics
-        
+        from ipware.ip import get_ip as get_ip
+
+        ip = get_ip(request)
+        data = get_location(ip)
+
         name = names.get_full_name()
-        uid = session.get("uid", name)
+        uid = request.session.get("uid", name)
+        request.session["uid"] = uid
         analytics.init('wdfkolf5dkr7gwh12jq7')
-        analytics.identify(uid)
+        analytics.identify(uid,
+            {
+                "$name" : uid,
+                "country" : data.get("country_name", None),
+                "city" : data.get("city", None),
+            },
+            { "$ip" : ip}
+        )
         analytics.track(uid, event=event, properties=properties)
     except Exception, e:
         logger.exception("Error handling analytics")
@@ -51,7 +81,7 @@ def search_by_product(request):
 def search(request, serialiser=serialisers.serialize_products):
     q = request.GET.get("q", "").strip()
 
-    log_analytics(request.session, "#search", {
+    log_analytics(request, "#search", {
         "search_string" : q
     })
 
@@ -74,7 +104,7 @@ def search_lite(request):
 def related_products(request):
     product_id = request.GET.get("product", "").strip()
     product = get_object_or_404(models.Product, id=product_id)
-    log_analytics(request.session, "#related", product_properties(product))
+    log_analytics(request, "#related", product_properties(product))
 
     return HttpResponse(
         json.dumps(
@@ -94,7 +124,7 @@ def product_detail(request):
     product_id = request.GET.get("product", "").strip()
     product = get_object_or_404(models.Product, id=product_id)
 
-    log_analytics(request.session, "#product-detail", product_properties(product))
+    log_analytics(request, "#product-detail", product_properties(product))
 
     return HttpResponse(
         json.dumps(

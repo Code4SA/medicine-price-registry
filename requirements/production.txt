@@ -3,3 +3,4 @@ gunicorn
 python-memcached
 analytics-python
 psycopg2
+django-ipware
