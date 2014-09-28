@@ -8,8 +8,8 @@ dosage_form = {
     "Lot" : "lotion",
     "Inj" : "injection",
     "Syr" : "syrup",
-    "Dsp" : "effervescent",
-    "Eft" : "effervescent",
+    "Dsp" : "effervescent tablet",
+    "Eft" : "effervescent tablet",
     "Ear" : "drops",
     "Drp" : "drops",
     "Opd" : "drops",
@@ -86,9 +86,17 @@ def serialize_products(products):
     return [serialize_product(p) for p in products]
 
 def serialize_product_lite(product):
+    import models
+    name = product.name
+    if product.ingredients.all().count() == 1:
+        ingredient = product.ingredients.all()[0]
+        pi = models.ProductIngredient.objects.get(product=product, ingredient=ingredient)
+        form = dosage_form.get(product.dosage_form, product.dosage_form)
+        name = "%s (%s%s %s)" % (name, int_or_float(pi.strength), ingredient.unit, form)
+
     return {
         "id" : product.id,
-        "name" : product.name,
+        "name" : name,
         "dosage_form" : dosage_form.get(product.dosage_form, product.dosage_form),
         "sep" : as_currency(product.max_fee),
     }
