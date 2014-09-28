@@ -48,6 +48,11 @@ class Command(BaseCommand):
                 "unit" : worksheet.cell_value(idx, 9).lower(),
             })
 
+    def delete_products(self):
+        while models.Product.objects.count():
+            ids = models.Product.objects.values_list('pk', flat=True)[:100]
+            models.Product.objects.filter(pk__in = ids).delete()
+
     def handle(self, *args, **options):
         def int_or_none(x):
             try:
@@ -64,7 +69,8 @@ class Command(BaseCommand):
         count = 0
         filename = args[0]
         with transaction.commit_on_success():
-            models.Product.objects.all().delete()
+            self.delete_products()
+
             count += 1
             sys.stdout.write(r"\r%s" % count)
             sys.stdout.flush()
