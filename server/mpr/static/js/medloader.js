@@ -79,14 +79,12 @@ var on_loaded = function(result) {
 
 var process_request = function(result) {
     $(".products .product").remove();
-    $("#search-container").removeClass("js-results");
     $("#noresults").hide();
     $("#resultsheader").hide();
 
     if (result.length) {
         $("#resultsheader").show();
         $("#resultsheader span").html(result.length);
-        $("#search-container").addClass("js-results");
 
         var $templateRow = $(".products .template");
         for (var i = 0; i < result.length; i++) {
