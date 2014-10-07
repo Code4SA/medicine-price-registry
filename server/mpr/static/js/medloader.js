@@ -83,14 +83,13 @@ var process_request = function(result) {
     $("#noresults").hide();
     $("#resultsheader").hide();
 
-    var resultLength = result.length;
-    if (resultLength) {
+    if (result.length) {
         $("#resultsheader").show();
-        $("#resultsheader span").html(resultLength);
+        $("#resultsheader span").html(result.length);
         $("#search-container").addClass("js-results");
 
         var $templateRow = $(".products .template");
-        for (var i = 0; i < resultLength; i++) {
+        for (var i = 0; i < result.length; i++) {
             var $product = new Product(result[i], $templateRow.clone().removeClass("template"));
             $('.products').append($product.build_product());
         }
