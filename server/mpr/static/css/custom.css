@@ -15,7 +15,24 @@ main {}
 .product {}
 	.product .panel-heading {overflow:hidden;}
 	.product-name {margin-top:0; color:#000; text-decoration:none; display:inline-block; float:left; margin:0 10px 0 0;}
-	.product-price {display:inline-block; width:100px; float:right; white-space:nowrap; text-align:right;}
+
+    .right-info {
+        display:inline-block;
+        float:right;
+        white-space:nowrap;
+        text-align:right;
+    }
+
+	.product-price {
+        width: 100px;
+    }
+
+    .find-generic {
+        margin-left: 5px;
+        font-size: 0.9em;
+        font-color:#eee;
+    }
+
 	.product dl {margin-bottom:0;}
 	.product dt {float:left; clear:left;}
 	.product dd {text-align:right;}
