@@ -48,7 +48,7 @@ Product.prototype = {
         $(".product-price", this.block).html(this.data.sep);
     },
 
-    set_class_names: function() {
+    set_class_names : function() {
         // We can't assume all data returned is of type: string :(
         if (typeof this.data.is_generic == 'string') {
             var classNameGeneric = 'type_' + this.data.is_generic.toLowerCase();
@@ -60,10 +60,17 @@ Product.prototype = {
         }
     },
 
+    set_related_link : function() {
+        related_link = $(".find-generic a", $(this.block));
+        related_link.attr("href", "#related:" + this.data.id);
+    },
+
     build_product : function() {
         this.set_name();
         this.set_price();
         this.set_class_names();
+        this.set_related_link();
+
         return this.block;
     }
 }
@@ -127,10 +134,6 @@ var add_product_detail = function(elem) {
             $ingredientsList.append("<dt>" + productIngredients[j].name.trim() + ":</dt>");
             $ingredientsList.append("<dd>" + productIngredients[j].strength + productIngredients[j].unit + "</dd>");
         }
-
-        // Add related products link
-        var related_link = $(".related", $product_detail);
-        related_link.attr("href", "#related:" + target_id);
 
         // Add meta data
         $('.product-reg-number', $product_detail).html(data.regno);
