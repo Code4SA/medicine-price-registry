@@ -2,7 +2,7 @@ import os
 from os import environ as env
 from django.conf import global_settings
 
-DEBUG = env.get('DJANGO_DEBUG', True)
+DEBUG = env.get('DJANGO_DEBUG', 'true') == 'true'
 TEMPLATE_DEBUG = DEBUG
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__name__))
 
@@ -86,7 +86,6 @@ if DEBUG:
     SECRET_KEY = "ub7dk%m=d*k=aip1rl)z&v8sj&fg2msc&=km0z3u#5ct9+_43w"
 else:
     SECRET_KEY = env.get('DJANGO_SECRET_KEY')
-    LOGGING["loggers"]["mpr"]["level"] = "ERROR"
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -138,7 +137,6 @@ INSTALLED_APPS = (
     "mpr",
 )
 
-PIPELINE = False
 STATICFILES_STORAGE = "pipeline.storage.PipelineCachedStorage"
 PIPELINE_CSS = {
     'mpr': {
@@ -215,7 +213,7 @@ LOGGING = {
         },
         "mpr": {
             "handlers": ["file"],
-            "level": "DEBUG",
+            "level": "DEBUG" if DEBUG else "ERROR",
             "propagate": True,
         },
     }
