@@ -22,19 +22,25 @@ Setting up your environment (if you're using virtualenv - which you should be):
     cd medicine-price-registry
     virtualenv $VIRTUALENV_HOME/mpr # (i.e. put it wherever you usually put your virtual environments)
     source $VIRTUALENV_HOME/mpr/bin/active # (or if you're using virtualenvwrapper you can mkvirtualenv mpr; workon mpr)
-    pip install -r requirements/development.txt
-    cd server
-
-    python manage.py runserver --settings=settings.development
+    pip install -r requirements.txt
+    python manage.py runserver
 
 Deployment
 ==========
 
-I've written a basic deployment script to my production server using $PROJECT_ROOT/fabfile.py.
+This app is hosted on Heroku.
 
-I run the code using gunicorn and supervisord with nginx working as a reverse proxy. The fabfile assumes that the application is called mpr and is run using supervisord. If you're setting it up in the same way, you need to copy fabdefs.sample.py to fabdefs.py and change the relevant settings inside that file. 
+To deploy to an existing server:
 
-At some point I'll add the nginx and supervisord config files to the repo in case anyone cares (and I guess it's probably good practice too).
+1. `git add remote git@heroku.com:code4sa-mpr.git`
+2. `git push`
+
+To deploy to a new server:
+
+1. `heroku login`
+2. `heroku apps:create APP-NAME`
+3. `heroku config:set DJANGO_DEBUG=false DJANGO_SECRET_KEY=some-secret-key`
+4. `git push heroku`
 
 TODO
 ====
@@ -42,7 +48,6 @@ TODO
 * Allow for searching of related products
 * Create a script that downloads the latest database instead of shipping a sqlite db with the repo
 * It might be useful to compare prices over time
-* Add CSS pre-compilers
 * Seems like there are some spelling errors in the database - e.g. paracetamol and paracetemol. Might need to clean the database through some sort of fuzzy match and possibly report those errors back to mpr
 
 Contributors
