@@ -1,0 +1,76 @@
+main {}
+	main > header {}
+	main > article {}
+	main > aside {}
+	main > footer {border-top:solid 1px #eee; padding-top:9px; margin-top:20px; clear:both;}
+
+.js-loading #entrybox {background:url(../images/loader.gif) 99% 50% no-repeat;}
+#product_results {margin-bottom:3em;}
+#resultsheader {display:none; margin-top:20px; margin-bottom:5px;}
+.js-results #resultsheader {visibility:visible;}
+#noresults {display:none; margin-top:10px;}
+.template,
+.template-panel-body {position:absolute; left:-9999em;}
+
+.product {}
+	.product .panel-heading {overflow:hidden;}
+	.product-name {margin-top:0; color:#000; text-decoration:none; display:inline-block; float:left; margin:0 10px 0 0;}
+
+    .right-info {
+        display:inline-block;
+        float:right;
+        white-space:nowrap;
+        text-align:right;
+    }
+
+	.product-price {
+        width: 100px;
+    }
+
+    .find-generic {
+        margin-left: 5px;
+        font-size: 0.9em;
+        font-color:#eee;
+    }
+
+	.product dl {margin-bottom:0;}
+	.product dt {float:left; clear:left;}
+	.product dd {text-align:right;}
+	.product .collapsing {-webkit-transition:none; transition:none;}
+	.product .panel-footer {overflow:hidden; background-color:#fcfcfc; color:#999; border-top:1px solid #ddd;}
+		.product .panel-footer p {margin:0;}
+			a.related {float:right; text-decoration:none; margin:0 0 0 10px;}
+
+
+/* Icons */
+.product > .panel-heading {padding-left:50px; background-repeat:no-repeat; background-position:12px 50%;}
+.df_capsule .panel-heading       {background-image:url(../images/icons/capsule_24.png);}
+.df_effervescent_tablet .panel-heading,
+.df_tablet .panel-heading        {background-image:url(../images/icons/pill_24.png);}
+.df_liquid .panel-heading,
+.df_syrup .panel-heading,
+.df_sachet .panel-heading,
+.df_suspension .panel-heading, 
+.df_solution .panel-heading,
+.df_suspension .panel-heading    {background-image:url(../images/icons/syrup_24.png);}
+.df_eye_ointment .panel-heading,  
+.df_drops .panel-heading         {background-image:url(../images/icons/pipette_24.png);}
+.df_penset .panel-heading,   
+.df_injection .panel-heading     {background-image:url(../images/icons/syringe_24.png);}
+.df_infusion .panel-heading      {background-image:url(../images/icons/iv_24.png);}
+.df_ointment .panel-heading,
+.df_gel .panel-heading,           
+.df_vaginal_gel .panel-heading,           
+.df_vaginal_cream .panel-heading,           
+.df_lotion .panel-heading,           
+.df_cream .panel-heading         {background-image:url(../images/icons/paste_24.png);}
+.df_inhaler .panel-heading,    
+.df_nebuliser .panel-heading     {background-image:url(../images/icons/inhaler_24.png);}
+.df_spray .panel-heading         {background-image:url(../images/icons/spray_24.png);}
+.df_ampoule .panel-heading,
+.df_vial .panel-heading          {background-image:url(../images/icons/ampoules_24.png);}
+
+@media (min-width:768px) {
+	.dl-horizontal dt {}
+	.dl-horizontal dd {text-align:left;}
+}
