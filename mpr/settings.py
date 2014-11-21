@@ -198,21 +198,20 @@ LOGGING = {
             "filters": ["require_debug_false"],
             "class": "django.utils.log.AdminEmailHandler"
         },
-        'file': {
+        'console': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': 'mysite.log',
+            'class': 'logging.StreamHandler',
             'formatter': 'verbose'
         },
     },
     "loggers": {
         "django": {
-            "handlers": ["file"],
+            "handlers": ["console"],
             "level": "ERROR",
             "propagate": True,
         },
         "mpr": {
-            "handlers": ["file"],
+            "handlers": ["console"],
             "level": "DEBUG" if DEBUG else "ERROR",
             "propagate": True,
         },
