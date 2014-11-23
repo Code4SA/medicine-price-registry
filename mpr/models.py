@@ -2,8 +2,8 @@ from __future__ import division
 from django.db import models
 
 class Ingredient(models.Model):
-    name = models.CharField(max_length=100)
-    unit = models.CharField(max_length=10)
+    name = models.CharField(max_length=250)
+    unit = models.CharField(max_length=20)
 
     class Meta:
         unique_together = ("name", "unit")
@@ -31,7 +31,7 @@ class ProductManager(models.Manager):
 class Product(models.Model):
     regno = models.CharField(max_length=50, null=True)
     name = models.CharField(max_length=100)
-    schedule = models.CharField(max_length=5, null=True)
+    schedule = models.CharField(max_length=22, null=True)
     dosage_form = models.CharField(max_length=20, null=True)
     pack_size = models.FloatField(null=True)
     num_packs = models.IntegerField(null=True)
