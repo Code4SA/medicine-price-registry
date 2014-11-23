@@ -1,6 +1,7 @@
 import os
 from os import environ as env
 from django.conf import global_settings
+import dj_database_url
 
 DEBUG = env.get('DJANGO_DEBUG', 'true') == 'true'
 TEMPLATE_DEBUG = DEBUG
@@ -13,10 +14,8 @@ ADMINS = (
 MANAGERS = ADMINS
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(PROJECT_ROOT, "mpr.db"),
-    }
+    # load from DATABASE_URL env var, or default to this
+    "default": dj_database_url.config(default='sqlite:///mpr.db')
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
