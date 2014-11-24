@@ -10,20 +10,6 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-def get_location(ip):
-    from django.contrib.gis.geoip import GeoIP
-    data = {}
-    if ip:
-        g = GeoIP()
-
-        data = g.city(ip)
-        if data:
-            city = data.get("city", None)
-            country = data.get("country_name", None)
-        else:
-            data = {}
-    return data
- 
 def log_analytics(request, event, properties):
     try:
         if settings.DEBUG: return
@@ -35,7 +21,6 @@ def log_analytics(request, event, properties):
         from ipware.ip import get_ip as get_ip
 
         ip = get_ip(request)
-        data = get_location(ip)
 
         name = names.get_full_name()
         uid = request.session.get("uid", name)
@@ -44,8 +29,6 @@ def log_analytics(request, event, properties):
         analytics.identify(uid,
             {
                 "$name" : uid,
-                "country" : data.get("country_name", None),
-                "city" : data.get("city", None),
             },
             { "$ip" : ip}
         )
