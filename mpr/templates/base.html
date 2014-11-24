@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>MPR (Medicine Price Registry) - Code for South Africa</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="_lWgnvin7w-6I_YOY23q3dI9E0pFAD8N6kQRPQda63g" />
+    {% load compressed %}
+    {% compressed_css 'mpr' %}
+    <!--[if lt IE 9]>
+      {% compressed_js 'oldie' %}
+    <![endif]-->
+
+    <script type="text/javascript">
+    window.analytics||(window.analytics=[]),window.analytics.methods=["identify","track","trackLink","trackForm","trackClick","trackSubmit","page","pageview","ab","alias","ready","group","on","once","off"],window.analytics.factory=function(a){return function(){var t=Array.prototype.slice.call(arguments);return t.unshift(a),window.analytics.push(t),window.analytics}};for(var i=0;i<window.analytics.methods.length;i++){var method=window.analytics.methods[i];window.analytics[method]=window.analytics.factory(method)}window.analytics.load=function(a){var t=document.createElement("script");t.type="text/javascript",t.async=!0,t.src=("https:"===document.location.protocol?"https://":"http://")+"d2dq2ahtl5zl1z.cloudfront.net/analytics.js/v1/"+a+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(t,n)},window.analytics.SNIPPET_VERSION="2.0.6",
+    window.analytics.load("4645xq3bi2"),
+    window.analytics.page();
+    </script>
+  </head>
+  <body>
+    <a id="top"></a>
+    <main class="container">
+      <header role="banner" class="container page-header">
+        <h1>What should your medicines cost?</h1>
+      </header>
+      <article role="main" class="col-md-12">
+      {% block body %}{% endblock %}
+      </article>
+      <aside class="col-md-12">
+        <section class="panel panel-info">
+          <header class="panel-heading">
+            <h3 class="panel-title">What is this all about?</h3>
+          </header>
+          <div class="panel-body">
+            <p>Did you know that medicine prices are regulated in South Africa? Using this application you can:</p>
+            <ul>
+                <li>Know what to expect to pay when you get a prescription from your doctor</li>
+                <li>Find possible generics for a branded medicine. Ask your doctor if these medicines are viable alternatives.</li>
+                <li>Ensure that you are not being overcharged for your medicine.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="panel panel-info">
+          <header class="panel-heading">
+            <h3 class="panel-title">How can you use it?</h3>
+          </header>
+          <div class="panel-body">
+            <p>Here are some ideas for how this application can be useful:</p>
+            <ul>
+                <li>When your doctor prescibes a medicine, quickly check on your phone for alternatives and ask whether the brand name product can be replaced with a generic.</li>
+                <li>If you're on chronic medication you can periodically check to see whether the price of your meds has increased.</li>
+                <li>While waiting in the queue at the pharmacy, you can look up your medicine and find out how much it will cost you and what alternatives you can ask the pharmacist for.</li>
+                <li>If you look up a particular medicine often, you can bookmark the page so that you can quickly refer to it.</li>
+            </ul>
+          </div>
+        </section>
+        <section class="panel panel-info">
+          <header class="panel-heading">
+            <h3 class="panel-title">What is the <abbr title="Single Exit Price">Single Exit Price</abbr>?</h3>
+          </header>
+          <div class="panel-body">
+            <p>The single exit price (SEP) mechanism in South Africa lists the maximum price that a medicine can be charged at. Dispensers may charge an additional dispensing fee depending on the price of the medicine. The Medicines and Related Substances Act allows for the following charges (excl VAT):</p>
+            <ul>
+                <li>Where the SEP is less than R85.70, the maximum dispensing fee is R6.95 + 46% of the SEP.</li>
+                <li>Where the SEP is less than R228.53, the maximum dispensing fee is R18.55 + 33% of the SEP.</li>
+                <li>Where the SEP is less than R799.85, the maximum dispensing fee is R59.00 + 15% of the SEP.</li>
+                <li>Where the SEP is greater than or equal to R756.00, the maximum dispensing fee is R140.00 + 5% of the SEP.</li>
+            </ul>
+            <p>The prices listed in this database represent the maximum price that you should be paying for your medicines.</p>
+            <p>More information can be found <a href="http://www.gov.za/documents/download.php?f=199693">here</a>. Please note that allowed dispensing fees may change and this website may not be completely up-to-date. The prices listed above were valid at 25 September 2014.</a></p>
+          </div>
+        </section>
+        <section>
+          <p class="text-center"><a href="http://www.code4sa.org"><img src="/static/images/logo.png" alt="Code for South Africa"></a></p>
+        </section>
+      </aside>
+      <footer role="contentinfo" class="container text-center">
+        
+        <ul class="list-inline">
+          <li>These prices were collected on {{ last_updated }}.</li>
+          <li>Contact &#097;&#100;&#105;&#064;&#099;&#111;&#100;&#101;&#052;&#115;&#097;&#046;&#111;&#114;&#103; for more details</li>
+        </ul>
+        <ul class="list-inline">
+          <li><a href="/">MPR</a> is powered by <a href="http://www.code4sa.org/">Code for South Africa</a>.</li>
+          <li><a href="https://github.com/Code4SA/medicine-price-registry">Pull requests are welcome</a></li>
+          <li>Thanks <a href="http://onlinepharmacycheck.com/medico/">MedICO</a> for the cool icons.</li>
+        </ul>
+      </footer>
+    </main>    
+    {% compressed_js 'mprbase' %}
+    {% block bodybottom %}{% endblock %}
+  </body>
+  <!-- UserVoice JavaScript SDK (only needed once on a page) -->
+    <script>(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/m1RMUEFyOAQTZCFqzNqgtQ.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})()</script>
+
+    <!-- A tab to launch the Classic Widget -->
+    <script>
+    UserVoice = window.UserVoice || [];
+    UserVoice.push(['showTab', 'classic_widget', {
+      mode: 'full',
+      primary_color: '#cc6d00',
+      link_color: '#007dbf',
+      default_mode: 'support',
+      forum_id: 266783,
+      tab_label: 'Feedback & Support',
+      tab_color: '#cc6d00',
+      tab_position: 'middle-right',
+      tab_inverted: false
+    }]);
+    </script>
+</html>

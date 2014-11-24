@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block body %}
+<div id="search-container">
+    <div class="row">
+        <label id="label-entrybox" for="entrybox">Search for a medicine:</label>
+        <input type="text" id="entrybox" aria-labelled-by="label-entrybox" class="form-control input-lg" placeholder="e.g. salbutamol or asthavent">
+    </div>
+    <div class="row results">
+        <p id="resultsheader"><b>Matching products and/or ingredients: <span></span></b></p>
+        <p id="noresults"><b>No matching products found.</b></p>
+        <div id="product_results" class="products panel-group">
+            <div class="template panel panel-default">
+                <div class="panel-heading">
+                    <a class="panel-title product-name collapse in" data-toggle="collapse" href="#"></a>
+                    <div class="right-info">
+                        <span class="product-price"></span>
+                        <span class="find-generic"><a href="#">Find Generics</a></span>
+                    </div>
+                </div>
+            </div>
+            <div class="template-panel-body panel-collapse collapse in">
+                <div class="panel-body">
+                    <div class="product-details">
+                        <div class="col-sm-6 details">
+                            <h4>Product details</h4>
+                            <dl>
+                                <dt>Max price (incl VAT):</dt>
+                                <dd></dd>
+                                <dt>Schedule:</dt>
+                                <dd></dd>
+                                <dt>Dosage Form:</dt>
+                                <dd></dd>
+                                <dt class="dosageform">Tablets/ml/Doses:</dt>
+                                <dd></dd>
+                                <dt>Number of packs:</dt>
+                                <dd></dd>
+                                <dt>Generic/Innovator:</dt>
+                                <dd></dd>
+                            </dl>
+                        </div>
+                        <div class="col-sm-6 ingredients">
+                            <h4>Ingredients</h4>
+                            <dl></dl>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <p>
+                        Registration number: <span class="product-reg-number"></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block bodybottom %}
+<script>
+    var debug = {{ debug|lower }};
+    $(document).ready(function(){
+        $("#entrybox").on("keyup", function(e){
+            entermedicine(e);
+        });
+
+        $(function() {
+            // Bind the event.
+            $(window).hashchange(function() {
+                load_medicines(location.hash);
+            })
+
+            // Trigger the event (useful on page load).
+            $(window).hashchange();
+        });
+    });
+</script>
+{% endblock %}
