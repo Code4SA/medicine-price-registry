@@ -1,5 +1,5 @@
 Django==1.5.4
-analytics-python==1.0.3
+analytics-python==0.4.3
 argparse==1.2.1
 dj-database-url==0.3.0
 django-ipware==0.1.0
