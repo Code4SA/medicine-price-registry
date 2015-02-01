@@ -32,7 +32,7 @@ This app is hosted on Heroku.
 
 To deploy to an existing server:
 
-1. `git add remote git@heroku.com:code4sa-mpr.git`
+1. `git remote add git@heroku.com:code4sa-mpr.git`
 2. `git push`
 
 To deploy to a new server:
