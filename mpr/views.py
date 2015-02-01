@@ -15,7 +15,7 @@ def log_analytics(request, event, properties):
         import analytics
         from ipware.ip import get_ip as get_ip
 
-        #if settings.DEBUG: return
+        if settings.DEBUG: return
         if not hasattr(settings, "SEGMENT_IO_KEY"):
             logger.warning("Cannot send analytics. No Segment IO Key has been set")
             return
