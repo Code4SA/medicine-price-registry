@@ -223,3 +223,5 @@ CACHES = {
         'TIMEOUT' : 60*60*24*7
     }
 }
+
+SEGMENT_IO_KEY = env.get('SEGMENT_IO_KEY')

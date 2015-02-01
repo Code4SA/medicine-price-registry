@@ -12,20 +12,26 @@ logger = logging.getLogger(__name__)
 
 def log_analytics(request, event, properties):
     try:
-        if settings.DEBUG: return
-        if "pingdom" in request.META.get("HTTP_USER_AGENT", ""):
-            logger.warning("ignored pingdom bot")
-            return
-
         import analytics
         from ipware.ip import get_ip as get_ip
+
+        #if settings.DEBUG: return
+        if not hasattr(settings, "SEGMENT_IO_KEY"):
+            logger.warning("Cannot send analytics. No Segment IO Key has been set")
+            return
+
+        if "pingdom" in request.META.get("HTTP_USER_AGENT", ""):
+            logger.warning("Not recording analytics. Ignored pingdom bot")
+            return
+
+        api_key = settings.SEGMENT_IO_KEY
 
         ip = get_ip(request)
 
         name = names.get_full_name()
         uid = request.session.get("uid", name)
         request.session["uid"] = uid
-        analytics.init('wdfkolf5dkr7gwh12jq7')
+        analytics.init(api_key)
         analytics.identify(uid,
             {
                 "$name" : uid,
