@@ -13,7 +13,7 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(IndexView, self).get_context_data(**kwargs)
         try:
-            last_updated = LastUpdated.objects.all().reverse()[0]
+            last_updated = LastUpdated.objects.all().order_by('-update_date')[0]
             context['last_updated'] = last_updated
         except:
             context['last_updated'] = u"Never"
