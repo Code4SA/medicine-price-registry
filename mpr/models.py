@@ -57,14 +57,14 @@ class Product(models.Model):
     def max_fee(self):
         VAT = 1.14
         try:
-            if self.sep < 81:
-                return self.sep + (self.sep * 0.46 + 6.30) * VAT
-            elif self.sep < 216:
-                return self.sep + (self.sep * 0.33 + 16) * VAT
-            elif self.sep < 756:
-                return self.sep + (self.sep * 0.15 + 55) * VAT
+            if self.sep < 85.69:
+                return self.sep + (self.sep * 0.46 + 7.04) * VAT
+            elif self.sep < 228.56:
+                return self.sep + (self.sep * 0.33 + 18.80) * VAT
+            elif self.sep < 799.99:
+                return self.sep + (self.sep * 0.15 + 59.83) * VAT
             else:
-                return self.sep + (self.sep * 0.05 + 131) * VAT
+                return self.sep + (self.sep * 0.05 + 140) * VAT
         except (ValueError, TypeError):
             return self.sep
 
