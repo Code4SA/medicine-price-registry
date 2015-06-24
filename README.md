@@ -28,14 +28,14 @@ Setting up your environment (if you're using virtualenv - which you should be):
 Deployment
 ==========
 
-This app is hosted on Heroku.
+This app is hosted on dokku or Heroku.
 
-To deploy to an existing server:
+To deploy to an existing dokku (or heroku) server:
 
-1. `git remote add git@heroku.com:code4sa-mpr.git`
-2. `git push`
+1. `git remote add dokku dokku@dokku.code4sa.org:mpr`
+2. `git push dokku`
 
-To deploy to a new server:
+To deploy to a new heroku instance:
 
 1. `heroku login`
 2. `heroku apps:create APP-NAME`
