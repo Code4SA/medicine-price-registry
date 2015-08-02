@@ -15,7 +15,7 @@ class Command(BaseCommand):
         worksheet = workbook.sheet_by_index(0)
 
         product = None
-        for idx in range(2, worksheet.nrows):
+        for idx in range(1, worksheet.nrows):
             regno = worksheet.cell_value(idx, 2)
             if regno.strip() != "":
                 if product: yield product
