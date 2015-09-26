@@ -5,9 +5,9 @@
 var timer,
     delay = 500,
     animate_speed = 750;
-var search_url = function(term) { return "/api/search-lite?q=" + term; }
-var related_url = function(id) { return "/api/related?product=" + id };
-var product_detail_url = function(id) { return "/api/detail?product=" + id };
+var search_url = function(term) { return '/api/search-lite?q=' + term; }
+var related_url = function(id) { return '/api/related?product=' + id };
+var product_detail_url = function(id) { return '/api/detail?product=' + id };
 
 
 var log = function(obj) {
@@ -17,12 +17,12 @@ var log = function(obj) {
 };
 
 var map = {
-    0 : "sep",
-    1 : "schedule",
-    2 : "dosage_form",
-    3 : "pack_size",
-    4 : "num_packs",
-    5 : "is_generic"
+    0 : 'sep',
+    1 : 'schedule',
+    2 : 'dosage_form',
+    3 : 'pack_size',
+    4 : 'num_packs',
+    5 : 'is_generic'
 };
 
 var load_data = function(url, foo) {
@@ -35,17 +35,17 @@ var load_data = function(url, foo) {
 
 Product = function(data, block) { 
     this.data = data;
-    this.block = block.addClass("product");
+    this.block = block.addClass('product');
 }
 
 Product.prototype = {
 
     set_name : function() {
-        $(".product-name", this.block).html(this.data.name).attr('href', '#product-detail-' + this.data.id);
+        $('.product-name', this.block).html(this.data.name).attr('href', '#product-detail-' + this.data.id);
     },
 
     set_price : function() {
-        $(".product-price", this.block).html(this.data.sep);
+        $('.product-price', this.block).html(this.data.sep);
     },
 
     set_class_names : function() {
@@ -55,14 +55,14 @@ Product.prototype = {
             $(this.block).addClass(classNameGeneric);
         }
         if (typeof this.data.dosage_form == 'string') {
-            var classNameDosageForm = 'df_' + this.data.dosage_form.toLowerCase().replace(" ", "_");
+            var classNameDosageForm = 'df_' + this.data.dosage_form.toLowerCase().replace(' ', '_');
             $(this.block).addClass(classNameDosageForm);
         }
     },
 
     set_related_link : function() {
-        related_link = $(".find-generic a", $(this.block));
-        related_link.attr("href", "#related:" + this.data.id);
+        related_link = $('.find-generic a', $(this.block));
+        related_link.attr('href', '#related:' + this.data.id);
     },
 
     build_product : function() {
@@ -76,26 +76,26 @@ Product.prototype = {
 }
 
 var on_loading = function() {
-    $("#search-container").addClass("js-loading");
+    $('#search-container').addClass('js-loading');
 }
 
 var on_loaded = function(result) {
-    $("#search-container").removeClass("js-loading");
+    $('#search-container').removeClass('js-loading');
 }
 
 
 var process_request = function(result) {
-    $(".products .product").remove();
-    $("#noresults").hide();
-    $("#resultsheader").hide();
+    $('.products .product').remove();
+    $('#noresults').hide();
+    $('#resultsheader').hide();
 
     if (result.length) {
-        $("#resultsheader").show();
-        $("#resultsheader span").html(result.length);
+        $('#resultsheader').show();
+        $('#resultsheader span').html(result.length);
 
-        var $templateRow = $(".products .template");
+        var $templateRow = $('.products .template');
         for (var i = 0; i < result.length; i++) {
-            var $product = new Product(result[i], $templateRow.clone().removeClass("template"));
+            var $product = new Product(result[i], $templateRow.clone().removeClass('template'));
             $('.products').append($product.build_product());
         }
         
@@ -104,12 +104,12 @@ var process_request = function(result) {
             add_product_detail($(this));
         });
     } else {
-        $("#noresults").show();
+        $('#noresults').show();
     }
     on_loaded(result);
 }
 
-var $templateDetail = $(".products .template-panel-body");
+var $templateDetail = $('.products .template-panel-body');
 var add_product_detail = function(elem) {
     var target_id = elem.attr('href').split('#product-detail-')[1];
 
@@ -121,18 +121,18 @@ var add_product_detail = function(elem) {
         var $product_detail = $templateDetail.clone().removeClass('template-panel-body');
 
         // Add product detail
-        $(".details dd", $product_detail).each(function(idx) {
+        $('.details dd', $product_detail).each(function(idx) {
             var key = map[idx];
             $(this).html(data[key]);
         });
 
         // Add ingredients
-        var $ingredientsList = $(".ingredients dl", $product_detail);
+        var $ingredientsList = $('.ingredients dl', $product_detail);
         var productIngredients = data.ingredients;
         var productIngredientsLength = productIngredients.length;
         for (var j = 0; j < productIngredientsLength; j++) {
-            $ingredientsList.append("<dt>" + productIngredients[j].name.trim() + ":</dt>");
-            $ingredientsList.append("<dd>" + productIngredients[j].strength + productIngredients[j].unit + "</dd>");
+            $ingredientsList.append('<dt>' + productIngredients[j].name.trim() + ':</dt>');
+            $ingredientsList.append('<dd>' + productIngredients[j].strength + productIngredients[j].unit + '</dd>');
         }
 
         // Add meta data
@@ -145,7 +145,7 @@ var add_product_detail = function(elem) {
         elem.parents('.product').append($product_detail);
 
         // Add collapse toggle to the source anchor
-        elem.on("click", function(){
+        elem.on('click', function(){
             $(this).collapse();
         });
     })
@@ -161,7 +161,7 @@ var entermedicine = function(e) {
     if (searchTerm.length < 4) return;
 
     var load_data = function() {
-        location.hash = "search:" + searchTerm;
+        location.hash = 'search:' + searchTerm;
     }
 
     var reset_delay_before_requesting = function() {
@@ -173,19 +173,19 @@ var entermedicine = function(e) {
 };
 
 var load_medicines = function(value) {
-    if (value.indexOf(":") >= 0) {
-        var s = value.split(":")
+    if (value.indexOf(':') >= 0) {
+        var s = value.split(':')
         var key = s[0]
         var value = s[1]
 
-        if (key == "#related") {
+        if (key == '#related') {
             load_data(related_url(value), process_request);
-        } else if (key == "#search") {
+        } else if (key == '#search') {
             load_data(search_url(value), process_request);
         }
 
         $('html, body').animate({
-            scrollTop: $("#top").offset().top
+            scrollTop: $('#top').offset().top
         }, animate_speed);
     }
 }
