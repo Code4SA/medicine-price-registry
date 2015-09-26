@@ -10,6 +10,7 @@
         <p id="noresults"><b>No matching products found.</b></p>
         <div id="product_results" class="products panel-group">
             <div class="template panel panel-default">
+                <a href="#">
                 <div class="panel-heading">
                     <a class="panel-title product-name collapse in" data-toggle="collapse" href="#"></a>
                     <div class="right-info">
@@ -17,6 +18,7 @@
                         <span class="find-generic"><a href="#">Find Generics</a></span>
                     </div>
                 </div>
+                </a>
             </div>
             <div class="template-panel-body panel-collapse collapse in">
                 <div class="panel-body">
@@ -57,7 +59,6 @@
 
 {% block bodybottom %}
 <script>
-    var debug = {{ debug|lower }};
     $(document).ready(function(){
         $("#entrybox").on("keyup", function(e){
             entermedicine(e);
