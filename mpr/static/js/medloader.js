@@ -145,7 +145,7 @@ var add_product_detail = function(elem) {
         elem.parents('.product').append($product_detail);
 
         // Add collapse toggle to the source anchor
-        elem.on('click', function(){
+        elem.on('click', function() {
             $(this).collapse();
         });
     })
