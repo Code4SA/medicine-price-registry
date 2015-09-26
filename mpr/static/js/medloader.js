@@ -99,7 +99,7 @@ var process_request = function(result) {
             $('.products').append($product.build_product());
         }
         
-        $('.product .product-name').on('click', function(e){
+        $('.product .product-name').on('click', function(e) {
             e.preventDefault();
             add_product_detail($(this));
         });
