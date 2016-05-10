@@ -27,6 +27,7 @@ urlpatterns = patterns("",
     url(r"^api/search/by_ingredient$", "mpr.views.search_by_ingredient", name="api_search_by_ingredient"),
     url(r"^api/search$", "mpr.views.search", name="api_search"),
     url(r"^api/search-lite$", "mpr.views.search_lite", name="api_search_lite"),
+    url(r"^api/dump$", "mpr.views.dump", name="api_dump"),
     url(r"^admin/", include(admin.site.urls)),
 )
 

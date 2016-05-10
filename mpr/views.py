@@ -120,3 +120,13 @@ def product_detail(request):
             serialisers.serialize_product(product), indent=4
         ), mimetype="application/json"
     )
+
+def dump(request):
+    log_analytics(request, "#dump", {})
+
+
+    return HttpResponse(
+        json.dumps(
+            serialisers.serialize_products(models.Product.objects.all()), indent=4
+        ), mimetype="application/json"
+    )
