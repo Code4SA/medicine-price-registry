@@ -8,6 +8,23 @@ This projects builds an API and basic user interface to query this database. You
 A typical use-case would be for a consumer to look for alternative products for a particular medicine, often generic medicines can be much cheaper than the branded product.
 Another use-case allows consumers to ensure that they are not being overcharged for their medicines. This database publishes the maximum price at which a medicine can be sold. A pharmacy cannot legally increase the price of a particular medicine above the price listed here.
 
+API
+===
+In addition to providing this simple web interface, we make available a rudimentary API that you can use to access the most up-to-date prices to be used in third party applications.
+
+Basic search e.g.
+[https://mpr.code4sa.org/api/search-lite?q=lamictin](https://mpr.code4sa.org/api/search-lite?q=lamictin)
+
+Accessing product details
+[https://mpr.code4sa.org/api/detail?product=3841](https://mpr.code4sa.org/api/detail?product=3841)
+
+Finding generic products (based in active ingredients)
+[https://mpr.code4sa.org/api/related?product=3841](https://mpr.code4sa.org/api/related?product=3841)
+
+Downloading a dump of the entire database
+[mpr.code4sa.org/api/dump](mpr.code4sa.org/api/dump)
+
+
 Contributing
 ============
 
