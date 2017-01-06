@@ -5,6 +5,10 @@ from django.db import transaction
 import xlrd
 from mpr import models
 
+name_change = {
+    "amoxycillin" : "Amoxicillin",
+}
+
 class Command(BaseCommand):
     args = '<filename>'
     help = "Populate database from mpr xls file"
@@ -42,8 +46,9 @@ class Command(BaseCommand):
                     "ingredients" : []
                 }
 
+            ingredient_name = worksheet.cell_value(idx, 7).title()
             product["ingredients"].append({
-                "name" : worksheet.cell_value(idx, 7).title(),
+                "name" : name_change.get(ingredient_name.lower(), ingredient_name),
                 "strength" : worksheet.cell_value(idx, 8),
                 "unit" : worksheet.cell_value(idx, 9).lower(),
             })
