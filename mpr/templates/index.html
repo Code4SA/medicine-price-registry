@@ -73,6 +73,16 @@
             // Trigger the event (useful on page load).
             $(window).hashchange();
         });
+
+        Survey.Survey.cssType = "bootstrap";
+        var surveyWindow = new Survey.SurveyWindow({
+            surveyId: '6e7889d3-ce36-48a3-9915-d4c6f71b030a',
+            surveyPostId: '8e7beac7-60c0-4770-9d36-1aa52dc2d21d',
+            title: 'Help us improve',
+            showProgressBar: 'bottom'
+        });
+        surveyWindow.show();
+
     });
 </script>
 {% endblock %}
