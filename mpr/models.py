@@ -59,7 +59,7 @@ class Product(models.Model):
         try:
             if self.sep < 90.0:
                 return self.sep + (self.sep * 0.46 + 7.65) * VAT
-            elif self.sep < 240.06
+            elif self.sep < 240.06:
                 return self.sep + (self.sep * 0.33 + 19.50) * VAT
             elif self.sep < 840.23:
                 return self.sep + (self.sep * 0.15 + 64.8) * VAT
