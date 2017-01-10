@@ -7,6 +7,7 @@
 import hashlib
 import urllib
 import time
+import sys
 try:
     import json
 except ImportError:
@@ -82,10 +83,9 @@ class Mixpanel(object):
             hash.update(self.api_secret)
         return hash.hexdigest() 
 
+year = int(raw_input("Year: "))
 api_key = raw_input("API Key: ")
 api_secret = raw_input("API Secret: ")
-from_date = raw_input("From Date: ")
-to_date = raw_input("To Date: ")
 output_file = raw_input("Output Filename: ")
 
 api = Mixpanel(
@@ -95,7 +95,7 @@ api = Mixpanel(
 
 data = api.request(['export'], {
     #'event': [''],
-    'from_date': from_date,
-    'to_date': to_date,
+    'from_date': "%d-01-01" % year,
+    'to_date': "%d-01-09" % year,
     #'where': ''
-    })    
+})    
