@@ -47,7 +47,8 @@ class Product(models.Model):
 
     @property
     def related_products(self):
-        qs = Product.objects.all()
+        num_ingredients = len(self.product_ingredients.all())
+        qs = Product.objects.annotate(models.Count("ingredients")).filter(ingredients__count=num_ingredients)
         for pi in self.product_ingredients.all():
             qs = qs.filter(product_ingredients__ingredient=pi.ingredient, product_ingredients__strength=pi.strength)
 
