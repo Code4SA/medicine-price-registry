@@ -18,11 +18,12 @@ var log = function(obj) {
 
 var map = {
     0 : 'sep',
-    1 : 'schedule',
-    2 : 'dosage_form',
-    3 : 'pack_size',
-    4 : 'num_packs',
-    5 : 'is_generic'
+    1 : 'cost_per_unit',
+    2 : 'schedule',
+    3 : 'dosage_form',
+    4 : 'pack_size',
+    5 : 'num_packs',
+    6 : 'is_generic'
 };
 
 var load_data = function(url, foo) {
@@ -123,7 +124,12 @@ var add_product_detail = function(elem) {
         // Add product detail
         $('.details dd', $product_detail).each(function(idx) {
             var key = map[idx];
-            $(this).html(data[key]);
+            if (key == "cost_per_unit") {
+                val = data[key] + " / " + data["dosage_form"]
+            } else {
+                val = data[key]
+            }
+            $(this).html(val)
         });
 
         // Add ingredients
