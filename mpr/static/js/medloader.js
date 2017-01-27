@@ -19,11 +19,12 @@ var log = function(obj) {
 var map = {
     0 : 'sep',
     1 : 'cost_per_unit',
-    2 : 'schedule',
-    3 : 'dosage_form',
-    4 : 'pack_size',
-    5 : 'num_packs',
-    6 : 'is_generic'
+    2 : 'dispensing_fee',
+    3 : 'schedule',
+    4 : 'dosage_form',
+    5 : 'pack_size',
+    6 : 'num_packs',
+    7 : 'is_generic'
 };
 
 var load_data = function(url, foo) {

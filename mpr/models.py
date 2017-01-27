@@ -56,18 +56,30 @@ class Product(models.Model):
 
     @property
     def max_fee(self):
+        return self.dispensing_fee + self.sep
+
+    @property
+    def dispensing_fee(self):
         VAT = 1.14
         try:
             if self.sep < 90.0:
-                return self.sep + (self.sep * 0.46 + 7.65) * VAT
+                return (self.sep * 0.46 + 7.65) * VAT
             elif self.sep < 240.06:
-                return self.sep + (self.sep * 0.33 + 19.50) * VAT
+                return (self.sep * 0.33 + 19.50) * VAT
             elif self.sep < 840.23:
-                return self.sep + (self.sep * 0.15 + 64.8) * VAT
+                return (self.sep * 0.15 + 64.8) * VAT
             else:
-                return self.sep + (self.sep * 0.05 + 154) * VAT
+                return (self.sep * 0.05 + 154) * VAT
         except (ValueError, TypeError):
             return self.sep
+
+    @property
+    def cost_per_unit(self):
+        if self.pack_size > 0:
+            qty = self.pack_size * self.num_packs
+        else:
+            qty = self.num_packs
+        return self.max_fee / qty
 
 class ProductIngredient(models.Model):
     product = models.ForeignKey(Product, related_name="product_ingredients")

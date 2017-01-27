@@ -76,6 +76,7 @@ def serialize_product(product):
         "num_packs" : product.num_packs,
         "sep" : as_currency(product.max_fee),
         "cost_per_unit" : as_currency(product.cost_per_unit),
+        "dispensing_fee" : as_currency(product.dispensing_fee),
         "is_generic" : product.is_generic,
         "ingredients" : [
             serialize_ingredient(pi.ingredient, pi.strength)
