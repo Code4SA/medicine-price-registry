@@ -62,14 +62,14 @@ class Product(models.Model):
     def dispensing_fee(self):
         VAT = 1.14
         try:
-            if self.sep < 90.0:
-                return (self.sep * 0.46 + 7.65) * VAT
-            elif self.sep < 240.06:
-                return (self.sep * 0.33 + 19.50) * VAT
-            elif self.sep < 840.23:
-                return (self.sep * 0.15 + 64.8) * VAT
+            if self.sep < 97.06:
+                return (self.sep * 0.46 + 9.25) * VAT
+            elif self.sep < 258.88:
+                return (self.sep * 0.33 + 22.50) * VAT
+            elif self.sep < 906.10:
+                return (self.sep * 0.15 + 69) * VAT
             else:
-                return (self.sep * 0.05 + 154) * VAT
+                return (self.sep * 0.05 + 160) * VAT
         except (ValueError, TypeError):
             return self.sep
 
