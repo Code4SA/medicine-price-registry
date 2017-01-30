@@ -40,3 +40,6 @@ nosetests.xml
 .DS_Store
 env/
 data/
+
+# JetBrains (PyCharm)
+.idea
