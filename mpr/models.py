@@ -29,13 +29,13 @@ class ProductManager(models.Manager):
         return products
 
 class Product(models.Model):
-    regno = models.CharField(max_length=50, null=True)
+    regno = models.CharField(max_length=50, null=False)
     name = models.CharField(max_length=100)
     schedule = models.CharField(max_length=22, null=True)
     dosage_form = models.CharField(max_length=20, null=True)
-    pack_size = models.FloatField(null=True)
-    num_packs = models.IntegerField(null=True)
-    sep = models.FloatField(null=True)
+    pack_size = models.FloatField(null=False)
+    num_packs = models.IntegerField(null=False)
+    sep = models.FloatField(null=False)
     is_generic = models.CharField(max_length=20, null=True)
 
     ingredients = models.ManyToManyField(Ingredient, through='ProductIngredient')
