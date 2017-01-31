@@ -20,12 +20,19 @@ class Command(BaseCommand):
 
         product = None
         for idx in range(1, worksheet.nrows):
-            regno = worksheet.cell_value(idx, 2)
+            regno = worksheet.cell_value(idx, 2).lower()
+            pack_size = worksheet.cell_value(idx, 11)
+            num_packs = worksheet.cell_value(idx, 12)
+            sep = worksheet.cell_value(idx, 16)
+            name = worksheet.cell_value(idx, 6).title()
+
+            if "medicine" in regno.lower():
+                continue
+
             if regno.strip() != "":
                 if product: yield product
                 
                 generic_value = worksheet.cell_value(idx, 20) 
-                name = worksheet.cell_value(idx, 6).title()
                 if "originator" in generic_value.lower():
                     is_generic = "Originator"
                 elif "generic" in generic_value.lower():
@@ -33,15 +40,21 @@ class Command(BaseCommand):
                 else:
                     is_generic = None
 
+                if not sep:
+                    print "Could not process %s (%s) due to lack of SEP" % (name, regno)
+                    continue
+                pack_size = pack_size or 1
+                num_packs = num_packs or 1
+
                 product = {
-                    "regno" : worksheet.cell_value(idx, 2).lower(),
+                    "regno" : regno,
                     "applicant" : worksheet.cell_value(idx, 1).title(),
                     "schedule" : worksheet.cell_value(idx, 5),
-                    "name" : worksheet.cell_value(idx, 6).title(),
+                    "name" : name,
                     "dosage_form" : worksheet.cell_value(idx, 10).title(),
-                    "pack_size" : worksheet.cell_value(idx, 11) or None,
-                    "num_packs" : worksheet.cell_value(idx, 12) or None,
-                    "sep" : worksheet.cell_value(idx, 16) or None,
+                    "pack_size" : pack_size,
+                    "num_packs" : num_packs,
+                    "sep" : sep,
                     "is_generic" : is_generic,
                     "ingredients" : []
                 }
