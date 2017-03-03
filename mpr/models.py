@@ -23,12 +23,18 @@ class ProductManager(models.Manager):
         products = sorted(products, key=lambda x: x.sep)
         return products
 
-    def search_by_product(self, pattern):
+    def search_by_nappi(self, nappi):
+
+        products = Product.objects.filter(nappi_code=nappi).order_by("sep")
+        return products
+
+    def search_by_product_name(self, pattern):
 
         products = Product.objects.filter(name__icontains=pattern).order_by("sep")
         return products
 
 class Product(models.Model):
+    nappi_code = models.CharField(max_length=20, null=False)
     regno = models.CharField(max_length=50, null=False)
     name = models.CharField(max_length=100)
     schedule = models.CharField(max_length=22, null=True)

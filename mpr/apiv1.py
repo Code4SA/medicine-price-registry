@@ -9,7 +9,6 @@ from loganalytics import log_analytics
 
 logger = logging.getLogger(__name__)
 
-
 def search_by_ingredient(request):
     q = request.GET.get("q", "").strip()
 

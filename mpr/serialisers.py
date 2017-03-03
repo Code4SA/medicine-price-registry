@@ -1,3 +1,5 @@
+import models
+
 dosage_form = {
     "Liq" : "liquid",
     "Tab" : "tablet",
@@ -68,6 +70,7 @@ def serialize_ingredient(ingredient, strength):
 def serialize_product(product):
     return {
         "id" : product.id,
+        "nappi_code" : product.nappi_code,
         "regno" : product.regno,
         "schedule" : product.schedule,
         "name" : product.name,
@@ -88,7 +91,6 @@ def serialize_products(products):
     return [serialize_product(p) for p in products]
 
 def serialize_product_lite(product):
-    import models
     name = product.name
     if product.ingredients.all().count() == 1:
         ingredient = product.ingredients.all()[0]
@@ -98,6 +100,7 @@ def serialize_product_lite(product):
 
     return {
         "id" : product.id,
+        "nappi_code" : product.nappi_code,
         "name" : name,
         "dosage_form" : dosage_form.get(product.dosage_form, product.dosage_form),
         "sep" : as_currency(product.max_fee),

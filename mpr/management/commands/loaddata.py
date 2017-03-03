@@ -20,6 +20,7 @@ class Command(BaseCommand):
 
         product = None
         for idx in range(1, worksheet.nrows):
+            nappi_code = worksheet.cell_value(idx, 3)
             regno = worksheet.cell_value(idx, 2).lower()
             pack_size = worksheet.cell_value(idx, 11)
             num_packs = worksheet.cell_value(idx, 12)
@@ -40,13 +41,20 @@ class Command(BaseCommand):
                 else:
                     is_generic = None
 
+                try:
+                    nappi_code = "%s" % int(nappi_code)
+                except ValueError:
+                    print "Could not process %s (%s) due to lack of nappi code" % (name, regno)
+                    continue
+                    
                 if not sep:
-                    print "Could not process %s (%s) due to lack of SEP" % (name, regno)
+                    print "Could not process %s (%s) due to lack of SEP" % (name, nappi_code)
                     continue
                 pack_size = pack_size or 1
                 num_packs = num_packs or 1
 
                 product = {
+                    "nappi_code" : nappi_code,
                     "regno" : regno,
                     "applicant" : worksheet.cell_value(idx, 1).title(),
                     "schedule" : worksheet.cell_value(idx, 5),
@@ -95,6 +103,7 @@ class Command(BaseCommand):
             if count % 100 == 0: sys.stdout.flush()
             for p in self.parse(filename):
                 product = models.Product.objects.create(
+                    nappi_code=p["nappi_code"],
                     name=p["name"], regno=p["regno"], schedule=p["schedule"],
                     dosage_form=p["dosage_form"], pack_size=int_or_none(p["pack_size"]), num_packs=int_or_none(p["num_packs"]),
                     sep=float_or_none(p["sep"]), is_generic=p["is_generic"]
