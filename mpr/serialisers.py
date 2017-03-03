@@ -81,7 +81,7 @@ def serialize_product(product):
         "ingredients" : [
             serialize_ingredient(pi.ingredient, pi.strength)
             for pi in product.product_ingredients.all()
-        ]
+        ],
     }
 
 def serialize_products(products):
