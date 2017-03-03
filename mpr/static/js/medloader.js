@@ -5,9 +5,9 @@
 var timer,
     delay = 500,
     animate_speed = 750;
-var search_url = function(term) { return '/api/search-lite?q=' + term; }
-var related_url = function(id) { return '/api/related?product=' + id };
-var product_detail_url = function(id) { return '/api/detail?product=' + id };
+var search_url = function(term) { return '/api/v2/search-lite?q=' + term; }
+var related_url = function(id) { return '/api/v2/related?nappi=' + id };
+var product_detail_url = function(id) { return '/api/v2/detail?nappi=' + id };
 
 
 var log = function(obj) {
@@ -43,7 +43,7 @@ Product = function(data, block) {
 Product.prototype = {
 
     set_name : function() {
-        $('.product-name', this.block).html(this.data.name).attr('href', '#product-detail-' + this.data.id);
+        $('.product-name', this.block).html(this.data.name).attr('href', '#product-detail-' + this.data.nappi_code);
     },
 
     set_price : function() {
@@ -64,7 +64,8 @@ Product.prototype = {
 
     set_related_link : function() {
         related_link = $('.find-generic a', $(this.block));
-        related_link.attr('href', '#related:' + this.data.id);
+        console.log(this.data)
+        related_link.attr('href', '#related:' + this.data.nappi_code);
     },
 
     build_product : function() {
@@ -118,6 +119,7 @@ var add_product_detail = function(elem) {
     load_data(product_detail_url(target_id), function(data) {
         // Switch off any further event bindings to the source anchor, so that we don't get two results
         elem.off();
+        console.log(data)
 
         // Set up the template
         var $product_detail = $templateDetail.clone().removeClass('template-panel-body');
@@ -146,7 +148,8 @@ var add_product_detail = function(elem) {
         $('.product-reg-number', $product_detail).html(data.regno);
 
         // Add product-detail ID so that we have something to target with collapse()
-        $product_detail.attr('id', 'product-detail-' + target_id);
+        console.log(data)
+        $product_detail.attr('id', 'product-detail-' + data.nappi_code);
         
         // Append the detail to the product in question
         elem.parents('.product').append($product_detail);

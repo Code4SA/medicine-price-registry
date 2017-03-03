@@ -49,8 +49,8 @@ def search_lite(request):
     return search(request, serialisers.serialize_products_lite)
 
 def related_products(request):
-    nappi_code = request.GET.get("product", "").strip()
-    product = get_object_or_404(models.Product, napp_code=nappi_code)
+    nappi_code = request.GET.get("nappi", "").strip()
+    product = get_object_or_404(models.Product, nappi_code=nappi_code)
 
     response = HttpResponse(
         json.dumps(
@@ -70,7 +70,7 @@ def product_properties(product):
     }
 
 def product_detail(request):
-    nappi_code = request.GET.get("product", "").strip()
+    nappi_code = request.GET.get("nappi", "").strip()
     product = get_object_or_404(models.Product, nappi_code=nappi_code)
 
     response = HttpResponse(
