@@ -12,8 +12,31 @@ API
 ===
 In addition to providing this simple web interface, we make available a rudimentary API that you can use to access the most up-to-date prices to be used in third party applications.
 
+*Version 2*
+Basic search e.g.
+[https://mpr.code4sa.org/api/v2/search-lite?q=lamictin](https://mpr.code4sa.org/api/v2/search-lite?q=lamictin)
+
+A more comprehensive search that makes available additional fields
+[https://mpr.code4sa.org/api/v2/search?q=lamictin](https://mpr.code4sa.org/api/v2/search?q=lamictin)
+
+Accessing product details
+[https://mpr.code4sa.org/api/v2/detail?product=703312001](https://mpr.code4sa.org/api/v2/detail?product=703312001)
+
+Finding generic products (based in active ingredients)
+[https://mpr.code4sa.org/api/v2/related?product=703312001](https://mpr.code4sa.org/api/v2/related?product=703312001)
+
+Downloading a dump of the entire database
+[mpr.code4sa.org/api/v2/dump](mpr.code4sa.org/api/v2/dump)
+
+*Version 1*
+This version of the API used database IDs to lookup medicines. The result was that urls that included the IDs didn't resolve to the same medicines when the database updated.
+
+
 Basic search e.g.
 [https://mpr.code4sa.org/api/search-lite?q=lamictin](https://mpr.code4sa.org/api/search-lite?q=lamictin)
+
+A more comprehensive search that makes available additional fields
+[https://mpr.code4sa.org/api/search?q=lamictin](https://mpr.code4sa.org/api/search?q=lamictin)
 
 Accessing product details
 [https://mpr.code4sa.org/api/detail?product=3841](https://mpr.code4sa.org/api/detail?product=3841)
