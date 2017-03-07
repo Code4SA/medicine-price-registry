@@ -71,7 +71,7 @@ def serialize_product(product):
     return {
         "id" : product.id,
         "nappi_code" : product.nappi_code,
-        "regno" : product.regno,
+        "regno" : product.regno.upper(),
         "schedule" : product.schedule,
         "name" : product.name,
         "dosage_form" : dosage_form.get(product.dosage_form, product.dosage_form),

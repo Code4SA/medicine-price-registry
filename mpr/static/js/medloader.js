@@ -24,7 +24,7 @@ var map = {
     4 : 'dosage_form',
     5 : 'pack_size',
     6 : 'num_packs',
-    7 : 'is_generic'
+    7 : 'is_generic',
 };
 
 var load_data = function(url, foo) {
@@ -146,6 +146,13 @@ var add_product_detail = function(elem) {
 
         // Add meta data
         $('.product-reg-number', $product_detail).html(data.regno);
+
+        if (data.insert_url == undefined) {
+            $('.package-insert', $product_detail).remove()
+        } else {
+            $('.product-package-insert', $product_detail).html(data.insert_url);
+            $('.product-package-insert', $product_detail)[0]["href"] = data.insert_url;
+        }
 
         // Add product-detail ID so that we have something to target with collapse()
         console.log(data)

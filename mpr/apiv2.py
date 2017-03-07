@@ -6,6 +6,7 @@ from django.shortcuts import get_object_or_404
 from mpr import models
 import serialisers
 from loganalytics import log_analytics
+from packageinserts import packageinserts
 
 logger = logging.getLogger(__name__)
 
@@ -72,12 +73,12 @@ def product_properties(product):
 def product_detail(request):
     nappi_code = request.GET.get("nappi", "").strip()
     product = get_object_or_404(models.Product, nappi_code=nappi_code)
+    js = serialisers.serialize_product(product)
+    if js["regno"] in packageinserts:
+        js["insert_url"] = packageinserts[js["regno"]]
 
     response = HttpResponse(
-        json.dumps(
-            serialisers.serialize_product(product), indent=4
-        ), mimetype="application/json"
-    )
+        json.dumps(js, indent=4), mimetype="application/json")
 
     log_analytics(request, response, "#product-detail", product_properties(product))
     return response
