@@ -90,25 +90,14 @@
     {% compressed_js 'mprbase' %}
     {% block bodybottom %}{% endblock %}
   </body>
-  <!-- UserVoice JavaScript SDK (only needed once on a page) -->
-    <!--<script>(function(){var uv=document.createElement('script');uv.type='text/javascript';uv.async=true;uv.src='//widget.uservoice.com/m1RMUEFyOAQTZCFqzNqgtQ.js';var s=document.getElementsByTagName('script')[0];s.parentNode.insertBefore(uv,s)})()</script>
-    -->
+	<!--Start of Zendesk Chat Script-->
+<script type="text/javascript">
+window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+_.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+$.src="https://v2.zopim.com/?4i7Iq4DZ2A1k3ggcnEZBWXw7YB8IZsnG";z.t=+new Date;$.
+type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+</script>
+<!--End of Zendesk Chat Script-->
 
-    <!-- A tab to launch the Classic Widget -->
-    <!--
-    <script>
-    UserVoice = window.UserVoice || [];
-    UserVoice.push(['showTab', 'classic_widget', {
-      mode: 'full',
-      primary_color: '#cc6d00',
-      link_color: '#007dbf',
-      default_mode: 'support',
-      forum_id: 266783,
-      tab_label: 'Feedback & Support',
-      tab_color: '#cc6d00',
-      tab_position: 'middle-right',
-      tab_inverted: false
-    }]);
-    </script>
--->
 </html>
