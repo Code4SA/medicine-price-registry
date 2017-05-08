@@ -20,10 +20,10 @@ A more comprehensive search that makes available additional fields
 [https://mpr.code4sa.org/api/v2/search?q=lamictin](https://mpr.code4sa.org/api/v2/search?q=lamictin)
 
 Accessing product details
-[https://mpr.code4sa.org/api/v2/detail?product=703312001](https://mpr.code4sa.org/api/v2/detail?product=703312001)
+[https://mpr.code4sa.org/api/v2/detail?nappi=703312001](https://mpr.code4sa.org/api/v2/detail?nappi=703312001)
 
 Finding generic products (based in active ingredients)
-[https://mpr.code4sa.org/api/v2/related?product=703312001](https://mpr.code4sa.org/api/v2/related?product=703312001)
+[https://mpr.code4sa.org/api/v2/related?nappi=703312001](https://mpr.code4sa.org/api/v2/related?nappi=703312001)
 
 Downloading a dump of the entire database
 [mpr.code4sa.org/api/v2/dump](mpr.code4sa.org/api/v2/dump)
