@@ -12,7 +12,7 @@ API
 ===
 In addition to providing this simple web interface, we make available a rudimentary API that you can use to access the most up-to-date prices to be used in third party applications.
 
-*Version 2*
+### Version 2
 Basic search e.g.
 [https://mpr.code4sa.org/api/v2/search-lite?q=lamictin](https://mpr.code4sa.org/api/v2/search-lite?q=lamictin)
 
@@ -31,7 +31,7 @@ Downloading a dump of the entire database
 Get the last updated date
 [mpr.code4sa.org/api/v2/last-updated](mpr.code4sa.org/api/v2/last-updated)
 
-*Version 1*
+### Version 1
 This version of the API used database IDs to lookup medicines. The result was that urls that included the IDs didn't resolve to the same medicines when the database updated.
 
 
