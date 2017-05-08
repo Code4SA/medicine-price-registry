@@ -43,6 +43,7 @@ urlpatterns = patterns("",
     url(r"^api/v2/search/by_product$", "mpr.apiv2.search_by_product", name="api_search_by_product"),
     url(r"^api/v2/search$", "mpr.apiv2.search", name="api_search"),
     url(r"^api/v2/search-lite$", "mpr.apiv2.search_lite", name="api_search_lite"),
+    url(r"^api/v2/last-updated$", "mpr.apiv2.last_updated", name="api_last_updated"),
 
     # currently still using v1 methods since there hasn't been a change
     url(r"^api/v2/dump$", "mpr.apiv1.dump", name="api_dump"),

@@ -84,3 +84,8 @@ def product_detail(request):
     return response
 
 
+def last_updated(request):
+    last_updated_date = models.LastUpdated.objects.last_updated().update_date.isoformat()
+    response = HttpResponse(last_updated_date, mimetype="application/json")
+    log_analytics(request, response, "#last-updated")
+    return response

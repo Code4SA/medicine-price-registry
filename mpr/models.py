@@ -98,8 +98,14 @@ class ProductIngredient(models.Model):
     def __unicode__(self):
         return "%s %s" % (self.ingredient, self.strength)
 
+class LastUpdatedManager(models.Manager):
+    def last_updated(self):
+        return LastUpdated.objects.all().order_by('-update_date')[0]
+
 class LastUpdated(models.Model):
     update_date = models.DateField(auto_now_add=True)
+    objects = LastUpdatedManager()
 
     def __unicode__(self):
         return str(self.update_date)
+
