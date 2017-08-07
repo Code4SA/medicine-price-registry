@@ -8,7 +8,7 @@ TEMPLATE_DEBUG = DEBUG
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__name__))
 
 ADMINS = (
-    ('Adi Eyal', 'adi@code4sa.org'),
+    ('Adi Eyal', 'adi@openup.org.za'),
 )
 
 MANAGERS = ADMINS

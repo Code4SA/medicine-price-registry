@@ -1,5 +1,5 @@
 /**
- * medloader - code4sa.org
+ * medloader - openup.org.za
  */
 
 var timer,
