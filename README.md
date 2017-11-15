@@ -26,10 +26,10 @@ Finding generic products (based in active ingredients)
 [https://mpr.code4sa.org/api/v2/related?nappi=703312001](https://mpr.code4sa.org/api/v2/related?nappi=703312001)
 
 Downloading a dump of the entire database
-[mpr.code4sa.org/api/v2/dump](mpr.code4sa.org/api/v2/dump)
+[https://mpr.code4sa.org/api/v2/dump](https://mpr.code4sa.org/api/v2/dump)
 
 Get the last updated date
-[mpr.code4sa.org/api/v2/last-updated](mpr.code4sa.org/api/v2/last-updated)
+[https://mpr.code4sa.org/api/v2/last-updated](https://mpr.code4sa.org/api/v2/last-updated)
 
 ### Version 1
 This version of the API used database IDs to lookup medicines. The result was that urls that included the IDs didn't resolve to the same medicines when the database updated.
@@ -48,7 +48,7 @@ Finding generic products (based in active ingredients)
 [https://mpr.code4sa.org/api/related?product=3841](https://mpr.code4sa.org/api/related?product=3841)
 
 Downloading a dump of the entire database
-[mpr.code4sa.org/api/dump](mpr.code4sa.org/api/dump)
+[https://mpr.code4sa.org/api/dump](https://mpr.code4sa.org/api/dump)
 
 
 Contributing
