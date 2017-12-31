@@ -69,13 +69,13 @@ class Product(models.Model):
         VAT = 1.14
         try:
             if self.sep < 107.15:
-                return (self.sep * 0.46 + 11) * VAT
+                return (self.sep * 0.46 + 11.25) * VAT
             elif self.sep < 285.8:
-                return (self.sep * 0.33 + 24.3) * VAT
-            elif self.sep < 1000.32:
-                return (self.sep * 0.15 + 74) * VAT
+                return (self.sep * 0.33 + 24) * VAT
+            elif self.sep < 1000.33:
+                return (self.sep * 0.15 + 73.5) * VAT
             else:
-                return (self.sep * 0.05 + 173) * VAT
+                return (self.sep * 0.05 + 172) * VAT
         except (ValueError, TypeError):
             return self.sep
 
