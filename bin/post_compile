@@ -15,7 +15,7 @@ if [ -f bin/install_nodejs ]; then
     bin/install_nodejs
 
     echo "-----> Installing yuglify"
-    npm install -g yuglify
+    #npm install -g yuglify
 fi
 
 if [ -f bin/run_collectstatic ]; then
