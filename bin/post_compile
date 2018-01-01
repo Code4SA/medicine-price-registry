@@ -9,14 +9,14 @@ echo "-----> I'm post-compile hook"
 # compile phase. See: https://github.com/heroku/heroku-buildpack-python/issues/57
 export MEMCACHE_SERVERS='' MEMCACHIER_SERVERS=''
 
-#if [ -f bin/install_nodejs ]; then
-#    echo "-----> Running install_nodejs"
-#    chmod +x bin/install_nodejs
-#    bin/install_nodejs
-#
-#    echo "-----> Installing yuglify"
-#    npm install -g yuglify
-#fi
+if [ -f bin/install_nodejs ]; then
+    echo "-----> Running install_nodejs"
+    chmod +x bin/install_nodejs
+    bin/install_nodejs
+
+    echo "-----> Installing yuglify"
+    npm install -g yuglify
+fi
 
 if [ -f bin/run_collectstatic ]; then
     echo "-----> Running run_collectstatic"
