@@ -6,6 +6,7 @@ import datetime
 logger = logging.getLogger(__name__)
 
 def log_analytics(request, response, event, *properties):
+    return
     try:
         import analytics
         from ipware.ip import get_ip as get_ip
