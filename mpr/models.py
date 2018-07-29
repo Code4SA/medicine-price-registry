@@ -66,7 +66,7 @@ class Product(models.Model):
 
     @property
     def dispensing_fee(self):
-        VAT = 1.14
+        VAT = 1.15
         try:
             if self.sep < 107.15:
                 return (self.sep * 0.46 + 11.25) * VAT
