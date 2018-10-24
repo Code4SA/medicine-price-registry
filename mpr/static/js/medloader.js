@@ -16,6 +16,10 @@ var log = function(obj) {
     }
 };
 
+var log_analytics = function(event, properties) {
+    amplitude.getInstance().logEvent(event, properties);
+}
+
 var map = {
     0 : 'sep',
     1 : 'cost_per_unit',
@@ -120,6 +124,7 @@ var add_product_detail = function(elem) {
         // Switch off any further event bindings to the source anchor, so that we don't get two results
         elem.off();
         console.log(data)
+        log_analytics("product-detail", {"id" : target_id});
 
         // Set up the template
         var $product_detail = $templateDetail.clone().removeClass('template-panel-body');
@@ -197,8 +202,10 @@ var load_medicines = function(value) {
 
         if (key == '#related') {
             load_data(related_url(value), process_request);
+            log_analytics("product-related", {"id" : value});
         } else if (key == '#search') {
             load_data(search_url(value), process_request);
+            log_analytics("product-search", {"query" : value});
         }
 
         $('html, body').animate({
