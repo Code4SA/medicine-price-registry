@@ -124,7 +124,7 @@ var add_product_detail = function(elem) {
         // Switch off any further event bindings to the source anchor, so that we don't get two results
         elem.off();
         console.log(data)
-        log_analytics("product-detail", {"id" : target_id});
+        log_analytics("product-detail", data);
 
         // Set up the template
         var $product_detail = $templateDetail.clone().removeClass('template-panel-body');
