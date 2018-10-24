@@ -1,4 +1,4 @@
-import models
+from . import models
 
 dosage_form = {
     "Liq" : "liquid",

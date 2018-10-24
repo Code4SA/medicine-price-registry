@@ -3,10 +3,11 @@ import logging
 
 from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
-from mpr import models
-import serialisers
-from loganalytics import log_analytics
-from packageinserts import packageinserts
+
+from .import models
+from .import serialisers
+from .loganalytics import log_analytics
+from .packageinserts import packageinserts
 
 logger = logging.getLogger(__name__)
 
@@ -37,7 +38,7 @@ def search(request, serialiser=serialisers.serialize_products):
         products = serialiser(all_products)
 
     response = HttpResponse(
-        json.dumps(products, indent=4), mimetype="application/json"
+        json.dumps(products, indent=4), content_type="application/json"
     )
 
     log_analytics(request, response, "#search", {
@@ -56,7 +57,7 @@ def related_products(request):
     response = HttpResponse(
         json.dumps(
             serialisers.serialize_products(product.related_products), indent=4
-        ), mimetype="application/json"
+        ), content_type="application/json"
     )
 
     log_analytics(request, response, "#related", product_properties(product))
@@ -78,7 +79,7 @@ def product_detail(request):
         js["insert_url"] = packageinserts[js["regno"]]
 
     response = HttpResponse(
-        json.dumps(js, indent=4), mimetype="application/json")
+        json.dumps(js, indent=4), content_type="application/json")
 
     log_analytics(request, response, "#product-detail", product_properties(product))
     return response
@@ -86,6 +87,6 @@ def product_detail(request):
 
 def last_updated(request):
     last_updated_date = models.LastUpdated.objects.last_updated().update_date.isoformat()
-    response = HttpResponse(last_updated_date, mimetype="application/json")
+    response = HttpResponse(last_updated_date, content_type="application/json")
     log_analytics(request, response, "#last-updated")
     return response

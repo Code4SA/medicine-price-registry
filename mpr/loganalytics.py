@@ -36,7 +36,7 @@ def log_analytics(request, response, event, *properties):
             { "$ip" : ip}
         )
         analytics.track(uid, event=event, properties=properties)
-    except Exception, e:
+    except Exception as e:
         logger.exception("Error handling analytics")
 
 
