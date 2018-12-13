@@ -93,11 +93,9 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
-CORS_ORIGIN_ALLOW_ALL = True
-
 MIDDLEWARE_CLASSES = (
+    'mpr.middleware.CORSMiddleware',
     'django.middleware.cache.UpdateCacheMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -124,7 +122,7 @@ def settings_context(context):
     return { 'debug' : DEBUG }
 
 TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
-    'mpr.settings.settings_context',    
+    'mpr.settings.settings_context',
 )
 
 INSTALLED_APPS = (
@@ -136,7 +134,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.admin',
     'pipeline',
-    'corsheaders',
     'mpr',
 )
 
