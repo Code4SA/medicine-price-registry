@@ -63,17 +63,39 @@ class TestProductManager(TestCase):
     fixtures = ["mpr_models.json"]
     
     def setUp(self):
-        pass
+        self.p1 = models.Product.objects.get(pk=1)
+        self.p2 = models.Product.objects.get(pk=2)
+        self.p3 = models.Product.objects.get(pk=3)
 
     def testSearchByIngredient(self):
         ingredients = models.Product.objects.search_by_ingredient("Ingredient 1")
         self.assertEquals(len(ingredients), 3)
+        self.assertTrue(self.p1 in ingredients)
+        self.assertTrue(self.p2 in ingredients)
+        self.assertTrue(self.p3 in ingredients)
+
+        seps = [i.sep for i in ingredients]
+        self.assertEquals(seps, sorted(seps))
 
         ingredients = models.Product.objects.search_by_ingredient("Ingredient 2")
         self.assertEquals(len(ingredients), 2)
+        self.assertTrue(self.p1 in ingredients)
+        self.assertTrue(self.p2 in ingredients)
 
         ingredients = models.Product.objects.search_by_ingredient("Ingredien")
         self.assertEquals(len(ingredients), 3)
+        self.assertTrue(self.p1 in ingredients)
+        self.assertTrue(self.p2 in ingredients)
+        self.assertTrue(self.p3 in ingredients)
 
         ingredients = models.Product.objects.search_by_ingredient("Nothing")
         self.assertEquals(len(ingredients), 0)
+
+
+    def testSearchByNappi(self):
+        p = models.Product.objects.search_by_nappi("1")
+        self.assertEquals(len(p), 1)
+        self.assertTrue(self.p1 in p)
+
+        p = models.Product.objects.search_by_nappi("0")
+        self.assertEquals(len(p), 0)
