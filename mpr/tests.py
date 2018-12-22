@@ -60,11 +60,17 @@ class TestProduct(TestCase):
         self.assertTrue(self.p3 in p)
 
 class TestProductManager(TestCase):
+    fixtures = ["mpr_models.json"]
+    
     def setUp(self):
         pass
 
     def testSearchByIngredient(self):
-        ingredients = models.ProductManager.search_by_ingredient("Ingr")
-        self.assertEquals(len(ingredients), 2)
-        return True
+        ingredients = models.Product.objects.search_by_ingredient("Ingredient 1")
+        self.assertEquals(len(ingredients), 3)
 
+        ingredients = models.Product.objects.search_by_ingredient("Ingredient 2")
+        self.assertEquals(len(ingredients), 2)
+
+        ingredients = models.Product.objects.search_by_ingredient("Ingredien")
+        self.assertEquals(len(ingredients), 3)
