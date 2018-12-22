@@ -1,6 +1,4 @@
 from django.test import TestCase
-from django.conf import settings
-from django.test import Client
 import json
 from mpr import models, apiv1
 

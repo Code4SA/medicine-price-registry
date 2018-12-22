@@ -1,11 +1,7 @@
-import json
 import logging
 
-from django.http import HttpResponse, Http404
-from django.shortcuts import get_object_or_404
 from mpr import models
 import serialisers
-from loganalytics import log_analytics
 
 logger = logging.getLogger(__name__)
 
