@@ -11,7 +11,7 @@
         "pk": 2, 
         "model": "mpr.ingredient", 
         "fields": {
-            "name": "Ingredient 2", 
+            "name": "Ingredient 2 ABC", 
             "unit": "mg"
         }
     },
@@ -20,7 +20,7 @@
         "model": "mpr.product", 
         "fields": {
             "num_packs": 1, 
-            "name": "Product 1", 
+            "name": "Product 1 ABC", 
             "schedule": "S4", 
             "sep": 100, 
             "is_generic": "Originator", 

@@ -9,97 +9,47 @@ from loganalytics import log_analytics
 
 logger = logging.getLogger(__name__)
 
-def search_by_ingredient(request):
-    q = request.GET.get("q", "").strip()
-
-    if len(q) < 3:
-        products = []
+def search_by_ingredient(query, serialiser=serialisers.serialize_products):
+    
+    if len(query) < 3:
+        return []
     else:
-        products = models.Product.objects.search_by_ingredient(q)
-        products = serialisers.serialize_products(products)
-    return HttpResponse(
-        json.dumps(products, indent=4), mimetype="application/json"
-    )
+        products = models.Product.objects.search_by_ingredient(query)
+        return serialiser(products)
 
-def search_by_product(request):
-    q = request.GET.get("q", "").strip()
+def search_by_product(query, serialiser=serialisers.serialize_products):
 
-    if len(q) < 3:
-        products = []
+    if len(query) < 3:
+        return []
     else:
-        products = models.Product.objects.search_by_product(q)
-        products = serialisers.serialize_products(products)
-    return HttpResponse(
-        json.dumps(products, indent=4), mimetype="application/json"
-    )
+        products = models.Product.objects.search_by_product_name(query)
+        return serialiser(products)
 
-def search(request, serialiser=serialisers.serialize_products):
-    q = request.GET.get("q", "").strip()
+def search(query, serialiser=serialisers.serialize_products):
 
     all_products = set()
-    if len(q) < 3:
+    if len(query) < 3:
         products = []
     else:
-        products1 = set(models.Product.objects.search_by_product(q))
-        products2 = set(models.Product.objects.search_by_ingredient(q))
+        products1 = set(models.Product.objects.search_by_product_name(query))
+        products2 = set(models.Product.objects.search_by_ingredient(query))
         all_products |= products1 | products2
         all_products = sorted(all_products, key=lambda x: x.sep)
         products = serialiser(all_products)
 
-    response = HttpResponse(
-        json.dumps(products, indent=4), mimetype="application/json"
-    )
+    return products
 
-    log_analytics(request, response, "#search", {
-        "search_string" : q
-    })
+def search_lite(query):
+    return search(query, serialisers.serialize_products_lite)
 
-    return response
+def related_products(product_id, serialiser=serialisers.serialize_products):
+    product = models.Product.objects.get(id=product_id)
+    return serialiser(product.related_products)
 
-def search_lite(request):
-    return search(request, serialisers.serialize_products_lite)
+def dump(serialiser=serialisers.serialize_products):
+    return serialiser(models.Product.objects.all())
 
-def related_products(request):
-    product_id = request.GET.get("product", "").strip()
-    product = get_object_or_404(models.Product, id=product_id)
-
-    response = HttpResponse(
-        json.dumps(
-            serialisers.serialize_products(product.related_products), indent=4
-        ), mimetype="application/json"
-    )
-
-    log_analytics(request, response, "#related", product_properties(product))
-    return response
-
-def product_properties(product):
-    return {
-        "product" : product.name,
-        "product_id" : product.id,
-        "dosage_form" : product.dosage_form,
-        "is_generic" : product.is_generic
-    }
-
-def dump(request):
-
-    response = HttpResponse(
-        json.dumps(
-            serialisers.serialize_products(models.Product.objects.all()), indent=4
-        ), mimetype="application/json"
-    )
-    log_analytics(request, response, "#dump", {})
-    return response
-
-def product_detail(request):
-    product_id = request.GET.get("product", "").strip()
-    product = get_object_or_404(models.Product, id=product_id)
-
-    response = HttpResponse(
-        json.dumps(
-            serialisers.serialize_product(product), indent=4
-        ), mimetype="application/json"
-    )
-
-    log_analytics(request, response, "#product-detail", product_properties(product))
-    return response
+def product_detail(product_id, serialiser=serialisers.serialize_product):
+    product = models.Product.objects.get(id=product_id)
+    return serialiser(product)
 
