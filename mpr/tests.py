@@ -74,3 +74,6 @@ class TestProductManager(TestCase):
 
         ingredients = models.Product.objects.search_by_ingredient("Ingredien")
         self.assertEquals(len(ingredients), 3)
+
+        ingredients = models.Product.objects.search_by_ingredient("Nothing")
+        self.assertEquals(len(ingredients), 0)
