@@ -64,5 +64,7 @@ class TestProductManager(TestCase):
         pass
 
     def testSearchByIngredient(self):
+        ingredients = models.ProductManager.search_by_ingredient("Ingr")
+        self.assertEquals(len(ingredients), 2)
         return True
 
