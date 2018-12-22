@@ -1,3 +1,4 @@
+from datetime import date
 from django.test import TestCase
 from django.conf import settings
 from mpr import models
@@ -106,3 +107,10 @@ class TestProductManager(TestCase):
 
         p = models.Product.objects.search_by_product_name("Product 1")
         self.assertEquals(len(p), 1)
+
+class TestLastUpdated(TestCase):
+    fixtures = ["mpr_models.json"]
+
+    def testLastUpdated(self):
+        lu = models.LastUpdated.objects.last_updated()
+        self.assertEquals(lu.update_date, date(2014, 9, 29))

@@ -104,5 +104,19 @@
             "strength": "20.0", 
             "ingredient": 1
         }
+    },
+    {
+        "pk": 1, 
+        "model": "mpr.lastupdated", 
+        "fields": {
+            "update_date": "2014-09-23"
+        }
+    },
+    {
+        "pk": 1, 
+        "model": "mpr.lastupdated", 
+        "fields": {
+            "update_date": "2014-09-29"
+        }
     }
 ]
