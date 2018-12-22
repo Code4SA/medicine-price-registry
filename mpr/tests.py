@@ -103,3 +103,6 @@ class TestProductManager(TestCase):
     def testSearchByProductName(self):
         p = models.Product.objects.search_by_product_name("roduct")
         self.assertEquals(len(p), 3)
+
+        p = models.Product.objects.search_by_product_name("Product 1")
+        self.assertEquals(len(p), 1)
