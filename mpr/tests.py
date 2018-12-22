@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.conf import settings
 from mpr import models
 
 class TestProduct(TestCase):
@@ -15,17 +16,36 @@ class TestProduct(TestCase):
             is_generic=True
         )
 
-        pass
+        settings.PRICE_PARAMETERS = {
+            "VAT" : 2,
+            "prices" : [
+                (100, 0.10, 10),
+                (200, 0.20, 20),
+                (300, 0.30, 30),
+                (float('inf'), 0.40, 40),
+            ]
+        }
 
     def testDispensingFee(self):
-        self.assertAlmostEquals(self.p1.dispensing_fee, 65.837, 2)
+        test_data = [(100, 40), (150, 50), (250, 105), (1000, 440)]
+
+        for price, fee in test_data:
+            self.p1.sep = price
+            self.assertEquals(self.p1.dispensing_fee, fee)
 
     def testCostPerUnit(self):
-        self.assertAlmostEquals(self.p1.cost_per_unit, 33.1675, 2)
+        test_data = [(100, 28), (150, 40), (250, 71), (1000, 288)]
+
+        for price, cost in test_data:
+            self.p1.sep = price
+            self.assertEquals(self.p1.cost_per_unit, cost)
 
     def testMaxFee(self):
-        self.assertAlmostEquals(self.p1.max_fee, 165.837, 2)
-        
+        test_data = [(100, 140), (150, 200), (250, 355), (1000, 1440)]
+
+        for price, fee in test_data:
+            self.p1.sep = price
+            self.assertEquals(self.p1.max_fee, fee)
 
 class TestProductManager(TestCase):
     def setUp(self):

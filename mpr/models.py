@@ -1,4 +1,5 @@
 from __future__ import division
+from django.conf import settings
 from django.db import models
 
 class Ingredient(models.Model):
@@ -48,6 +49,11 @@ class Product(models.Model):
 
     objects = ProductManager()
 
+    # wish this could be dependecy injection but it isn't clear how to do this with Django models
+    @staticmethod
+    def parameters():
+        return settings.PRICE_PARAMETERS
+
     def __unicode__(self):
         return self.name
 
@@ -66,16 +72,12 @@ class Product(models.Model):
 
     @property
     def dispensing_fee(self):
-        VAT = 1.15
+        params = Product.parameters()
+        VAT = params["VAT"]
         try:
-            if self.sep < 107.15:
-                return (self.sep * 0.46 + 11.25) * VAT
-            elif self.sep < 285.8:
-                return (self.sep * 0.33 + 24) * VAT
-            elif self.sep < 1000.33:
-                return (self.sep * 0.15 + 73.5) * VAT
-            else:
-                return (self.sep * 0.05 + 172) * VAT
+            for threshold, perc, flat_rate in params["prices"]:
+                if self.sep < threshold:
+                    return (self.sep * perc + flat_rate)
         except (ValueError, TypeError):
             return self.sep
 
