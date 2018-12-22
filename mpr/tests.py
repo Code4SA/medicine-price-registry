@@ -99,3 +99,7 @@ class TestProductManager(TestCase):
 
         p = models.Product.objects.search_by_nappi("0")
         self.assertEquals(len(p), 0)
+
+    def testSearchByProductName(self):
+        p = models.Product.objects.search_by_product_name("roduct")
+        self.assertEquals(len(p), 3)
