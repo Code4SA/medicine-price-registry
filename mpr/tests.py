@@ -3,45 +3,14 @@ from django.conf import settings
 from mpr import models
 
 class TestProduct(TestCase):
+    fixtures = ["mpr_models.json"]
+
     def setUp(self):
-        self.ing1 = models.Ingredient(
-            name="Ingredient 1",
-            unit="mg",
-        )
-        self.ing1.save()
-
-        self.ing2 = models.Ingredient(
-            name="Ingredient 2",
-            unit="mg"
-        )
-        self.ing2.save()
-
-        self.p1 = models.Product(
-            nappi_code="nappi_code", regno="regno", name="my medicine",
-            schedule="S5", dosage_form="Pill", pack_size=5,
-            num_packs=1, sep=100, is_generic=True
-        )
-        self.p1.save()
-
-        self.p2 = models.Product(
-            nappi_code="nappi_code2", regno="regno2", name="my medicine2",
-            schedule="S7", dosage_form="Pill", pack_size=5,
-            num_packs=1, sep=100, is_generic=True
-        )
-        self.p2.save()
-
-        self.p3 = models.Product(
-            nappi_code="nappi_code3", regno="regno3", name="my medicine3",
-            schedule="S7", dosage_form="Pill", pack_size=5,
-            num_packs=1, sep=100, is_generic=True
-        )
-        self.p3.save()
-
-        models.ProductIngredient.objects.create(product=self.p1, ingredient=self.ing1, strength=10)
-        models.ProductIngredient.objects.create(product=self.p1, ingredient=self.ing2, strength=10)
-        models.ProductIngredient.objects.create(product=self.p2, ingredient=self.ing1, strength=10)
-        models.ProductIngredient.objects.create(product=self.p2, ingredient=self.ing2, strength=10)
-        models.ProductIngredient.objects.create(product=self.p3, ingredient=self.ing2, strength=10)
+        self.ing1 = models.Ingredient.objects.get(pk=1)
+        self.ing2 = models.Ingredient.objects.get(pk=2)
+        self.p1 = models.Product.objects.get(pk=1)
+        self.p2 = models.Product.objects.get(pk=2)
+        self.p3 = models.Product.objects.get(pk=3)
 
         settings.PRICE_PARAMETERS = {
             "VAT" : 2,
