@@ -94,7 +94,7 @@ class TestProductManager(TestCase):
 
 
     def testSearchByNappi(self):
-        p = models.Product.objects.search_by_nappi("1")
+        p = models.Product.objects.search_by_nappi("111")
         self.assertEquals(len(p), 1)
         self.assertTrue(self.p1 in p)
 

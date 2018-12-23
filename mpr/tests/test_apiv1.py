@@ -2,10 +2,6 @@ from django.test import TestCase
 import json
 from mpr import models, apiv1
 
-class TestClient(object):
-    def __init__(self, **kwargs):
-        self.GET = kwargs
-
 def test_serialiser(products):
     return [p.pk for p in products]
 

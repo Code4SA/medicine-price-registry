@@ -11,57 +11,33 @@ from .packageinserts import packageinserts
 
 logger = logging.getLogger(__name__)
 
-def search_by_product(request):
-    q = request.GET.get("nappi", "").strip()
+def search_by_product(query, serialiser=serialisers.serialize_products):
 
-    if len(q) < 3:
-        products = []
+    if len(query) < 3:
+        return []
     else:
-        products = models.Product.objects.search_by_nappi(q)
-        products = serialisers.serialize_products(products)
-    return HttpResponse(
-        json.dumps(products, indent=4), mimetype="application/json"
-    )
+        products = models.Product.objects.search_by_nappi(query)
+        return serialiser(products)
 
-def search(request, serialiser=serialisers.serialize_products):
-    q = request.GET.get("q", "").strip()
-
+def search(query, serialiser=serialisers.serialize_products):
     all_products = set()
-    if len(q) < 3:
+    if len(query) < 3:
         products = []
     else:
-        products0 = set(models.Product.objects.search_by_nappi(q))
-        products1 = set(models.Product.objects.search_by_product_name(q))
-        products2 = set(models.Product.objects.search_by_ingredient(q))
+        products0 = set(models.Product.objects.search_by_nappi(query))
+        products1 = set(models.Product.objects.search_by_product_name(query))
+        products2 = set(models.Product.objects.search_by_ingredient(query))
         all_products |= products0 | products1 | products2
         all_products = sorted(all_products, key=lambda x: x.sep)
         products = serialiser(all_products)
+    return products
 
-    response = HttpResponse(
-        json.dumps(products, indent=4), content_type="application/json"
-    )
+def search_lite(query, serialiser=serialisers.serialize_products):
+    return search(query, serialisers.serialize_products_lite)
 
-    log_analytics(request, response, "#search", {
-        "search_string" : q
-    })
-
-    return response
-
-def search_lite(request):
-    return search(request, serialisers.serialize_products_lite)
-
-def related_products(request):
-    nappi_code = request.GET.get("nappi", "").strip()
-    product = get_object_or_404(models.Product, nappi_code=nappi_code)
-
-    response = HttpResponse(
-        json.dumps(
-            serialisers.serialize_products(product.related_products), indent=4
-        ), content_type="application/json"
-    )
-
-    log_analytics(request, response, "#related", product_properties(product))
-    return response
+def related_products(nappi_code, serialiser=serialisers.serialize_products):
+    product = models.Product.objects.get(nappi_code=nappi_code)
+    return serialiser(product.related_products)
 
 def product_properties(product):
     return {
@@ -71,22 +47,16 @@ def product_properties(product):
         "is_generic" : product.is_generic
     }
 
-def product_detail(request):
-    nappi_code = request.GET.get("nappi", "").strip()
-    product = get_object_or_404(models.Product, nappi_code=nappi_code)
-    js = serialisers.serialize_product(product)
-    if js["regno"] in packageinserts:
-        js["insert_url"] = packageinserts[js["regno"]]
+def product_detail(nappi_code, serialiser=serialisers.serialize_product):
+    try:
+        product = models.Product.objects.get(nappi_code=nappi_code)
+        js = serialiser(product)
+        if js["regno"] in packageinserts:
+            js["insert_url"] = packageinserts[js["regno"]]
+        return js
+    except models.Product.DoesNotExist:
+        return {}
 
-    response = HttpResponse(
-        json.dumps(js, indent=4), content_type="application/json")
-
-    log_analytics(request, response, "#product-detail", product_properties(product))
-    return response
-
-
-def last_updated(request):
+def last_updated():
     last_updated_date = models.LastUpdated.objects.last_updated().update_date.isoformat()
-    response = HttpResponse(last_updated_date, content_type="application/json")
-    log_analytics(request, response, "#last-updated")
-    return response
+    return last_updated_date

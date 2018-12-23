@@ -26,7 +26,7 @@
             "is_generic": "Originator", 
             "regno": "regno2", 
             "pack_size": 5,
-            "nappi_code": "1", 
+            "nappi_code": "111", 
             "dosage_form": "Inj"
         }
     },
@@ -41,7 +41,7 @@
             "is_generic": "Originator", 
             "regno": "regno2", 
             "pack_size": 5,
-            "nappi_code": "2", 
+            "nappi_code": "222", 
             "dosage_form": "Inj"
         }
     },
@@ -56,7 +56,7 @@
             "is_generic": "Originator", 
             "regno": "regno3", 
             "pack_size": 5,
-            "nappi_code": "3", 
+            "nappi_code": "333", 
             "dosage_form": "Inj"
         }
     },

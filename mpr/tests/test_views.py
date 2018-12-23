@@ -97,3 +97,43 @@ class TestApi(ApiUrls):
     def __init__(self, *args, **kwargs):
         super(TestApi, self).__init__(*args, **kwargs)
         self.api_prefix = "api1"
+
+class TestApiV2(ApiUrls):
+    def __init__(self, *args, **kwargs):
+        super(TestApiV2, self).__init__(*args, **kwargs)
+        self.api_prefix = "api2"
+
+    def testSearchByProduct(self):
+        client = Client()
+
+        response = client.get(reverse(self.api_prefix + "_search_by_product"), {"nappi" : "5"})
+        self.assertEquals(len(json.loads(response.content)), 0)
+
+        response = client.get(reverse(self.api_prefix + "_search_by_product"), {"nappi" : "555"})
+        self.assertEquals(len(json.loads(response.content)), 0)
+
+        response = client.get(reverse(self.api_prefix + "_search_by_product"), {"nappi" : "111"})
+        self.assertEquals(len(json.loads(response.content)), 1)
+
+    def testRelatedProduct(self):
+        client = Client()
+
+        response = client.get(reverse(self.api_prefix + "_related_products"), {"nappi" : "111"})
+        self.assertEquals(len(json.loads(response.content)), 2)
+
+        response = client.get(reverse(self.api_prefix + "_related_products"), {"product" : "5"})
+        self.assertEquals(len(json.loads(response.content)), 0)
+
+    def testProductDetail(self):
+        client = Client()
+
+        response = client.get(reverse(self.api_prefix + "_product_detail"), {"nappi" : "111"})
+        self.assertEquals(json.loads(response.content)["name"], "Product 1 ABC")
+
+        response = client.get(reverse(self.api_prefix + "_product_detail"), {"nappi" : "0"})
+        self.assertEquals(json.loads(response.content), {})
+
+    def testLastUpdated(self):
+        client = Client()
+        response = client.get(reverse(self.api_prefix + "_last_updated"))
+        self.assertEquals(response.content, "2014-09-29")

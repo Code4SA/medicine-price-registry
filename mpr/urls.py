@@ -41,16 +41,16 @@ urlpatterns = [
     url(r"^api/v1/search-lite$", views.search_lite, name="api1_search_lite"),
     url(r"^api/v1/dump$", views.dump, name="api1_dump"),
 
-    url(r"^api/v2/related$", apiv2.related_products, name="api2_related_products"),
-    url(r"^api/v2/detail$", apiv2.product_detail, name="api2_product_detail"),
-    url(r"^api/v2/search/by_product$", apiv2.search_by_product, name="api2_search_by_product"),
-    url(r"^api/v2/search$", apiv2.search, name="api2_search"),
-    url(r"^api/v2/search-lite$", apiv2.search_lite, name="api2_search_lite"),
-    url(r"^api/v2/last-updated$", apiv2.last_updated, name="api2_last_updated"),
+    url(r"^api/v2/related$", views.v2_related_products, name="api2_related_products"),
+    url(r"^api/v2/detail$", views.v2_product_detail, name="api2_product_detail"),
+    url(r"^api/v2/search/by_product$", views.v2_search_by_product, name="api2_search_by_product"),
+    url(r"^api/v2/search$", views.v2_search, name="api2_search"),
+    url(r"^api/v2/search-lite$", views.v2_search_lite, name="api2_search_lite"),
+    url(r"^api/v2/last-updated$", views.v2_last_updated, name="api2_last_updated"),
 
     # currently still using v1 methods since there hasn't been a change
-    url(r"^api/v2/dump$", apiv1.dump, name="api2_dump"),
-    url(r"^api/v2/search/by_ingredient$", apiv1.search_by_ingredient, name="api2_search_by_ingredient"),
+    url(r"^api/v2/dump$", views.dump, name="api2_dump"),
+    url(r"^api/v2/search/by_ingredient$", views.search_by_ingredient, name="api2_search_by_ingredient"),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
