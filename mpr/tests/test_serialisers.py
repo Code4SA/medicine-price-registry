@@ -3,6 +3,12 @@ from mpr import serialisers
 from mpr import models
 import json
 
+ingredient1_json = {
+    "strength": 200,
+    "name": "Ingredient 1",
+    "unit": "mg"
+}
+
 product1_json = {
     "schedule": "S4",
     "is_generic": "Originator",
@@ -57,9 +63,7 @@ class TestSerialisers(TestCase):
     def testSerialiseIngredient(self):
         ingredient = models.Ingredient.objects.all()[0]
         js = serialisers.serialize_ingredient(ingredient, 200) 
-        self.assertTrue("name" in js and js["name"] == "Ingredient 1")
-        self.assertTrue("unit" in js and js["unit"] == "mg")
-        self.assertTrue("strength" in js and js["strength"] == 200)
+        self.assertJSONEqual(json.dumps(js), ingredient1_json)
         
     def testSerialiseProduct(self):
         product = models.Product.objects.all()[0]
