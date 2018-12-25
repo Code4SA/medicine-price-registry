@@ -1,54 +1,39 @@
 from django.conf import settings
+import base64
 import logging
 import names
 import datetime
+import amplitude
+import json
 
 logger = logging.getLogger(__name__)
+amplitude_logger = amplitude.AmplitudeLogger(api_key=settings.AMPLITUDE_KEY)
 
-def log_analytics(request, response, event, *properties):
-    return
+def test_log_analytics(request, response, event, **properties):
+    if not hasattr(test_log_analytics, "events"):
+        test_log_analytics.events = []
+    test_log_analytics.events.append((event, properties))
+
+def log_analytics(request, response, event, **properties):
+    ids = [(k, v) for (k, v) in request._cookies.items() if "amplitude_id_" in k]
     try:
-        import analytics
-        from ipware.ip import get_ip as get_ip
+        if len(ids) > 0:
+            amp_id = ids[0][1]
+            decoded = base64.b64decode(ids[0][1])
+            js = json.loads(decoded)
+            user_id = js["userId"]
+            device_id = jd["deviceId"]
+        else:
+            device_id = None
+            user_id = "Anonymous"
 
-        if settings.DEBUG: return
-        if not hasattr(settings, "SEGMENT_IO_KEY"):
-            logger.warning("Cannot send analytics. No Segment IO Key has been set")
-            return
-
-        if "pingdom" in request.META.get("HTTP_USER_AGENT", ""):
-            logger.warning("Not recording analytics. Ignored pingdom bot")
-            return
-
-        api_key = settings.SEGMENT_IO_KEY
-
-        ip = get_ip(request)
-
-        uid = names.get_full_name()
-        uid = request.COOKIES.get("uid", uid)
-        set_cookie(response, "uid", uid)
-
-        request.session["uid"] = uid
-        analytics.init(api_key)
-        analytics.identify(uid, {
-                "$name" : uid,
-            },
-            { "$ip" : ip}
-        )
-        analytics.track(uid, event=event, properties=properties)
+        event_args = {
+            "event_type": event,
+            "user_id" : js["userId"], "device_id" : js["deviceId"],
+            "source":"test",
+            "event_properties" : properties
+        }
+        event = amplitude_logger.create_event(**event_args)
+        amplitude_logger.log_event(event)
     except Exception as e:
         logger.exception("Error handling analytics")
-
-
-def set_cookie(response, key, value, days_expire = 7):
-    max_age = 365 * 24 * 60 * 60  * 100
-    expires = datetime.datetime.strftime(
-        datetime.datetime.utcnow() + datetime.timedelta(seconds=max_age), "%a, %d-%b-%Y %H:%M:%S GMT")
-    response.set_cookie(
-        key, value,
-        max_age=max_age,
-        expires=expires,
-        domain=settings.SESSION_COOKIE_DOMAIN,
-        secure=settings.SESSION_COOKIE_SECURE or None
-    )
-

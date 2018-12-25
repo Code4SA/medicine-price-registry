@@ -1,0 +1,122 @@
+[
+    {
+        "pk": 1, 
+        "model": "mpr.ingredient", 
+        "fields": {
+            "name": "Ingredient 1", 
+            "unit": "mg"
+        }
+    },
+    {
+        "pk": 2, 
+        "model": "mpr.ingredient", 
+        "fields": {
+            "name": "Ingredient 2 ABC", 
+            "unit": "mg"
+        }
+    },
+    {
+        "pk": 1, 
+        "model": "mpr.product", 
+        "fields": {
+            "num_packs": 1, 
+            "name": "Product 1 ABC", 
+            "schedule": "S4", 
+            "sep": 100, 
+            "is_generic": "Originator", 
+            "regno": "regno2", 
+            "pack_size": 5,
+            "nappi_code": "111", 
+            "dosage_form": "Inj"
+        }
+    },
+    {
+        "pk": 2, 
+        "model": "mpr.product", 
+        "fields": {
+            "num_packs": 1, 
+            "name": "Product 2", 
+            "schedule": "S4", 
+            "sep": 200, 
+            "is_generic": "Originator", 
+            "regno": "regno2", 
+            "pack_size": 5,
+            "nappi_code": "222", 
+            "dosage_form": "Inj"
+        }
+    },
+    {
+        "pk": 3, 
+        "model": "mpr.product", 
+        "fields": {
+            "num_packs": 1, 
+            "name": "Product 3", 
+            "schedule": "S4", 
+            "sep": 50, 
+            "is_generic": "Originator", 
+            "regno": "regno3", 
+            "pack_size": 5,
+            "nappi_code": "333", 
+            "dosage_form": "Inj"
+        }
+    },
+    {
+        "pk": 1, 
+        "model": "mpr.productingredient", 
+        "fields": {
+            "product": 1, 
+            "strength": "20.0", 
+            "ingredient": 1
+        }
+    },
+    {
+        "pk": 2, 
+        "model": "mpr.productingredient", 
+        "fields": {
+            "product": 1, 
+            "strength": "20.0", 
+            "ingredient": 2
+        }
+    },
+    {
+        "pk": 3, 
+        "model": "mpr.productingredient", 
+        "fields": {
+            "product": 2, 
+            "strength": "20.0", 
+            "ingredient": 1
+        }
+    },
+    {
+        "pk": 4, 
+        "model": "mpr.productingredient", 
+        "fields": {
+            "product": 2, 
+            "strength": "20.0", 
+            "ingredient": 2
+        }
+    },
+    {
+        "pk": 5, 
+        "model": "mpr.productingredient", 
+        "fields": {
+            "product": 3, 
+            "strength": "20.0", 
+            "ingredient": 1
+        }
+    },
+    {
+        "pk": 1, 
+        "model": "mpr.lastupdated", 
+        "fields": {
+            "update_date": "2014-09-23"
+        }
+    },
+    {
+        "pk": 1, 
+        "model": "mpr.lastupdated", 
+        "fields": {
+            "update_date": "2014-09-29"
+        }
+    }
+]

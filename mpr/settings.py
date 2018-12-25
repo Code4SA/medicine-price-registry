@@ -20,7 +20,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['code4sa-mpr.herokuapp.com', 'mpr.code4sa.org']
+ALLOWED_HOSTS = ['code4sa-mpr.herokuapp.com', 'mpr.code4sa.org', 'localhost']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -121,9 +121,9 @@ TEMPLATE_DIRS = (
 def settings_context(context):
     return { 'debug' : DEBUG }
 
-TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
-    'mpr.settings.settings_context',
-)
+#TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
+#    'mpr.settings.settings_context',
+#)
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -135,6 +135,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'pipeline',
     'mpr',
+#    'behave_django',
 )
 
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
@@ -230,3 +231,20 @@ CACHES = {
 
 SEGMENT_IO_KEY = env.get('SEGMENT_IO_KEY')
 SESSION = 'django.contrib.sessions.backends.signed_cookies'
+
+PRICE_PARAMETERS = {
+    "VAT" : 1.15,
+    "prices" : [
+        (107.15, 0.46, 11.25),
+        (285.8, 0.33, 24),
+        (1000.33, 0.15, 73.5),
+        (float('inf'), 0.05, 172),
+    ]
+}
+
+AMPLITUDE_KEY = env.get("AMPLITUDE_KEY", "Test key")
+import loganalytics
+if DEBUG:
+    ANALYTICS = loganalytics.test_log_analytics
+else:
+    ANALYTICS = loganalytics.log_analytics
