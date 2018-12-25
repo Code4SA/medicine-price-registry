@@ -1,4 +1,4 @@
-Django==1.7
+Django==1.9
 analytics-python==0.4.3
 argparse==1.2.1
 dj-database-url==0.3.0
