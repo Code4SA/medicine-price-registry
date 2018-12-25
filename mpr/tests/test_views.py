@@ -3,9 +3,8 @@ from django.test import Client
 from django.core.urlresolvers import reverse
 from django.conf import settings
 import json
+from mpr.loganalytics import test_log_analytics
 
-def test_log_analytics(request, response, event, **properties):
-    test_log_analytics.events.append((event, properties))
 
 class ApiUrls(TestCase):
     fixtures = ["mpr_models.json"]

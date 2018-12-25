@@ -5,6 +5,11 @@ import datetime
 
 logger = logging.getLogger(__name__)
 
+def test_log_analytics(request, response, event, **properties):
+    if not hasattr(test_log_analytics, "events"):
+        test_log_analytics.events = []
+    test_log_analytics.events.append((event, properties))
+
 def log_analytics(request, response, event, *properties):
     return
     try:
