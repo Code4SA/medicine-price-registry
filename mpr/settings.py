@@ -241,3 +241,6 @@ PRICE_PARAMETERS = {
         (float('inf'), 0.05, 172),
     ]
 }
+
+from loganalytics import log_analytics
+ANALYTICS = log_analytics
