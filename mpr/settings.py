@@ -242,5 +242,8 @@ PRICE_PARAMETERS = {
     ]
 }
 
-from loganalytics import log_analytics
-ANALYTICS = log_analytics
+import loganalytics
+if DEBUG:
+    ANALYTICS = loganalytics.test_log_analytics
+else:
+    ANALYTICS = loganalytics.log_analytics
