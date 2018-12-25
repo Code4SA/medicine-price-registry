@@ -1,4 +1,6 @@
 Django==1.11
+pyOpenSSL==18.0.0
+urllib3==1.24.1
 analytics-python==0.4.3
 argparse==1.2.1
 dj-database-url==0.3.0
