@@ -13,8 +13,11 @@ class Command(BaseCommand):
     args = '<filename>'
     help = "Populate database from mpr xls file"
 
-    def parse(self, filename):
+    def add_arguments(self, parser):
+        parser.add_argument('filename', type=str)
 
+    def parse(self, filename):
+        import pdb; pdb.set_trace
         workbook = xlrd.open_workbook(filename)
         worksheet = workbook.sheet_by_index(0)
 
@@ -79,6 +82,7 @@ class Command(BaseCommand):
             ids = models.Product.objects.values_list('pk', flat=True)[:100]
             models.Product.objects.filter(pk__in = ids).delete()
 
+    @transaction.atomic
     def handle(self, *args, **options):
         def int_or_none(x):
             try:
@@ -93,25 +97,25 @@ class Command(BaseCommand):
                 return None
 
         count = 0
-        filename = args[0]
-        with transaction.commit_on_success():
-            self.delete_products()
+        filename = options["filename"]
 
-            count += 1
-            sys.stdout.write(r"\r%s" % count)
-            sys.stdout.flush()
-            if count % 100 == 0: sys.stdout.flush()
-            for p in self.parse(filename):
-                product = models.Product.objects.create(
-                    nappi_code=p["nappi_code"],
-                    name=p["name"], regno=p["regno"], schedule=p["schedule"],
-                    dosage_form=p["dosage_form"], pack_size=int_or_none(p["pack_size"]), num_packs=int_or_none(p["num_packs"]),
-                    sep=float_or_none(p["sep"]), is_generic=p["is_generic"]
+        self.delete_products()
+
+        count += 1
+        sys.stdout.write(r"\r%s" % count)
+        sys.stdout.flush()
+        if count % 100 == 0: sys.stdout.flush()
+        for p in self.parse(filename):
+            product = models.Product.objects.create(
+                nappi_code=p["nappi_code"],
+                name=p["name"], regno=p["regno"], schedule=p["schedule"],
+                dosage_form=p["dosage_form"], pack_size=int_or_none(p["pack_size"]), num_packs=int_or_none(p["num_packs"]),
+                sep=float_or_none(p["sep"]), is_generic=p["is_generic"]
+            )
+
+            for i in p["ingredients"]:
+                ingredient, _ = models.Ingredient.objects.get_or_create(name=i["name"], unit=i["unit"])
+                models.ProductIngredient.objects.get_or_create(
+                    product=product, ingredient=ingredient, strength=i["strength"]
                 )
-
-                for i in p["ingredients"]:
-                    ingredient, _ = models.Ingredient.objects.get_or_create(name=i["name"], unit=i["unit"])
-                    models.ProductIngredient.objects.get_or_create(
-                        product=product, ingredient=ingredient, strength=i["strength"]
-                    )
-            models.LastUpdated.objects.create()
+        models.LastUpdated.objects.create()
