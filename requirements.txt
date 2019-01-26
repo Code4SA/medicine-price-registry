@@ -1,4 +1,4 @@
-setuptools
+pip==19.0.1
 Django==1.11
 urllib3[secure]
 analytics-python==0.4.3
