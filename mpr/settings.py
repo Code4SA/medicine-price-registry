@@ -4,7 +4,6 @@ from django.conf import global_settings
 import dj_database_url
 
 DEBUG = env.get('DJANGO_DEBUG', 'true') == 'true'
-TEMPLATE_DEBUG = DEBUG
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__name__))
 
 ADMINS = (
@@ -20,7 +19,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['code4sa-mpr.herokuapp.com', 'mpr.code4sa.org', 'localhost']
+ALLOWED_HOSTS = ['code4sa-mpr.herokuapp.com', 'mpr.code4sa.org', 'localhost', '127.0.0.1']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -77,7 +76,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    'pipeline.finders.PipelineFinder',
 )
 
 if DEBUG:
@@ -86,12 +85,17 @@ if DEBUG:
 else:
     SECRET_KEY = env.get('DJANGO_SECRET_KEY')
 
-# List of callables that know how to import templates from various sources.
-TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
-)
+TEMPLATES = [
+    {
+        'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'context_processors': [
+                'django.contrib.auth.context_processors.auth'
+            ]
+        }
+    },
+]
 
 MIDDLEWARE_CLASSES = (
     'mpr.middleware.CORSMiddleware',
@@ -111,20 +115,6 @@ ROOT_URLCONF = 'mpr.urls'
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'mpr.wsgi.application'
 
-TEMPLATE_DIRS = (
-    # Put strings here, like '/home/html/django_templates' or 'C:/www/django/templates'.
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-    os.path.join(PROJECT_ROOT, 'templates'),
-)
-
-def settings_context(context):
-    return { 'debug' : DEBUG }
-
-#TEMPLATE_CONTEXT_PROCESSORS = global_settings.TEMPLATE_CONTEXT_PROCESSORS + (
-#    'mpr.settings.settings_context',
-#)
-
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -139,40 +129,37 @@ INSTALLED_APPS = (
 )
 
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
-PIPELINE_CSS = {
-    'mpr': {
-        'source_filenames': (
-          'css/bootstrap.css',
-          #'css/bootstrap-theme.css',
-          'css/custom.css',
-          #'css/survey.css',
-        ),
-        'output_filename': 'css/mpr.css',
+
+PIPELINE = {
+    'ENABLED': True,
+    'JAVASCRIPT': {
+        'mprbase' : {
+            'source_filenames': (
+              'js/jquery-1.10.2.js',
+              'js/bootstrap.js',
+              'js/jquery.ba-hashchange.js',
+              'js/knockout.js',
+              'js/survey.ko.js',
+              'js/medloader.js',
+            ),
+            'output_filename': 'js/mprbase.js',
+        },
     },
+    'STYLESHEETS' : {
+        'mpr' : {
+            'source_filenames': (
+              'css/bootstrap.css',
+              #'css/bootstrap-theme.css',
+              'css/custom.css',
+              #'css/survey.css',
+            ),
+            'output_filename': 'css/mpr.css',
+        }
+    },
+    'CSS_COMPRESSOR' : 'pipeline.compressors.yuglify.YuglifyCompressor',
+    'JS_COMPRESSOR' : 'pipeline.compressors.yuglify.YuglifyCompressor',
+    'DISABLE_WRAPPER' : True
 }
-PIPELINE_JS = {
-    'mprbase': {
-        'source_filenames': (
-          'js/jquery-1.10.2.js',
-          'js/bootstrap.js',
-          'js/jquery.ba-hashchange.js',
-          'js/knockout.js',
-          'js/survey.ko.js',
-          'js/medloader.js',
-        ),
-        'output_filename': 'js/mprbase.js',
-    },
-    'oldie': {
-        'source_filenames': (
-          'js/html5shiv.js',
-          'js/respond.src.js',
-        ),
-        'output_filename': 'js/oldie.js',
-    },
-}
-PIPELINE_CSS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
-PIPELINE_JS_COMPRESSOR = 'pipeline.compressors.yuglify.YuglifyCompressor'
-PIPELINE_DISABLE_WRAPPER = True
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
