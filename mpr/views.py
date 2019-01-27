@@ -1,15 +1,16 @@
+import json
+
 from django.http import HttpResponse
 from django.views.generic import View
 from django.conf import settings
 
-import apiv1, apiv2
-import models
-import json
-from loganalytics import log_analytics
+from . import apiv1, apiv2
+from . import models
+from .loganalytics import log_analytics
 
 def product_properties(product_code):
     product = None
-    if type(product_code) in (str, unicode):
+    if type(product_code)  == str:
         products = models.Product.objects.filter(pk=product_code)
         if len(products) > 0:
             product = products[0]

@@ -1,7 +1,7 @@
 import logging
 
-from mpr import models
-import serialisers
+from . import models
+from . import serialisers
 
 logger = logging.getLogger(__name__)
 

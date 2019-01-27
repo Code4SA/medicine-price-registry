@@ -2,11 +2,12 @@ from django.conf.urls import include, url
 from django.views.generic import TemplateView
 from django.conf.urls.static import static
 from django.conf import settings
-from mpr.models import LastUpdated
-from mpr import views
-
 from django.contrib import admin
-import apiv1, apiv2
+
+from . import apiv1, apiv2
+from . import views
+from .models import LastUpdated
+
 admin.autodiscover()
 
 class IndexView(TemplateView):

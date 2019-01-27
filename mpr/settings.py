@@ -230,7 +230,7 @@ PRICE_PARAMETERS = {
 }
 
 AMPLITUDE_KEY = env.get("AMPLITUDE_KEY", "Test key")
-import loganalytics
+from . import loganalytics
 if DEBUG:
     ANALYTICS = loganalytics.test_log_analytics
 else:
