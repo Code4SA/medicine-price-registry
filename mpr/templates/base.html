@@ -1,3 +1,4 @@
+{% load math %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -5,10 +6,10 @@
     <title>MPR (Medicine Price Registry) - OpenUp</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google-site-verification" content="_lWgnvin7w-6I_YOY23q3dI9E0pFAD8N6kQRPQda63g" />
-    {% load compressed %}
-    {% compressed_css 'mpr' %}
+    {% load pipeline %}
+    {% stylesheet 'mpr' %}
     <!--[if lt IE 9]>
-      {% compressed_js 'oldie' %}
+      {% javascript 'oldie' %}
     <![endif]-->
 
     <script type="text/javascript">
@@ -99,12 +100,16 @@
             <h3 class="panel-title">What is the <abbr title="Single Exit Price">Single Exit Price</abbr>?</h3>
           </header>
           <div class="panel-body">
+            {{ price_parameters.VAT }} 
             <p>The single exit price (SEP) mechanism in South Africa lists the maximum price that a medicine can be charged at. Dispensers may charge an additional dispensing fee depending on the price of the medicine. The Medicines and Related Substances Act allows for the following charges (excl VAT):</p>
             <ul>
-                <li>Where the SEP is less than R107.15, the maximum dispensing fee is R11.25 + 46% of the SEP.</li>
-                <li>Where the SEP is less than R285.80, the maximum dispensing fee is R24.00 + 33% of the SEP.</li>
-                <li>Where the SEP is less than R1000.33, the maximum dispensing fee is R73.50 + 15% of the SEP.</li>
-                <li>Where the SEP is greater than or equal to R1000.33, the maximum dispensing fee is R172.00 + 5% of the SEP.</li>
+                {% for row in price_parameters.prices %}
+                    {% if not row.0|isinf %}
+                    <li>Where the SEP is less than R{{ row.0|floatformat:2 }}, the maximum dispensing fee is R{{ row.2|floatformat:2 }} + {{ row.1|mult:100 }}% of the SEP.</li>
+                    {% else %}
+                    <li>Otherwise the maximum dispensing fee is R{{ row.2|floatformat:2 }} + {{ row.1|mult:100}}% of the SEP.</li>
+                    {% endif %}
+                {% endfor %}
             </ul>
             <p>The prices listed in this database represent the maximum price that you should be paying for your medicines (incl VAT). Note that these prices do not apply to dispensing practitioners who have a separate dispensing fee.</p><p>You can find the latest fees schedule <a href="https://search.opengazettes.org.za/text/25860?page=31">here</a>.</p>
             <p>Please note that allowed dispensing fees may change and this website may not be completely up-to-date. The prices listed above were valid at {{ last_updated }}.</p>
@@ -127,7 +132,7 @@
         </ul>
       </footer>
     </main>
-    {% compressed_js 'mprbase' %}
+    {% javascript 'mprbase' %}
     {% block bodybottom %}{% endblock %}
   </body>
 </html>

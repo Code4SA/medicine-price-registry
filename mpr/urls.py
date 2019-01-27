@@ -17,6 +17,7 @@ class IndexView(TemplateView):
         try:
             last_updated = LastUpdated.objects.all().order_by('-update_date')[0]
             context['last_updated'] = last_updated
+            context['price_parameters'] = settings.PRICE_PARAMETERS
         except:
             context['last_updated'] = u"Never"
         return context
