@@ -1,4 +1,5 @@
 Django==1.11
+cffi
 urllib3[secure]
 analytics-python==0.4.3
 argparse==1.2.1
