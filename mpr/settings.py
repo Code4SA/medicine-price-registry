@@ -131,7 +131,7 @@ INSTALLED_APPS = (
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 
 PIPELINE = {
-    'ENABLED': True,
+    'ENABLED': env.get("DJANGO_PIPELINE_ENABLED", True),
     'JAVASCRIPT': {
         'mprbase' : {
             'source_filenames': (
