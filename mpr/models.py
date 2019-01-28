@@ -108,6 +108,6 @@ class LastUpdated(models.Model):
     update_date = models.DateField(auto_now_add=True)
     objects = LastUpdatedManager()
 
-    def __unicode__(self):
+    def __str__(self):
         return str(self.update_date)
 
