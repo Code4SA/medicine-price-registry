@@ -77,7 +77,7 @@ class Product(models.Model):
         try:
             for threshold, perc, flat_rate in params["prices"]:
                 if self.sep < threshold:
-                    return (self.sep * perc + flat_rate)
+                    return (self.sep * perc + flat_rate) * VAT
         except (ValueError, TypeError):
             return self.sep
 
