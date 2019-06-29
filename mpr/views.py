@@ -10,7 +10,7 @@ from .loganalytics import log_analytics
 
 def product_properties(product_code):
     product = None
-    if type(product_code)  == str:
+    if isinstance(product_code, basestring):
         products = models.Product.objects.filter(pk=product_code)
         if len(products) > 0:
             product = products[0]
