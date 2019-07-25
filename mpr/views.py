@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.views.generic import View
 from django.conf import settings
 
-from . import apiv1, apiv2
+from . import apiv1, apiv2, apiv3
 from . import models
 from .loganalytics import log_analytics
 
@@ -184,6 +184,25 @@ class V2SearchLiteView(View, AnalyticsMixin):
         response =  HttpResponse(json.dumps(products), content_type="application/json")
         log_analytics = self.get_analytics_logger()
         log_analytics(request, response, "#search-lite", query=q)
+        return response
+
+class V3ProductDetailView(View, AnalyticsMixin):
+    def get(self, request, *args, **kwargs):
+
+        product = None
+        try:
+            nappi_code = request.GET.get("nappi", "").strip()
+            product = apiv3.product_detail(nappi_code)
+            response = HttpResponse(json.dumps(product), content_type="application/json")
+        except models.Product.DoesNotExist:
+            response = HttpResponse(json.dumps({}), content_type="application/json")
+
+        log_analytics = self.get_analytics_logger()
+        if product:
+            log_analytics(request, response, "#product-detail", **product_properties(nappi_code))
+        else:
+            log_analytics(request, response, "#missing-detail", nappi_code=nappi_code)
+
         return response
 
 class LastUpdatedView(View, AnalyticsMixin):

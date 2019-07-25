@@ -87,6 +87,16 @@ def serialize_product(product):
         ],
     }
 
+def serialize_product_apiv3(product):
+    details = serialize_product(product)
+    details["sep"] = as_currency(product.sep)
+    details["min_price"] = as_currency(product.sep)
+    details["max_price"] = as_currency(product.sep + product.dispensing_fee)
+    details["min_cost_per_unit"] = as_currency(product.min_cost_per_unit)
+    details["max_cost_per_unit"] = as_currency(product.max_cost_per_unit)
+
+    return details
+
 def serialize_products(products):
     return [serialize_product(p) for p in products]
 

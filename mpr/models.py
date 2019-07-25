@@ -89,6 +89,18 @@ class Product(models.Model):
             qty = self.num_packs
         return self.max_fee / qty
 
+    @property
+    def min_cost_per_unit(self):
+        if self.pack_size > 0:
+            qty = self.pack_size * self.num_packs
+        else:
+            qty = self.num_packs
+        return self.sep / qty
+
+    @property
+    def max_cost_per_unit(self):
+        return self.cost_per_unit
+
 class ProductIngredient(models.Model):
     product = models.ForeignKey(Product, related_name="product_ingredients")
     ingredient = models.ForeignKey(Ingredient)

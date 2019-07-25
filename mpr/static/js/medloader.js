@@ -7,7 +7,7 @@ var timer,
     animate_speed = 750;
 var search_url = function(term) { return '/api/v2/search-lite?q=' + term; }
 var related_url = function(id) { return '/api/v2/related?nappi=' + id };
-var product_detail_url = function(id) { return '/api/v2/detail?nappi=' + id };
+var product_detail_url = function(id) { return '/api/v3/detail?nappi=' + id };
 
 
 var log = function(obj) {
@@ -22,13 +22,14 @@ var log_analytics = function(event, properties) {
 
 var map = {
     0 : 'sep',
-    1 : 'cost_per_unit',
-    2 : 'dispensing_fee',
-    3 : 'schedule',
-    4 : 'dosage_form',
-    5 : 'pack_size',
-    6 : 'num_packs',
-    7 : 'is_generic',
+    1 : 'dispensing_fee',
+    2 : 'price_range',
+    3 : 'cost_per_unit',
+    4 : 'schedule',
+    5 : 'dosage_form',
+    6 : 'pack_size',
+    7 : 'num_packs',
+    8 : 'is_generic',
 };
 
 var load_data = function(url, foo) {
@@ -133,7 +134,9 @@ var add_product_detail = function(elem) {
         $('.details dd', $product_detail).each(function(idx) {
             var key = map[idx];
             if (key == "cost_per_unit") {
-                val = data[key] + " / " + data["dosage_form"]
+                val = data["min_cost_per_unit"] + " / " + data["dosage_form"] + " - " + data["max_cost_per_unit"] + " / " + data["dosage_form"];
+            } else if (key == "price_range") {
+                val = data["min_price"] + " - " + data["max_price"]
             } else {
                 val = data[key]
             }

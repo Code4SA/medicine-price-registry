@@ -53,6 +53,18 @@ urlpatterns = [
     # currently still using v1 methods since there hasn't been a change
     url(r"^api/v2/dump$", views.DumpView.as_view(), name="api2_dump"),
     url(r"^api/v2/search/by_ingredient$", views.SearchByIngredientView.as_view(), name="api2_search_by_ingredient"),
+
+    # API V3 - using some old api calls as they haven't changed
+    url(r"^api/v3/related$", views.V2RelatedProductsView.as_view(), name="api3_related_products"),
+    url(r"^api/v3/detail$", views.V3ProductDetailView.as_view(), name="api3_product_detail"),
+    url(r"^api/v3/search/by_product$", views.V2SearchByProduct.as_view(), name="api3_search_by_product"),
+    url(r"^api/v3/search$", views.V2SearchView.as_view(), name="api3_search"),
+    url(r"^api/v3/search-lite$", views.V2SearchLiteView.as_view(), name="api3_search_lite"),
+    url(r"^api/v3/last-updated$", views.LastUpdatedView.as_view(), name="api3_last_updated"),
+
+    # currently still using v1 methods since there hasn't been a change
+    url(r"^api/v3/dump$", views.DumpView.as_view(), name="api3_dump"),
+    url(r"^api/v3/search/by_ingredient$", views.SearchByIngredientView.as_view(), name="api3_search_by_ingredient"),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
