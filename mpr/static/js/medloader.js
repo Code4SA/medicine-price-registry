@@ -143,6 +143,9 @@ var add_product_detail = function(elem) {
             $(this).html(val)
         });
 
+        if (data["dosage_form"] != "tablet" && data["dosage_form"] != "capsule")
+            $('.details .cost-per-unit', $product_detail).remove();
+
         // Add ingredients
         var $ingredientsList = $('.ingredients dl', $product_detail);
         var productIngredients = data.ingredients;
