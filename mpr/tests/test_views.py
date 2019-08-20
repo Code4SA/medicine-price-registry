@@ -64,7 +64,7 @@ class ApiUrls(TestCase):
             "product_id": 1,
             "dosage_form": "Inj"
         }
-        self.assertJSONEqual(json.dumps(test_log_analytics.events[0][1], 4), related_product)
+        self.assertJSONEqual(json.dumps(test_log_analytics.events[0][1]), related_product)
 
         test_log_analytics.events = []
         response = client.get(reverse(self.api_prefix + "_related_products"), {"product" : "5"})
@@ -207,7 +207,7 @@ class TestApiV2(ApiUrls):
     def testLastUpdated(self):
         client = Client()
         response = client.get(reverse(self.api_prefix + "_last_updated"))
-        self.assertEquals(response.content, "2014-09-29")
+        self.assertEquals(response.content, b"2014-09-29")
         self.assertEquals(len(test_log_analytics.events), 1)
 
         self.assertEquals(test_log_analytics.events[0][0], "#last-updated")
