@@ -14,7 +14,7 @@ product1_json = {
     "is_generic": "Originator",
     "regno": "REGNO2",
     "pack_size": 5.0,
-    "dispensing_fee": "R 40.00",
+    "dispensing_fee": "R 80.00",
     "id": 1,
     "num_packs": 1,
     "name": "Product 1 ABC",
@@ -30,21 +30,25 @@ product1_json = {
             "unit": "mg"
         }
     ],
-    "sep": "R 140.00",
-    "cost_per_unit": "R 28.00",
+    "sep": "R 180.00",
+    "cost_per_unit": "R 36.00",
     "nappi_code": "111",
     "dosage_form": "injection"
 }
 
 product1_lite_json = {
     "dosage_form": "injection",
-    "sep": "R 140.00",
+    "sep": "R 180.00",
     "id": 1,
     "nappi_code": "111",
     "name": "Product 1 ABC"
 }
 
 class TestSerialisers(TestCase):
+    def __init__(self, *args, **kwargs):
+        super(TestSerialisers, self).__init__(*args, **kwargs)
+        self.maxDiff = None
+
     fixtures = ["mpr_models.json"]
 
     def testAscurrency(self):
