@@ -1,3 +1,4 @@
+from copy import deepcopy
 from django.test import TestCase
 from mpr import serialisers
 from mpr import models
@@ -36,6 +37,15 @@ product1_json = {
     "dosage_form": "injection"
 }
 
+product1_apiv3_json = deepcopy(product1_json)
+product1_apiv3_json["sep"] = "R 100.00"
+product1_apiv3_json.extend({
+    "max_cost_per_unit": "R 36.00",
+    "max_price": "R 180.00",
+    "min_cost_per_unit": "R 20.00",
+    "min_price": "R 100.00",
+}
+
 product1_lite_json = {
     "dosage_form": "injection",
     "sep": "R 180.00",
@@ -43,6 +53,9 @@ product1_lite_json = {
     "nappi_code": "111",
     "name": "Product 1 ABC"
 }
+
+product1_lite_apiv3_json = deepcopy(product1_lite_json)
+product1_lite_apiv3_json["sep"] = "R 100.00"
 
 class TestSerialisers(TestCase):
     def __init__(self, *args, **kwargs):
@@ -74,6 +87,12 @@ class TestSerialisers(TestCase):
         js = serialisers.serialize_product(product) 
 
         self.assertJSONEqual(json.dumps(js), product1_json)
+
+    def testSerialiseProductAPIV3(self):
+        product = models.Product.objects.all()[0]
+        js = serialisers.serialize_product_apiv3(product) 
+
+        self.assertJSONEqual(json.dumps(js), product1_apiv3_json)
 
     def testSerialiseProducts(self):
         products = models.Product.objects.all()
