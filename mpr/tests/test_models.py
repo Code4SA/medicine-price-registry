@@ -24,21 +24,21 @@ class TestProduct(TestCase):
         }
 
     def testDispensingFee(self):
-        test_data = [(100, 40), (150, 50), (250, 105), (1000, 440)]
+        test_data = [(100, 80), (150, 100), (250, 210), (1000, 880)]
 
         for price, fee in test_data:
             self.p1.sep = price
             self.assertEquals(self.p1.dispensing_fee, fee)
 
     def testCostPerUnit(self):
-        test_data = [(100, 28), (150, 40), (250, 71), (1000, 288)]
+        test_data = [(100, 36), (150, 50), (250, 92), (1000, 376)]
 
         for price, cost in test_data:
             self.p1.sep = price
             self.assertEquals(self.p1.cost_per_unit, cost)
 
     def testMaxFee(self):
-        test_data = [(100, 140), (150, 200), (250, 355), (1000, 1440)]
+        test_data = [(100, 180), (150, 250), (250, 460), (1000, 1880)]
 
         for price, fee in test_data:
             self.p1.sep = price
