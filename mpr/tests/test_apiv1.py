@@ -67,7 +67,7 @@ class TestApi(TestCase):
         try:
             products = apiv1.related_products(5, test_serialiser)
             self.fail()
-        except models.Product.DoesNotExist, e:
+        except models.Product.DoesNotExist as e:
             pass
 
         products = apiv1.related_products(1, test_serialiser)
@@ -87,6 +87,6 @@ class TestApi(TestCase):
         try:
             products = apiv1.product_detail(5, test_serialise_product)
             self.fail()
-        except models.Product.DoesNotExist, e:
+        except models.Product.DoesNotExist as e:
             pass
 

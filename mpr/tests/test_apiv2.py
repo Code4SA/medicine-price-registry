@@ -54,7 +54,7 @@ class TestApiV2(TestCase):
         try:
             products = apiv2.related_products(5, test_serialiser)
             self.fail()
-        except models.Product.DoesNotExist, e:
+        except models.Product.DoesNotExist as e:
             pass
 
         products = apiv2.related_products(222, test_serialiser)
