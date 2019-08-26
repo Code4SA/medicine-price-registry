@@ -9,17 +9,54 @@ name_change = {
     "amoxycillin" : "Amoxicillin",
 }
 
+class ConversionLogger:
+    def __init__(self):
+        self.logs = {}
+
+    def log(self):
+        pass
+
 class Command(BaseCommand):
     args = '<filename>'
     help = "Populate database from mpr xls file"
 
     @staticmethod
     def process_row(idx, extract_func):
+        def clean_float(x, check_blank_is_1=False):
+            if type(x) == float:
+                return x
+            x = remove_dup_decimal(x)
+            x = x.replace(" ", "")
+            if check_blank_is_1:
+                x = blank_is_1(x)
+            return float(x)
+
+        def remove_dup_decimal(x):
+            if x.count(".") > 1:
+                x = "".join(x.split(".", 1))
+            return x
+
+        def blank_is_1(x):
+            if x.strip() == "":
+                return 1
+            return x
+
         def to_empty(x):
             if x is None:
                 return ""
             else:
                 return x
+
+        to_empty(extract_func(idx, 1)).title(),
+        extract_func(idx, 2).lower(),
+        int(extract_func(idx, 3)),
+        extract_func(idx, 5),
+        extract_func(idx, 6).title(),
+        to_empty(extract_func(idx, 10)).title(),
+        clean_float(extract_func(idx, 11)),
+        clean_float(extract_func(idx, 12), check_blank_is_1=True),
+        clean_float(extract_func(idx, 16)),
+        extract_func(idx, 20)
 
         return {
             "applicant": to_empty(extract_func(idx, 1)).title(),
@@ -28,9 +65,9 @@ class Command(BaseCommand):
             "schedule": extract_func(idx, 5),
             "name": extract_func(idx, 6).title(),
             "dosage_form": to_empty(extract_func(idx, 10)).title(),
-            "pack_size": float(extract_func(idx, 11)),
-            "num_packs": float(extract_func(idx, 12)),
-            "sep": float(extract_func(idx, 16)),
+            "pack_size": clean_float(extract_func(idx, 11)),
+            "num_packs": clean_float(extract_func(idx, 12), check_blank_is_1=True),
+            "sep": clean_float(extract_func(idx, 16)),
             "is_generic": "Originator" if extract_func(idx, 20) == "originator" else  "Generic"
         }
 
@@ -43,22 +80,32 @@ class Command(BaseCommand):
 
         product = None
         for idx in range(1, worksheet.nrows):
-            product = Command.process_row(idx, worksheet.cell_value)
+            try:
+                regno = worksheet.cell_value(idx, 2).lower()
+                if "medicine" in regno:
+                    continue
 
-            if "medicine" in product["regno"]:
-                continue
+                if regno.strip() != "":
+                    if product: yield product
 
-            if product["regno"].strip() != "":
-                if product: yield product
+                    product = Command.process_row(idx, worksheet.cell_value)
+                    product["ingredients"] = []
+
+                ingredient_name = worksheet.cell_value(idx, 7).title()
+                product["ingredients"].append({
+                    "name" : name_change.get(ingredient_name.lower(), ingredient_name),
+                    "strength" : worksheet.cell_value(idx, 8),
+                    "unit" : worksheet.cell_value(idx, 9).lower(),
+                })
+
+            except ValueError as e:
+                import traceback; traceback.print_exc()
+                print(e)
+                import pdb; pdb.set_trace()
+                print(worksheet.cell_value(idx, 2))
+
                 
-                product["ingredients"] = []
 
-            ingredient_name = worksheet.cell_value(idx, 7).title()
-            product["ingredients"].append({
-                "name" : name_change.get(ingredient_name.lower(), ingredient_name),
-                "strength" : worksheet.cell_value(idx, 8),
-                "unit" : worksheet.cell_value(idx, 9).lower(),
-            })
 
     def delete_products(self):
         while models.Product.objects.count():
@@ -84,11 +131,10 @@ class Command(BaseCommand):
 
         self.delete_products()
 
-        count += 1
-        sys.stdout.write(r"\r%s" % count)
-        sys.stdout.flush()
-        if count % 100 == 0: sys.stdout.flush()
-        for p in self.parse(filename):
+        for idx, p in enumerate(self.parse(filename)):
+            if idx % 100 == 0:
+                sys.stdout.write("\r%s" % idx)
+                sys.stdout.flush()
             product = models.Product.objects.create(
                 nappi_code=p["nappi_code"],
                 name=p["name"], regno=p["regno"], schedule=p["schedule"],
