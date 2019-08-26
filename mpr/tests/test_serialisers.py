@@ -39,12 +39,12 @@ product1_json = {
 
 product1_apiv3_json = deepcopy(product1_json)
 product1_apiv3_json["sep"] = "R 100.00"
-product1_apiv3_json.extend({
+product1_apiv3_json.update({
     "max_cost_per_unit": "R 36.00",
     "max_price": "R 180.00",
     "min_cost_per_unit": "R 20.00",
     "min_price": "R 100.00",
-}
+})
 
 product1_lite_json = {
     "dosage_form": "injection",
