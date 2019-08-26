@@ -13,62 +13,45 @@ class Command(BaseCommand):
     args = '<filename>'
     help = "Populate database from mpr xls file"
 
+    @staticmethod
+    def process_row(idx, extract_func):
+        def to_empty(x):
+            if x is None:
+                return ""
+            else:
+                return x
+
+        return {
+            "applicant": to_empty(extract_func(idx, 1)).title(),
+            "regno": extract_func(idx, 2).lower(),
+            "nappi_code": int(extract_func(idx, 3)),
+            "schedule": extract_func(idx, 5),
+            "name": extract_func(idx, 6).title(),
+            "dosage_form": to_empty(extract_func(idx, 10)).title(),
+            "pack_size": float(extract_func(idx, 11)),
+            "num_packs": float(extract_func(idx, 12)),
+            "sep": float(extract_func(idx, 16)),
+            "is_generic": "Originator" if extract_func(idx, 20) == "originator" else  "Generic"
+        }
+
     def add_arguments(self, parser):
         parser.add_argument('filename', type=str)
 
     def parse(self, filename):
-        import pdb; pdb.set_trace
         workbook = xlrd.open_workbook(filename)
         worksheet = workbook.sheet_by_index(0)
 
         product = None
         for idx in range(1, worksheet.nrows):
-            nappi_code = worksheet.cell_value(idx, 3)
-            regno = worksheet.cell_value(idx, 2).lower()
-            pack_size = worksheet.cell_value(idx, 11)
-            num_packs = worksheet.cell_value(idx, 12)
-            sep = worksheet.cell_value(idx, 16)
-            name = worksheet.cell_value(idx, 6).title()
+            product = Command.process_row(idx, worksheet.cell_value)
 
-            if "medicine" in regno.lower():
+            if "medicine" in product["regno"]:
                 continue
 
-            if regno.strip() != "":
+            if product["regno"].strip() != "":
                 if product: yield product
                 
-                generic_value = worksheet.cell_value(idx, 20) 
-                if "originator" in generic_value.lower():
-                    is_generic = "Originator"
-                elif "generic" in generic_value.lower():
-                    is_generic = "Generic"
-                else:
-                    is_generic = None
-
-                try:
-                    nappi_code = "%s" % int(nappi_code)
-                except ValueError:
-                    print "Could not process %s (%s) due to lack of nappi code" % (name, regno)
-                    continue
-                    
-                if not sep:
-                    print "Could not process %s (%s) due to lack of SEP" % (name, nappi_code)
-                    continue
-                pack_size = pack_size or 1
-                num_packs = num_packs or 1
-
-                product = {
-                    "nappi_code" : nappi_code,
-                    "regno" : regno,
-                    "applicant" : worksheet.cell_value(idx, 1).title(),
-                    "schedule" : worksheet.cell_value(idx, 5),
-                    "name" : name,
-                    "dosage_form" : worksheet.cell_value(idx, 10).title(),
-                    "pack_size" : pack_size,
-                    "num_packs" : num_packs,
-                    "sep" : sep,
-                    "is_generic" : is_generic,
-                    "ingredients" : []
-                }
+                product["ingredients"] = []
 
             ingredient_name = worksheet.cell_value(idx, 7).title()
             product["ingredients"].append({
