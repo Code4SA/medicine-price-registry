@@ -57,10 +57,20 @@ var process_request = function(result) {
         $('.cc-listing-name', res).text(datum.name);
         $('.listing-price', res).text(datum.sep);  
         $('.show-more', res).data('data-nappi', datum.nappi_code);     
+        $('.generics-link', res).data('data-id', datum.nappi_code);     
         res.show();
+        
+        $('.generics-link', res).one('click', createClickGenericCallBack());
         $('.show-more', res).one('click', createClickCallBack(res));
        }
     }
+  }
+}
+
+function createClickGenericCallBack() {
+  return function() {
+    var id = $(this).data('data-id');
+    load_data(related_url(id), process_request_for_generics);
   }
 }
 
@@ -72,6 +82,24 @@ function createClickCallBack(res) {
     });
   }
 }
+
+var process_request_for_generics = function(result) {
+  $('.listing').hide();
+  $(".search-results").css("display", "block")
+  if (result.length > 0) {
+  	for (var i = 0; i < result.length; i++) {
+    	var datum = result[i];
+      var res = $(".listing")[i]
+      res = $(res)
+      if (res != undefined) {
+        $('.cc-listing-name', res).text(datum.name);
+        $('.listing-price', res).text(datum.sep);      
+        res.show();
+       }
+    }
+  }
+}
+
 
 var process_request_for_details = function(resultObject, listing) {
   if (resultObject) {
