@@ -19,8 +19,6 @@ var search_url = function(term) { return 'https://mpr.code4sa.org/api/v2/search-
 var related_url = function(id) { return 'https://mpr.code4sa.org/api/v2/related?nappi=' + id };
 var product_detail_url = function(id) { return 'https://mpr.code4sa.org/api/v3/detail?nappi=' + id };
 
-$('.listing').hide();
-$('.ingredient').hide();
 
 var entermedicine = function(e) {
     searchTerm = e.target.value;
@@ -48,6 +46,7 @@ var load_medicines = function(value) {
     }
 }
 var process_request = function(result) {
+  $('.listing').hide();
   $(".search-results").css("display", "block")
   if (result.length > 0) {
   	for (var i = 0; i < result.length; i++) {
@@ -85,6 +84,7 @@ function createClickCallBack(res) {
 }
 
 var process_request_for_generics = function(result) {
+  $('.listing').hide();
   $(".search-results").css("display", "block")
   if (result.length > 0) {
   	for (var i = 0; i < result.length; i++) {
@@ -117,6 +117,7 @@ var process_request_for_details = function(resultObject, listing) {
       $('.registration', res).text(`Registration Number: ${resultObject.regno}`);
       var ingredientsWrapper = $('.ingredients-wrapper', res);
       var $ingredient = $('.ingredient', res);
+      $ingredient.hide();
       var ingredientsArray = resultObject.ingredients
       if (ingredientsArray) {
         for(var i = 0; i < ingredientsArray.length; i++) {
