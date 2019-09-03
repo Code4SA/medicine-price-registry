@@ -49,6 +49,8 @@ var process_request = function(result) {
   $('.listing').hide();
   $(".search-results").css("display", "block")
   if (result.length > 0) {
+    $('.home-title-wrapper').css('display', 'none');
+    $('.hero-image').css('display', 'none');
   	for (var i = 0; i < result.length; i++) {
     	var datum = result[i];
       var res = $(".listing")[i]
