@@ -1,5 +1,3 @@
-/* webflow code */
-
 $(document).ready(function() {
   $("#medicine-search").on("keyup", function(e) {
     entermedicine(e);
@@ -22,15 +20,27 @@ var product_detail_url = function(id) { return 'https://mpr.code4sa.org/api/v3/d
 
 var entermedicine = function(e) {
     searchTerm = e.target.value;
-    if (searchTerm.length < 4) return;
-    var load_data = function() {
+    if (searchTerm.length < 4) {
+      $(".search-button").click(function() {
+        var load_data = function() {
+          location.hash = 'search:' + searchTerm;
+        }
+        var reset_delay_before_requesting = function() {
+            clearTimeout(timer);
+            timer = setTimeout(load_data, delay);
+        }
+        reset_delay_before_requesting();
+      })
+    } else {
+      var load_data = function() {
         location.hash = 'search:' + searchTerm;
+      }
+      var reset_delay_before_requesting = function() {
+          clearTimeout(timer);
+          timer = setTimeout(load_data, delay);
+      }
+      reset_delay_before_requesting();
     }
-    var reset_delay_before_requesting = function() {
-        clearTimeout(timer);
-        timer = setTimeout(load_data, delay);
-    }
-    reset_delay_before_requesting();
 };
 var load_medicines = function(value) {
     if (value.indexOf(':') >= 0) {
@@ -47,32 +57,33 @@ var load_medicines = function(value) {
 }
 var process_request = function(result) {
   $('.listing').hide();
-  $(".search-results").css("display", "block")
-  if (result.length > 0) {
-    $('.home-title-wrapper').css('display', 'none');
-    $('.hero-image').css('display', 'none');
-  	for (var i = 0; i < result.length; i++) {
-    	var datum = result[i];
-      var res = $(".listing")[i]
-      res = $(res)
-      if (res != undefined) {
-        $('.cc-listing-name', res).text(datum.name);
-        $('.listing-price', res).text(datum.sep);  
-        $('.show-more', res).data('data-nappi', datum.nappi_code);     
-        $('.generics-link', res).data('data-id', datum.nappi_code);     
-        res.show();
-        
-        $('.generics-link', res).one('click', createClickGenericCallBack());
-        $('.show-more', res).one('click', createClickCallBack(res));
-       }
-    }
+  $(".search-results").css("display", "block");
+  $('#results-state', res).text('results');
+  $('.home-title-wrapper').css({'margin-top': 0, 'height': 0, 'opacity': 0, 'transition': 'height 0.1s ease-out, opacity 0.1s ease-out, margin-top 0.1s ease-out'});
+  $('.hero-image').css({'height': 0, 'opacity': 0, 'transition': 'height 0.1s ease-out, opacity 0.1s ease-out'});
+  $('#results-number', res).text(result.length);
+  for (var i = 0; i < result.length; i++) {
+    var datum = result[i];
+    var res = $(".listing")[i]
+    res = $(res)
+    if (res != undefined) {
+      $('.cc-listing-name', res).text(datum.name);
+      $('.listing-price', res).text(datum.sep);  
+      $('.listing-accordion-trigger', res).data('data-nappi', datum.nappi_code);     
+      $('.generics-link', res).data('data-id', datum.nappi_code);     
+      res.show();
+      
+      $('.generics-link', res).click(createClickGenericCallBack(res));
+      $('.listing-accordion-trigger', res).one('click', createClickCallBack(res));
+      }
   }
 }
 
-function createClickGenericCallBack() {
-  return function() {
+function createClickGenericCallBack(res) {
+  return function(event) {
+    event.stopImmediatePropagation();
     var id = $(this).data('data-id');
-    load_data(related_url(id), process_request_for_generics);
+    load_data(related_url(id), process_request_for_generics, res);
   }
 }
 
@@ -85,17 +96,20 @@ function createClickCallBack(res) {
   }
 }
 
-var process_request_for_generics = function(result) {
+var process_request_for_generics = function(result, listing) {
   $('.listing').hide();
-  $(".search-results").css("display", "block")
+  $(".search-results").css("display", "block");
+  $('#results-state', res).text('generics');
   if (result.length > 0) {
+    $('#results-number', res).text(result.length);
   	for (var i = 0; i < result.length; i++) {
     	var datum = result[i];
-      var res = $(".listing")[i]
+      var res = $($(".listing")[i], listing)
       res = $(res)
       if (res != undefined) {
         $('.cc-listing-name', res).text(datum.name);
-        $('.listing-price', res).text(datum.sep);      
+        $('.listing-price', res).text(datum.sep);
+        $('.generics-link', res).data('data-id', datum.nappi_code);     
         res.show();
        }
     }
