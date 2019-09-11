@@ -85,6 +85,7 @@ def serialize_product(product):
             serialize_ingredient(pi.ingredient, pi.strength)
             for pi in product.product_ingredients.all()
         ],
+        "number_of_generics" : len(product.related_products)
     }
 
 def serialize_product_apiv3(product):
@@ -114,6 +115,7 @@ def serialize_product_lite(product):
         "name" : name,
         "dosage_form" : dosage_form.get(product.dosage_form, product.dosage_form),
         "sep" : as_currency(product.max_fee),
+        "number_of_generics" : len(product.related_products)
     }
 
 def serialize_products_lite(products):
