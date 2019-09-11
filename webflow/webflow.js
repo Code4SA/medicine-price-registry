@@ -49,7 +49,6 @@ var load_medicines = function(value) {
         var value = s[1]
         if (key == '#related') {
             load_data(related_url(value), process_request);
-            log_analytics("product-related", {"id" : value});
         } else if (key == '#search') {
             load_data(search_url(value), process_request);
         }
@@ -100,6 +99,10 @@ var process_request_for_generics = function(result, listing) {
   $('.listing').hide();
   $(".search-results").css("display", "block");
   $('#results-state', res).text('generics');
+  // $('.listing-accordion-trigger').css({'background-color': 'rgb(241,241,241)', 'border-color': 'rgba(0,0,0,0)'});
+  // $('.show-more > img').css({'transform': 'translate3d(0px, 0px, 0px) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg)',
+  //   'transform-style': 'preserve-3d'});
+  // $('.listing-accordion-content').css({'display': 'none'});
   if (result.length > 0) {
     $('#results-number', res).text(result.length);
   	for (var i = 0; i < result.length; i++) {
@@ -109,7 +112,8 @@ var process_request_for_generics = function(result, listing) {
       if (res != undefined) {
         $('.cc-listing-name', res).text(datum.name);
         $('.listing-price', res).text(datum.sep);
-        $('.generics-link', res).data('data-id', datum.nappi_code);     
+        $('.generics-link', res).data('data-id', datum.nappi_code);
+        location.hash = 'related:' + datum.nappi_code;     
         res.show();
        }
     }
