@@ -68,6 +68,7 @@ var process_request = function(result) {
     if (res != undefined) {
       $('.cc-listing-name', res).text(datum.name);
       $('.listing-price', res).text(datum.sep);  
+      $('.generics-link', res).text(`${datum.number_of_generics} generics`);
       $('.listing-accordion-trigger', res).data('data-nappi', datum.nappi_code);     
       $('.generics-link', res).data('data-id', datum.nappi_code);     
       res.show();
@@ -112,8 +113,7 @@ var process_request_for_generics = function(result, listing) {
       if (res != undefined) {
         $('.cc-listing-name', res).text(datum.name);
         $('.listing-price', res).text(datum.sep);
-        $('.generics-link', res).data('data-id', datum.nappi_code);
-        location.hash = 'related:' + datum.nappi_code;     
+        $('.generics-link', res).data('data-id', datum.nappi_code);  
         res.show();
        }
     }
@@ -124,7 +124,7 @@ var process_request_for_generics = function(result, listing) {
 var process_request_for_details = function(resultObject, listing) {
   if (resultObject) {
     var res = $('.listing-accordion-content', listing);
-    res = $(res)
+    res = $(res);
     if (res != undefined) {
       $('.single-exit-price', res).text(resultObject.sep);
       $('.max-dispensing-fee', res).text(resultObject.dispensing_fee);
@@ -145,8 +145,9 @@ var process_request_for_details = function(resultObject, listing) {
           clone.show();
 
           var $product = new Product(ingredientsArray[i], clone);
-            
-          ingredientsWrapper.append($product.build_product());
+
+            $('.ingredients-wrapper div:nth-child(2)', res).remove();
+            ingredientsWrapper.append($product.build_product());
 
 
           clone.find('.row-title').text(ingredientsArray[i].name)
