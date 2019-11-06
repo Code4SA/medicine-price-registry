@@ -23,13 +23,16 @@ class Command(BaseCommand):
     @staticmethod
     def process_row(idx, extract_func):
         def clean_float(x, check_blank_is_1=False):
-            if type(x) == float:
-                return x
-            x = remove_dup_decimal(x)
-            x = x.replace(" ", "")
-            if check_blank_is_1:
-                x = blank_is_1(x)
-            return float(x)
+            try:
+                if type(x) == float:
+                    return x
+                x = remove_dup_decimal(x)
+                x = x.replace(" ", "")
+                if check_blank_is_1:
+                    x = blank_is_1(x)
+                return float(x)
+            except ValueError:
+                return None
 
         def remove_dup_decimal(x):
             if x.count(".") > 1:
