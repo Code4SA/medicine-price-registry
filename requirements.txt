@@ -9,7 +9,6 @@ django-pipeline==1.6.14
 futures==2.2.0
 gunicorn>=19.5.0
 names==0.3.0
-newrelic==2.38.0.31
 python-dateutil==2.2
 requests==2.21.0
 six==1.8.0
