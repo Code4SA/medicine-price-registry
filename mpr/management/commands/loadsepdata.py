@@ -92,6 +92,9 @@ class Command(BaseCommand):
                     if product: yield product
 
                     product = Command.process_row(idx, worksheet.cell_value)
+                    if product["regno"] == "51/21.2/0683":
+                        import pdb; pdb.set_trace()
+
                     product["ingredients"] = []
 
                 ingredient_name = worksheet.cell_value(idx, 7).title()
@@ -107,6 +110,7 @@ class Command(BaseCommand):
                 import pdb; pdb.set_trace()
                 print(worksheet.cell_value(idx, 2))
 
+        if product: yield product
                 
 
 
