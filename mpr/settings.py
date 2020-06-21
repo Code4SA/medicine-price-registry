@@ -222,7 +222,7 @@ SESSION = 'django.contrib.sessions.backends.signed_cookies'
 PRICE_PARAMETERS = {
     "VAT" : 1.15,
     "prices" : [
-        (113.71, 0.46, 15.19),
+        (113.71, 0.46, 15.95),
         (303.31, 0.33, 29.07),
         (1061.62, 0.15, 82.77),
         (float('inf'), 0.05, 190.68),
