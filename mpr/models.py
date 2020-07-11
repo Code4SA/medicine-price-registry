@@ -68,6 +68,8 @@ class Product(models.Model):
 
     @property
     def max_fee(self):
+        if self.dispensing_fee is None or self.sep is None:
+            return 0
         return self.dispensing_fee + self.sep
 
     @property
@@ -83,6 +85,9 @@ class Product(models.Model):
 
     @property
     def cost_per_unit(self):
+        if self.pack_size is None:
+            return 0
+
         if self.pack_size > 0:
             qty = self.pack_size * self.num_packs
         else:
