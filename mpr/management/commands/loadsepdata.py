@@ -1,4 +1,5 @@
 import sys
+import logging
 
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
@@ -8,6 +9,9 @@ from mpr import models
 name_change = {
     "amoxycillin" : "Amoxicillin",
 }
+
+
+logger = logging.getLogger(__name__)
 
 class ConversionLogger:
     def __init__(self):
@@ -61,16 +65,29 @@ class Command(BaseCommand):
         clean_float(extract_func(idx, 16)),
         extract_func(idx, 20)
 
+        sep = clean_float(extract_func(idx, 16))
+        name = extract_func(idx, 6).title()
+        pack_size = clean_float(extract_func(idx, 11))
+        num_packs = clean_float(extract_func(idx, 12), check_blank_is_1=True)
+
+        if sep is None:
+            logger.warning(f"Skipping {name} as it is missing an SEP")
+        elif pack_size is None:
+            logger.warning(f"Skipping {name} as it is missing a pack_size")
+        elif num_packs is None:
+            logger.warning(f"Skipping {name} as it is missing num_packs")
+            return
+
         return {
             "applicant": to_empty(extract_func(idx, 1)).title(),
             "regno": extract_func(idx, 2).lower(),
             "nappi_code": int(extract_func(idx, 3)),
             "schedule": extract_func(idx, 5),
-            "name": extract_func(idx, 6).title(),
+            "name": name,
             "dosage_form": to_empty(extract_func(idx, 10)).title(),
-            "pack_size": clean_float(extract_func(idx, 11)),
-            "num_packs": clean_float(extract_func(idx, 12), check_blank_is_1=True),
-            "sep": clean_float(extract_func(idx, 16)),
+            "pack_size": pack_size,
+            "num_packs": num_packs,
+            "sep": sep,
             "is_generic": "Originator" if extract_func(idx, 20) == "originator" else  "Generic"
         }
 
@@ -89,13 +106,18 @@ class Command(BaseCommand):
                     continue
 
                 if regno.strip() != "":
-                    if product: yield product
+                    if product is not None:
+                        yield product
 
                     product = Command.process_row(idx, worksheet.cell_value)
-                    if product["regno"] == "51/21.2/0683":
-                        import pdb; pdb.set_trace()
+                    if product is None:
+                        continue
 
                     product["ingredients"] = []
+
+                if product is None:
+                    continue
+
 
                 ingredient_name = worksheet.cell_value(idx, 7).title()
                 product["ingredients"].append({
@@ -107,7 +129,6 @@ class Command(BaseCommand):
             except ValueError as e:
                 import traceback; traceback.print_exc()
                 print(e)
-                import pdb; pdb.set_trace()
                 print(worksheet.cell_value(idx, 2))
 
         if product: yield product
