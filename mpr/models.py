@@ -9,8 +9,9 @@ class Ingredient(models.Model):
     class Meta:
         unique_together = ("name", "unit")
 
-    def __unicode__(self):
-        return self.name
+    def __str__(self):
+        return f"{self.name} ({self.unit})"
+
 
 class ProductManager(models.Manager):
     def search_by_ingredient(self, pattern):
@@ -54,7 +55,7 @@ class Product(models.Model):
     def parameters():
         return settings.PRICE_PARAMETERS
 
-    def __unicode__(self):
+    def __str__(self):
         return self.name
 
     @property
@@ -114,7 +115,7 @@ class ProductIngredient(models.Model):
     class Meta:
         unique_together = ("product", "ingredient", "strength")
 
-    def __unicode__(self):
+    def __str__(self):
         return "%s %s" % (self.ingredient, self.strength)
 
 class LastUpdatedManager(models.Manager):
