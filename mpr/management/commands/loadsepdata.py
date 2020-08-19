@@ -20,6 +20,55 @@ class ConversionLogger:
     def log(self):
         pass
 
+def clean_unit(unit):
+    unit = unit.strip()
+    lunit = unit.lower()
+    skip_patterns = [
+        "at reference date",
+        "antigen units",
+        "elisa units",
+        "d-antigen unit",
+    ]
+
+    for s in skip_patterns:
+        if s in lunit:
+            return unit
+
+    return unit.replace(" ", "")
+
+def fix_product_unit(nappi_code, ingredient, unit):
+    unit = clean_unit(unit)
+    fixes = {
+        702983003: {
+            "Timolol": {
+                "unit": "mg/ml",
+            }
+        },
+        720983001: {
+            "Dorzolamide": {
+                "unit": "mg/ml",
+            }
+        },
+    }
+
+    if nappi_code in fixes and ingredient in fixes[nappi_code]:
+        unit = fixes[nappi_code][ingredient]["unit"]
+
+    return unit
+
+def fix_ingredient_name(nappi_code, ingredient):
+    fixes = {
+        722712001: {
+            "Timilol": "Timolol"
+        }
+    }
+
+    if nappi_code in fixes and ingredient in fixes[nappi_code]:
+        return fixes[nappi_code][ingredient]
+
+    return ingredient
+
+
 class Command(BaseCommand):
     args = '<filename>'
     help = "Populate database from mpr xls file"
