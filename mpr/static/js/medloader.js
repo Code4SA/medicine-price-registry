@@ -17,10 +17,12 @@ var log = function(obj) {
     }
 };
 
-var log_analytics = function(event, properties) {
-    console.log(event);
-    console.log(properties);
-    window.gtag('event', event, properties);
+var log_analytics = function(event, category, label) {
+    window.gtag('event', event, {
+        event_category: category,
+        event_action: event,
+        event_label: label
+    });
 }
 
 var map = {
@@ -132,7 +134,7 @@ var add_product_detail = function(elem) {
     load_data(product_detail_url(target_id), function(data) {
         // Switch off any further event bindings to the source anchor, so that we don't get two results
         elem.off();
-        log_analytics("product-detail", data);
+        log_analytics("product-detail", 'general', data.name + ' (' + data.nappi_code + ')' );
 
         // Set up the template
         var $product_detail = $templateDetail.clone().removeClass('template-panel-body');
@@ -214,10 +216,10 @@ var load_medicines = function(value) {
 
         if (key == '#related') {
             load_data(related_url(value), process_request);
-            log_analytics("product-related", current_product);
+            log_analytics("product-related", 'general', ' (' + current_product.nappi_code + ')');
         } else if (key == '#search') {
             load_data(search_url(value), process_request);
-            log_analytics("product-search", {"query" : value});
+            log_analytics('product-search', 'general', value)
         }
 
         $('html, body').animate({
