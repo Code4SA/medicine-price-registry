@@ -1,4 +1,6 @@
 .env
+.env3.6
+.env3.7
 .env.bak
 fabdefs.py
 server/static
