@@ -8,6 +8,7 @@ var timer,
 var search_url = function(term) { return '/api/v2/search-lite?q=' + term; }
 var related_url = function(id) { return '/api/v2/related?nappi=' + id };
 var product_detail_url = function(id) { return '/api/v3/detail?nappi=' + id };
+var current_product = null;
 
 
 var log = function(obj) {
@@ -17,7 +18,9 @@ var log = function(obj) {
 };
 
 var log_analytics = function(event, properties) {
-    amplitude.getInstance().logEvent(event, properties);
+    console.log(event);
+    console.log(properties);
+    window.gtag('event', event, properties);
 }
 
 var map = {
@@ -69,7 +72,6 @@ Product.prototype = {
 
     set_related_link : function() {
         related_link = $('.find-generic a', $(this.block));
-        console.log(this.data)
         related_link.attr('href', '#related:' + this.data.nappi_code);
     },
 
@@ -78,6 +80,12 @@ Product.prototype = {
         this.set_price();
         this.set_class_names();
         this.set_related_link();
+        
+        var self = this;
+
+        this.block.click(function(e) {
+            current_product = self.data;
+        })
 
         return this.block;
     }
@@ -124,7 +132,6 @@ var add_product_detail = function(elem) {
     load_data(product_detail_url(target_id), function(data) {
         // Switch off any further event bindings to the source anchor, so that we don't get two results
         elem.off();
-        console.log(data)
         log_analytics("product-detail", data);
 
         // Set up the template
@@ -166,7 +173,6 @@ var add_product_detail = function(elem) {
         }
 
         // Add product-detail ID so that we have something to target with collapse()
-        console.log(data)
         $product_detail.attr('id', 'product-detail-' + data.nappi_code);
         
         // Append the detail to the product in question
@@ -208,7 +214,7 @@ var load_medicines = function(value) {
 
         if (key == '#related') {
             load_data(related_url(value), process_request);
-            log_analytics("product-related", {"id" : value});
+            log_analytics("product-related", current_product);
         } else if (key == '#search') {
             load_data(search_url(value), process_request);
             log_analytics("product-search", {"query" : value});
