@@ -220,7 +220,9 @@ class Command(BaseCommand):
             )
 
             for i in p["ingredients"]:
-                ingredient, _ = models.Ingredient.objects.get_or_create(name=i["name"], unit=i["unit"])
+                ingredient_name = fix_ingredient_name(p["nappi_code"], i["name"])
+                unit = fix_product_unit(p["nappi_code"], ingredient_name, i["unit"])
+                ingredient, _ = models.Ingredient.objects.get_or_create(name=ingredient_name, unit=unit)
                 models.ProductIngredient.objects.get_or_create(
                     product=product, ingredient=ingredient, strength=i["strength"]
                 )
