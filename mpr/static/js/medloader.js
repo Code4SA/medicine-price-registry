@@ -216,7 +216,7 @@ var load_medicines = function(value) {
 
         if (key == '#related') {
             load_data(related_url(value), process_request);
-            log_analytics("product-related", 'general', ' (' + current_product.nappi_code + ')');
+            log_analytics("product-related", 'general', current_product.name + ' (' + current_product.nappi_code + ')');
         } else if (key == '#search') {
             load_data(search_url(value), process_request);
             log_analytics('product-search', 'general', value)
