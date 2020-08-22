@@ -2,7 +2,7 @@ import json
 import logging
 
 from django.http import HttpResponse, Http404
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, get_list_or_404
 
 from .import models
 from .import serialisers
@@ -36,7 +36,8 @@ def search_lite(query, serialiser=serialisers.serialize_products):
     return search(query, serialisers.serialize_products_lite)
 
 def related_products(nappi_code, serialiser=serialisers.serialize_products):
-    product = models.Product.objects.get(nappi_code=nappi_code)
+    products = get_list_or_404(models.Product, nappi_code=nappi_code)
+    product = products[0]
     return serialiser(product.related_products)
 
 def product_properties(product):

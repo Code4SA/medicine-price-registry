@@ -126,7 +126,6 @@ class V2RelatedProductsView(View, AnalyticsMixin):
 
         log_analytics = self.get_analytics_logger()
         try:
-            p = models.Product.objects.get(nappi_code=q)
             log_analytics(request, response, "#related-product", **product_properties(q))
         except models.Product.DoesNotExist:
             log_analytics(request, response, "#missing-related", nappi_code=q)
