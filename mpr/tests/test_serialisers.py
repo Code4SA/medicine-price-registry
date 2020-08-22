@@ -19,6 +19,7 @@ product1_json = {
     "id": 1,
     "num_packs": 1,
     "name": "Product 1 ABC",
+    "number_of_generics": 2,
     "ingredients": [
         {
             "strength": 20,
@@ -51,7 +52,8 @@ product1_lite_json = {
     "sep": "R 180.00",
     "id": 1,
     "nappi_code": "111",
-    "name": "Product 1 ABC"
+    "name": "Product 1 ABC",
+    "number_of_generics": 2
 }
 
 product1_lite_apiv3_json = deepcopy(product1_lite_json)
@@ -107,6 +109,9 @@ class TestSerialisers(TestCase):
 
     def testSerialiseProductsLite(self):
         products = models.Product.objects.all()
+        self.assertEquals(products.count(), 3)
+
         js = serialisers.serialize_products_lite(products) 
         self.assertEquals(len(js), 3)
+        print(js[0])
         self.assertJSONEqual(json.dumps(js[0]), product1_lite_json)

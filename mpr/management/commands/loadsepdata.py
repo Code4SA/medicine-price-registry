@@ -212,11 +212,18 @@ class Command(BaseCommand):
             if idx % 100 == 0:
                 sys.stdout.write("\r%s" % idx)
                 sys.stdout.flush()
+
+            sep = float_or_none(p["sep"])
+            num_packs = int_or_none(p["num_packs"])
+            pack_size = int_or_none(p["pack_size"])
+            if None in [sep, num_packs, pack_size]:
+                continue
+
             product = models.Product.objects.create(
                 nappi_code=p["nappi_code"],
                 name=p["name"], regno=p["regno"], schedule=p["schedule"],
-                dosage_form=p["dosage_form"], pack_size=int_or_none(p["pack_size"]), num_packs=int_or_none(p["num_packs"]),
-                sep=float_or_none(p["sep"]), is_generic=p["is_generic"]
+                dosage_form=p["dosage_form"], pack_size=pack_size, num_packs=num_packs,
+                sep=sep, is_generic=p["is_generic"]
             )
 
             for i in p["ingredients"]:

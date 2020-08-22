@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.test import Client
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.conf import settings
 import json
 from mpr.loganalytics import test_log_analytics
@@ -183,9 +183,9 @@ class TestApiV2(ApiUrls):
         self.assertEquals(test_log_analytics.events[0][1]["product"], "Product 1 ABC")
 
         test_log_analytics.events = []
-        response = client.get(reverse(self.api_prefix + "_related_products"), {"nappi" : "5"})
-        self.assertEquals(len(json.loads(response.content)), 0)
-        self.assertEquals(len(test_log_analytics.events), 1)
+        response = client.get(reverse(f"{self.api_prefix}_related_products"), {"nappi" : "5"})
+        self.assertEquals(response.status_code, 404)
+
         self.assertEquals(test_log_analytics.events[0][0], "#missing-related")
         self.assertEquals(test_log_analytics.events[0][1]["nappi_code"], "5")
 

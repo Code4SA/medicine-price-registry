@@ -1,6 +1,6 @@
 import json
 
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.views.generic import View
 from django.conf import settings
 
@@ -117,20 +117,18 @@ class DumpView(View, AnalyticsMixin):
 
 class V2RelatedProductsView(View, AnalyticsMixin):
     def get(self, request, *args, **kwargs):
+        log_analytics = self.get_analytics_logger()
         try:
             q = request.GET.get("nappi", "").strip()
             products = apiv2.related_products(q)
             response = HttpResponse(json.dumps(products), content_type="application/json")
-        except models.Product.DoesNotExist:
-            response = HttpResponse(json.dumps([]), content_type="application/json")
-
-        log_analytics = self.get_analytics_logger()
-        try:
             log_analytics(request, response, "#related-product", **product_properties(q))
-        except models.Product.DoesNotExist:
-            log_analytics(request, response, "#missing-related", nappi_code=q)
+        except Http404 as e:
+            log_analytics(request, None, "#missing-related", nappi_code=q)
+            raise e
 
         return response
+
 
 class V2ProductDetailView(View, AnalyticsMixin):
     def get(self, request, *args, **kwargs):

@@ -1,5 +1,7 @@
-from django.test import TestCase
 import json
+
+from django.test import TestCase
+from django.http import Http404
 from mpr import models, apiv2
 
 def test_serialiser(products):
@@ -54,7 +56,7 @@ class TestApiV2(TestCase):
         try:
             products = apiv2.related_products(5, test_serialiser)
             self.fail()
-        except models.Product.DoesNotExist as e:
+        except Http404 as e:
             pass
 
         products = apiv2.related_products(222, test_serialiser)
