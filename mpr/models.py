@@ -22,7 +22,9 @@ class ProductManager(models.Manager):
         for i in ingredients:
             products |= set(i.product_set.all())
 
-        products = sorted(products, key=lambda x: x.sep)
+        with_prices = [product for product in products if product.sep is not None]
+
+        products = sorted(with_prices, key=lambda x: x.sep)
         return products
 
     def search_by_nappi(self, nappi):
