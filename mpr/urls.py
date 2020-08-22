@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
+from django.urls import path
 
 from . import apiv1, apiv2
 from . import views
@@ -25,7 +26,7 @@ class IndexView(TemplateView):
 
 urlpatterns = [
     url(r'^$', IndexView.as_view(template_name="index.html"), name="home"),
-    url(r"^admin/", include(admin.site.urls)),
+    path("admin/", admin.site.urls),
 
     url(r"^api/related$", views.RelatedProductsView.as_view(), name="api_related_products"),
     url(r"^api/detail$", views.ProductDetailView.as_view(), name="api_product_detail"),
