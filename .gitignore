@@ -48,3 +48,6 @@ data/
 # JetBrains (PyCharm)
 .idea
 scripts/
+
+node_modules/
+static/
