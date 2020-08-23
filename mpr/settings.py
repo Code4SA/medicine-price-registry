@@ -161,8 +161,6 @@ PIPELINE = {
               'js/jquery-1.10.2.js',
               'js/bootstrap.js',
               'js/jquery.ba-hashchange.js',
-              'js/knockout.js',
-              'js/survey.ko.js',
               'js/medloader.js',
             ),
             'output_filename': 'js/mprbase.js',
@@ -174,7 +172,6 @@ PIPELINE = {
               'css/bootstrap.css',
               #'css/bootstrap-theme.css',
               'css/custom.css',
-              #'css/survey.css',
             ),
             'output_filename': 'css/mpr.css',
         }
