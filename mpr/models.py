@@ -131,3 +131,13 @@ class LastUpdated(models.Model):
     def __str__(self):
         return str(self.update_date)
 
+class Formulary(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return self.name
+
+class FormularyProduct(models.Model):
+    formulary = models.ForeignKey(Formulary, on_delete=models.CASCADE, related_name="products")
+    price = models.FloatField(null=False)
+
