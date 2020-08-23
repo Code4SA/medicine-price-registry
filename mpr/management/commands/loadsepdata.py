@@ -6,6 +6,8 @@ from django.db import transaction
 import xlrd
 from mpr import models
 
+from dataprocessing.parsing import nappi
+
 name_change = {
     "amoxycillin" : "Amoxicillin",
 }
@@ -39,12 +41,12 @@ def clean_unit(unit):
 def fix_product_unit(nappi_code, ingredient, unit):
     unit = clean_unit(unit)
     fixes = {
-        702983003: {
+        "702983003": {
             "Timolol": {
                 "unit": "mg/ml",
             }
         },
-        720983001: {
+        "720983001": {
             "Dorzolamide": {
                 "unit": "mg/ml",
             }
@@ -58,7 +60,7 @@ def fix_product_unit(nappi_code, ingredient, unit):
 
 def fix_ingredient_name(nappi_code, ingredient):
     fixes = {
-        722712001: {
+        "722712001": {
             "Timilol": "Timolol"
         }
     }
@@ -105,7 +107,7 @@ class Command(BaseCommand):
 
         to_empty(extract_func(idx, 1)).title(),
         extract_func(idx, 2).lower(),
-        int(extract_func(idx, 3)),
+        extract_func(idx, 3),
         extract_func(idx, 5),
         extract_func(idx, 6).title(),
         to_empty(extract_func(idx, 10)).title(),
@@ -130,7 +132,7 @@ class Command(BaseCommand):
         return {
             "applicant": to_empty(extract_func(idx, 1)).title(),
             "regno": extract_func(idx, 2).lower(),
-            "nappi_code": int(extract_func(idx, 3)),
+            "nappi_code": str(int(extract_func(idx, 3))),
             "schedule": extract_func(idx, 5),
             "name": name,
             "dosage_form": to_empty(extract_func(idx, 10)).title(),
@@ -204,14 +206,31 @@ class Command(BaseCommand):
                 return None
 
         count = 0
+        fixed_name_count = 0
         filename = options["filename"]
 
         self.delete_products()
 
+        logger.info("Loading up nappi codes")
+        nappi_lookup = nappi.nappi_lookup()
+
+        logger.info("Loading up sep file")
         for idx, p in enumerate(self.parse(filename)):
             if idx % 100 == 0:
                 sys.stdout.write("\r%s" % idx)
                 sys.stdout.flush()
+
+            nappi_code = p["nappi_code"]
+
+            if p["nappi_code"] in nappi_lookup:
+                nappi_product = nappi_lookup[nappi_code]
+                if nappi_product["description"] != p["name"]:
+                    fixed_name_count += 1
+
+                p["name"] = nappi_product["description"]
+
+                if nappi_product["form"].strip() != "":
+                    p["dosage_form"] = nappi_product["form"]
 
             sep = float_or_none(p["sep"])
             num_packs = int_or_none(p["num_packs"])
@@ -234,3 +253,4 @@ class Command(BaseCommand):
                     product=product, ingredient=ingredient, strength=i["strength"]
                 )
         models.LastUpdated.objects.create()
+        logger.info(f"Corrected {fixed_name_count} names")

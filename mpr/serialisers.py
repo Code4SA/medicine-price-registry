@@ -85,7 +85,8 @@ def serialize_product(product):
             serialize_ingredient(pi.ingredient, pi.strength)
             for pi in product.product_ingredients.all()
         ],
-        "number_of_generics" : len(product.related_products)
+        "number_of_generics" : len(product.related_products),
+        "copayments": product.copayments
     }
 
 def serialize_product_apiv3(product):

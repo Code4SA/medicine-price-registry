@@ -5,6 +5,7 @@ import dj_database_url
 
 DEBUG = env.get('DJANGO_DEBUG', 'true') == 'true'
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__name__))
+DATA_PATH = os.path.join(PROJECT_ROOT, "data")
 
 ADMINS = (
     ('Adi Eyal', 'adi@openup.org.za'),
@@ -135,6 +136,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'pipeline',
     'mpr',
+    'dataprocessing',
 #    'behave_django',
 )
 
