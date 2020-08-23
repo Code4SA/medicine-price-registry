@@ -14,19 +14,8 @@ admin.autodiscover()
 class IndexView(TemplateView):
     template_name = "index.html"
 
-    def get_context_data(self, **kwargs):
-        context = super(IndexView, self).get_context_data(**kwargs)
-        try:
-            last_updated = LastUpdated.objects.all().order_by('-update_date')[0]
-            context['last_updated'] = last_updated
-            context['price_parameters'] = settings.PRICE_PARAMETERS
-            context['latest_gazette'] = settings.LATEST_GAZETTE
-        except:
-            context['last_updated'] = u"Never"
-        return context
-
 urlpatterns = [
-    url(r'^$', IndexView.as_view(template_name="index.html"), name="home"),
+    url(r'^$', TemplateView.as_view(template_name="index.html"), name="home"),
     path("admin/", admin.site.urls),
 
     url(r"^api/related$", views.RelatedProductsView.as_view(), name="api_related_products"),
