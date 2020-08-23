@@ -231,12 +231,14 @@ SESSION = 'django.contrib.sessions.backends.signed_cookies'
 PRICE_PARAMETERS = {
     "VAT" : 1.15,
     "prices" : [
-        (113.72, 0.46, 15.95),
-        (303.32, 0.33, 29.07),
-        (1061.62, 0.15, 82.77),
-        (float('inf'), 0.05, 190.68),
+        (118.80, 0.46, 15.80),
+        (315.53, 0.33, 30.24),
+        (1104.40, 0.15, 86.11),
+        (float('inf'), 0.05, 198.36),
     ]
 }
+
+LATEST_GAZETTE = "https://search.opengazettes.org.za/text/37304?dq=single%20exit%20price&page=27"
 
 from . import loganalytics
 if DEBUG:
