@@ -141,7 +141,7 @@ class LastUpdated(models.Model):
 
 class Formulary(models.Model):
     name = models.CharField(max_length=255)
-    last_updated = models.DateTimeField(auto_now=True)
+    last_updated = models.DateField()
 
     def __str__(self):
         return self.name
