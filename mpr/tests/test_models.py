@@ -1,5 +1,6 @@
 from datetime import date
 from django.test import TestCase
+from django.db.utils import IntegrityError
 from django.conf import settings
 from mpr import models
 
@@ -26,6 +27,7 @@ class TestProduct(TestCase):
 
     def tearDown(self):
         settings.PRICE_PARAMETERS = self.old_parameters
+
     def testDispensingFee(self):
         test_data = [(100, 80), (150, 100), (250, 210), (1000, 880)]
 
@@ -62,6 +64,14 @@ class TestProduct(TestCase):
         p = self.p3.related_products
         self.assertEquals(len(p), 1)
         self.assertTrue(self.p3 in p)
+
+    def testEmptyFormularyProducts(self):
+        p = self.p1
+        self.assertEquals(p.formularyproducts.count(), 0)
+
+    def testFormularyProduct(self):
+        p = self.p3
+        self.assertEquals(p.formularyproducts.count(), 1)
 
 class TestProductManager(TestCase):
     fixtures = ["mpr_models.json"]
@@ -117,4 +127,14 @@ class TestLastUpdated(TestCase):
     def testLastUpdated(self):
         lu = models.LastUpdated.objects.last_updated()
         self.assertEquals(lu.update_date, date(2014, 9, 29))
+
+class TestProductFormulary(TestCase):
+    fixtures = ["mpr_models.json"]
+
+    def test_duplicate_product_formulary(self):
+        formulary = models.Formulary.objects.get(pk=1)
+        product = models.Product.objects.get(pk=1)
+        models.FormularyProduct.objects.create(formulary=formulary, product=product, price=100)
+        with self.assertRaises(IntegrityError):
+            models.FormularyProduct.objects.create(formulary=formulary, product=product, price=100)
 
