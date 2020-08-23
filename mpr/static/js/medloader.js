@@ -17,6 +17,10 @@ var log = function(obj) {
     }
 };
 
+formatCurrency = function(cur) {
+    return "R " + cur.toFixed(2);
+}
+
 var log_analytics = function(event, category, label) {
     window.gtag('event', event, {
         event_category: category,
