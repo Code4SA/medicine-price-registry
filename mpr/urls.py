@@ -11,9 +11,6 @@ from .models import LastUpdated
 
 admin.autodiscover()
 
-class IndexView(TemplateView):
-    template_name = "index.html"
-
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name="index.html"), name="home"),
     path("admin/", admin.site.urls),
