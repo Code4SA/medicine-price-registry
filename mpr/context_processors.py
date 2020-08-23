@@ -1,6 +1,6 @@
 from django.conf import settings
 
-from .models import LastUpdated
+from .models import LastUpdated, Formulary
 
 def settings_context(request):
     context = {}
@@ -13,5 +13,6 @@ def settings_context(request):
 
     context['price_parameters'] = settings.PRICE_PARAMETERS
     context['latest_gazette'] = getattr(settings, "LATEST_GAZETTE", None)
+    context['formularies'] = Formulary.objects.all()
 
     return context

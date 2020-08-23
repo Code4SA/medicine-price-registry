@@ -79,6 +79,29 @@
             <p>Please note that allowed dispensing fees may change and this website may not be completely up-to-date. The prices listed above were valid at {{ last_updated }}.</p>
           </div>
         </section>
+        <section class="panel panel-info">
+          <header class="panel-heading">
+            <h3 class="panel-title">Copayments</h3>
+          </header>
+          <a name="copayments"></a><div class="panel-body">
+            <p>When your medical aid does not cover the full price of your chosen medicine, you will be required to pay the balance of price.</p>
+            <p>Please note following when using this data:
+              <ul>
+                <li>This is an experimental feature, some data might be missing and you may be asked for a copayment even if it is not listed on this site</li>
+                <li>Copayments are estimated, verify with your pharmacist or medical aid for the exact value.</li>
+                <li>Additional medical aids may be added in future. If a price is not listed for your medical aid, please contact us. If there is sufficient demand we may include it in future.</li>
+              </ul>
+            </p>
+            <p>
+              Copayment data was updated as follows:
+              <dl class="dl-horizontal">
+                {% for formulary in formularies %}
+                <dt>{{ formulary.name }}:</dt><dd>{{ formulary.last_updated }}</dd>
+                {% endfor %}
+              </dl> 
+            </p>
+          </div>
+        </section>
         <section>
           <p class="text-center"><a href="https://www.openup.org.za"><img src="/static/images/logo.svg" alt="OpenUp"></a></p>
         </section>

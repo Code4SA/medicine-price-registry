@@ -131,15 +131,7 @@ var $templateDetail = $('.products .template-panel-body');
 var add_product_detail = function(elem) {
     var target_id = elem.attr('href').split('#product-detail-')[1];
 
-    load_data(product_detail_url(target_id), function(data) {
-        // Switch off any further event bindings to the source anchor, so that we don't get two results
-        elem.off();
-        log_analytics("product-detail", 'general', data.name + ' (' + data.nappi_code + ')' );
-
-        // Set up the template
-        var $product_detail = $templateDetail.clone().removeClass('template-panel-body');
-
-        // Add product detail
+    function addProductDetail(data, $product_detail) {
         $('.details dd', $product_detail).each(function(idx) {
             var key = map[idx];
             if (key == "cost_per_unit") {
@@ -154,25 +146,60 @@ var add_product_detail = function(elem) {
 
         if (data["dosage_form"] != "tablet" && data["dosage_form"] != "capsule")
             $('.details .cost-per-unit', $product_detail).remove();
+    }
 
-        // Add ingredients
+    function addIngredients(data, $product_detail) {
         var $ingredientsList = $('.ingredients dl', $product_detail);
         var productIngredients = data.ingredients;
         var productIngredientsLength = productIngredients.length;
+
         for (var j = 0; j < productIngredientsLength; j++) {
             $ingredientsList.append('<dt>' + productIngredients[j].name.trim() + ':</dt>');
             $ingredientsList.append('<dd>' + productIngredients[j].strength + productIngredients[j].unit + '</dd>');
         }
+    }
+
+    function addPackageInsert(data, $product_detail) {
+        var $copaymentsContainer = $('.copayments', $product_detail);
+        var $copaymentsList = $('dl', $copaymentsContainer);
+        var copayments = data.copayments;
+
+        if (copayments.length == 0)
+            $copaymentsContainer.hide();
+        else {
+            for (var j = 0; j < copayments.length; j++) {
+                $copaymentsList.append('<dt>' + copayments[j].formulary.trim() + ':</dt>');
+                $copaymentsList.append('<dd>' + formatCurrency(copayments[j].copayment) + '</dd>');
+            }
+        }
+        console.log(data.copayments)
+        // if (data.insert_url == undefined) {
+        //     $('.package-insert', $product_detail).remove()
+        // } else {
+        //     $('.product-package-insert', $product_detail).html(data.insert_url);
+        //     $('.product-package-insert', $product_detail)[0]["href"] = data.insert_url;
+        // }
+    }
+
+    function addCopayments(data, $product_detail) {
+
+    }
+
+    load_data(product_detail_url(target_id), function(data) {
+        // Switch off any further event bindings to the source anchor, so that we don't get two results
+        elem.off();
+        log_analytics("product-detail", 'general', data.name + ' (' + data.nappi_code + ')' );
+
+        // Set up the template
+        var $product_detail = $templateDetail.clone().removeClass('template-panel-body');
+
+        addProductDetail(data, $product_detail);
+        addIngredients(data, $product_detail);
+        addPackageInsert(data, $product_detail);
+        addCopayments(data, $product_detail);
 
         // Add meta data
         $('.product-reg-number', $product_detail).html(data.regno);
-
-        if (data.insert_url == undefined) {
-            $('.package-insert', $product_detail).remove()
-        } else {
-            $('.product-package-insert', $product_detail).html(data.insert_url);
-            $('.product-package-insert', $product_detail)[0]["href"] = data.insert_url;
-        }
 
         // Add product-detail ID so that we have something to target with collapse()
         $product_detail.attr('id', 'product-detail-' + data.nappi_code);
