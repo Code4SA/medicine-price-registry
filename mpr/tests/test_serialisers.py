@@ -47,7 +47,9 @@ product1_json = {
     "sep": "R 171.07",
     "cost_per_unit": "R 34.21",
     "nappi_code": "111",
-    "dosage_form": "injection"
+    "dosage_form": "injection",
+    "copayments": [
+    ]
 }
 
 product1_apiv3_json = deepcopy(product1_json)
@@ -107,6 +109,13 @@ class TestSerialisers(TestCase):
         js = serialisers.serialize_product_apiv3(product) 
 
         self.assertJSONEqual(json.dumps(js), product1_apiv3_json)
+
+    def testSerialiseProductAPIV3WithCopayments(self):
+        product = models.Product.objects.all()[2]
+        js = serialisers.serialize_product_apiv3(product) 
+
+        copayments = [{'formulary': 'Formulary1', 'copayment': 44.61999999999999}]
+        self.assertEquals(js["copayments"], copayments)
 
     def testSerialiseProducts(self):
         products = models.Product.objects.all()
