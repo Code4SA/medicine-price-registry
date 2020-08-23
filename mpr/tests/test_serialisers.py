@@ -1,8 +1,20 @@
 from copy import deepcopy
 from django.test import TestCase
+from django.conf import settings
+
 from mpr import serialisers
 from mpr import models
 import json
+
+settings.PRICE_PARAMETERS = {
+    "VAT" : 1.15,
+    "prices" : [
+        (118.80, 0.46, 15.80),
+        (315.53, 0.33, 30.24),
+        (1104.40, 0.15, 86.11),
+        (float('inf'), 0.05, 198.36),
+    ]
+}
 
 ingredient1_json = {
     "strength": 200,
@@ -15,7 +27,7 @@ product1_json = {
     "is_generic": "Originator",
     "regno": "REGNO2",
     "pack_size": 5.0,
-    "dispensing_fee": "R 80.00",
+    "dispensing_fee": "R 71.07",
     "id": 1,
     "num_packs": 1,
     "name": "Product 1 ABC",
@@ -32,8 +44,8 @@ product1_json = {
             "unit": "mg"
         }
     ],
-    "sep": "R 180.00",
-    "cost_per_unit": "R 36.00",
+    "sep": "R 171.07",
+    "cost_per_unit": "R 34.21",
     "nappi_code": "111",
     "dosage_form": "injection"
 }
@@ -41,15 +53,15 @@ product1_json = {
 product1_apiv3_json = deepcopy(product1_json)
 product1_apiv3_json["sep"] = "R 100.00"
 product1_apiv3_json.update({
-    "max_cost_per_unit": "R 36.00",
-    "max_price": "R 180.00",
+    "max_cost_per_unit": "R 34.21",
+    "max_price": "R 171.07",
     "min_cost_per_unit": "R 20.00",
     "min_price": "R 100.00",
 })
 
 product1_lite_json = {
     "dosage_form": "injection",
-    "sep": "R 180.00",
+    "sep": "R 171.07",
     "id": 1,
     "nappi_code": "111",
     "name": "Product 1 ABC",
@@ -113,5 +125,4 @@ class TestSerialisers(TestCase):
 
         js = serialisers.serialize_products_lite(products) 
         self.assertEquals(len(js), 3)
-        print(js[0])
         self.assertJSONEqual(json.dumps(js[0]), product1_lite_json)
