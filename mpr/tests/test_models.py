@@ -73,6 +73,13 @@ class TestProduct(TestCase):
         p = self.p3
         self.assertEquals(p.formularyproducts.count(), 1)
 
+    def testCopayments(self):
+        p = self.p3
+        copayments = p.copayments
+        self.assertEquals(len(copayments), 1)
+        self.assertEquals(copayments[0], {"formulary": "Formulary1", "copayment": 30})
+
+
 class TestProductManager(TestCase):
     fixtures = ["mpr_models.json"]
     
@@ -137,4 +144,14 @@ class TestProductFormulary(TestCase):
         models.FormularyProduct.objects.create(formulary=formulary, product=product, price=100)
         with self.assertRaises(IntegrityError):
             models.FormularyProduct.objects.create(formulary=formulary, product=product, price=100)
+
+    def test_copayment(self):
+        fp = models.FormularyProduct.objects.get(product=3)
+        fp.price = 100
+
+        self.assertAlmostEquals(fp.copayment, 0)
+
+        fp.price = 50
+        self.assertAlmostEquals(fp.copayment, 44.62)
+
 

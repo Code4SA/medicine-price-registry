@@ -109,6 +109,14 @@ class Product(models.Model):
     def max_cost_per_unit(self):
         return self.cost_per_unit
 
+    @property
+    def copayments(self):
+        return [
+            {"formulary": fp.formulary.name, "copayment": fp.copayment}
+            for fp in self.formularyproducts.all()
+        ]
+     
+
 class ProductIngredient(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product_ingredients")
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
@@ -142,6 +150,10 @@ class FormularyProduct(models.Model):
     formulary = models.ForeignKey(Formulary, on_delete=models.CASCADE, related_name="products")
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="formularyproducts")
     price = models.FloatField(null=False)
+
+    @property
+    def copayment(self):
+        return max(self.product.max_fee - self.price, 0)
 
     class Meta:
         unique_together = ("formulary", "product")

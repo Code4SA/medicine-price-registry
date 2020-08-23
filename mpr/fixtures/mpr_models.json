@@ -118,5 +118,22 @@
         "fields": {
             "update_date": "2014-09-29"
         }
+    },
+    {
+        "pk": 1, 
+        "model": "mpr.formulary", 
+        "fields": {
+            "name": "Formulary1",
+            "last_updated": "2020-08-08 00:00:00+00:00"
+        }
+    },
+    {
+        "pk": 1, 
+        "model": "mpr.formularyproduct", 
+        "fields": {
+            "formulary": 1,
+            "product": 3,
+            "price": 50
+        }
     }
 ]
