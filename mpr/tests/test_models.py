@@ -7,6 +7,7 @@ class TestProduct(TestCase):
     fixtures = ["mpr_models.json"]
 
     def setUp(self):
+        self.old_parameters = settings.PRICE_PARAMETERS
         self.ing1 = models.Ingredient.objects.get(pk=1)
         self.ing2 = models.Ingredient.objects.get(pk=2)
         self.p1 = models.Product.objects.get(pk=1)
@@ -23,6 +24,8 @@ class TestProduct(TestCase):
             ]
         }
 
+    def tearDown(self):
+        settings.PRICE_PARAMETERS = self.old_parameters
     def testDispensingFee(self):
         test_data = [(100, 80), (150, 100), (250, 210), (1000, 880)]
 
