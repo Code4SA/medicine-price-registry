@@ -2,6 +2,17 @@ import os
 from os import environ as env
 from django.conf import global_settings
 import dj_database_url
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+SENTRY_DSN = env.get("SENTRY_DSN", None)
+if SENTRY_DSN is not None:
+    sentry_sdk.init(
+        dsn=SENTRY_DSN,
+        integrations=[DjangoIntegration()],
+        traces_sample_rate = 1.0,
+    )
+
 
 DEBUG = env.get('DJANGO_DEBUG', 'true') == 'true'
 PROJECT_ROOT = os.path.dirname(os.path.realpath(__name__))
