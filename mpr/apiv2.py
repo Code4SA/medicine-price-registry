@@ -50,7 +50,10 @@ def product_properties(product):
 
 def product_detail(nappi_code, serialiser=serialisers.serialize_product):
     try:
-        product = models.Product.objects.get(nappi_code=nappi_code)
+        product = models.Product.objects.filter(nappi_code=nappi_code).first()
+        if product is None:
+            raise models.Product.DoesNotExist()
+
         js = serialiser(product)
         if js["regno"] in packageinserts:
             js["insert_url"] = packageinserts[js["regno"]]
