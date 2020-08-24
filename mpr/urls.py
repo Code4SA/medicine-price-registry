@@ -30,6 +30,7 @@ admin.autodiscover()
 
 urlpatterns = [
     url(r'^$', TemplateView.as_view(template_name="index.html"), name="home"),
+    path(r"related/<str:nappi_code>/", views.ProductView.as_view(), name="product_related"),
     path("admin/", admin.site.urls),
 
     url(r"^api/related$", views.RelatedProductsView.as_view(), name="api_related_products"),

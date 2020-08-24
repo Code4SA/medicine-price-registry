@@ -2,7 +2,9 @@ import json
 
 from django.http import HttpResponse, Http404
 from django.views.generic import View
+from django.views.generic.detail import DetailView
 from django.conf import settings
+from django.views.generic.base import TemplateResponseMixin
 
 from . import apiv1, apiv2, apiv3
 from . import models
@@ -69,6 +71,12 @@ class RelatedProductsView(View, AnalyticsMixin):
             log_analytics(request, response, "#missing-related-product", product_id=q)
 
         return response
+
+class ProductView(DetailView, TemplateResponseMixin):
+    model = models.Product
+    slug_url_kwarg = "nappi_code"
+    slug_field = "nappi_code"
+    template_name = "index.html"
         
 class ProductDetailView(View, AnalyticsMixin):
     def get(self, request, *args, **kwargs):

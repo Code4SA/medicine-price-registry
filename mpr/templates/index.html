@@ -1,4 +1,33 @@
 {% extends "base.html" %}
+{% block title %}<title>MPR (Medicine Price Registry) - {{ product.name }}</title>{% endblock %}
+{% block extrascripts %}
+    {% if product %}
+        <script type="application/ld+json">
+            {
+              "@context": "https://schema.org/",
+              "@type": "Product",
+              "name": "{{ product.name }}",
+              "description": "{{ product.name }} {{ product.pack_size|cut:".0" }} {{ product.dosage_form }}",
+              
+              "sku": "{{ product.nappi_code }}",
+              "productID": "{{ product.nappi_code }}",
+              "size": {
+                "unitText": "tablets",
+                "value": 30
+              },
+              "offers": {
+                "@type": "Offer",
+                "url": "{% url 'product_related' product.nappi_code %}",
+                "price": "{{ product.max_fee }}",
+                "priceCurrency": "ZAR"
+              }
+            }
+        </script>
+        <script>
+            location.hash = "related:" + {{ product.nappi_code }}
+        </script>
+    {% endif %}
+{% endblock %}
 {% block body %}
 <div id="search-container">
     <div class="row">

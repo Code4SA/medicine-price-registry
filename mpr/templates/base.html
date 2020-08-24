@@ -3,7 +3,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>MPR (Medicine Price Registry) - OpenUp</title>
+    {% block title %}<title>MPR (Medicine Price Registry) - OpenUp</title>{% endblock %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google-site-verification" content="_lWgnvin7w-6I_YOY23q3dI9E0pFAD8N6kQRPQda63g" />
     {% load pipeline %}
@@ -20,6 +20,7 @@
 
         window.gtag = gtag;
     </script>
+    {% block extrascripts %}{% endblock %}
 
   </head>
   <body>
