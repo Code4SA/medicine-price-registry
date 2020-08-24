@@ -1,13 +1,30 @@
 from django.conf.urls import include, url
+from django.urls import reverse
 from django.views.generic import TemplateView
 from django.conf.urls.static import static
 from django.conf import settings
 from django.contrib import admin
 from django.urls import path
+from django.contrib.sitemaps.views import sitemap
+from django.contrib.sitemaps import Sitemap
+
 
 from . import apiv1, apiv2
 from . import views
-from .models import LastUpdated
+from .models import LastUpdated, Product
+
+class ProductSitemap(Sitemap):
+    changefreq = "monthly"
+    priority = 0.5
+
+    def items(self):
+        return Product.objects.all()
+
+    def lastmod(self, obj):
+        return LastUpdated.objects.last_updated().update_date
+
+    def location(self, obj):
+        return reverse("home") + f"#related:{obj.nappi_code}"
 
 admin.autodiscover()
 
@@ -53,6 +70,8 @@ urlpatterns = [
     # currently still using v1 methods since there hasn't been a change
     url(r"^api/v3/dump$", views.DumpView.as_view(), name="api3_dump"),
     url(r"^api/v3/search/by_ingredient$", views.SearchByIngredientView.as_view(), name="api3_search_by_ingredient"),
+
+    path('sitemap.xml', sitemap, {'sitemaps': {"Products": ProductSitemap}}, name='django.contrib.sitemaps.views.sitemap')
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
