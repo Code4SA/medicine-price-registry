@@ -5,6 +5,7 @@ from django.views.generic import View
 from django.views.generic.detail import DetailView
 from django.conf import settings
 from django.views.generic.base import TemplateResponseMixin
+from django.shortcuts import redirect
 
 from . import apiv1, apiv2, apiv3
 from . import models
@@ -115,13 +116,14 @@ class SearchLiteView(View, AnalyticsMixin):
 
 class DumpView(View, AnalyticsMixin):
     def get(self, request, *args, **kwargs):
-        products = apiv1.dump()
-        response = HttpResponse(json.dumps(products), content_type="application/json")
 
         log_analytics = self.get_analytics_logger()
+
+        response = redirect("/static/data/dump.json")
         log_analytics(request, response, "#dump")
 
         return response
+
 
 class V2RelatedProductsView(View, AnalyticsMixin):
     def get(self, request, *args, **kwargs):
