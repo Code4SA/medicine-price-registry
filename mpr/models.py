@@ -38,7 +38,7 @@ class ProductManager(models.Manager):
         return products
 
 class Product(models.Model):
-    nappi_code = models.CharField(max_length=20, null=False)
+    nappi_code = models.CharField(max_length=20, null=False, unique=True)
     regno = models.CharField(max_length=50, null=False)
     name = models.CharField(max_length=100)
     schedule = models.CharField(max_length=22, null=True)
@@ -115,7 +115,6 @@ class Product(models.Model):
             {"formulary": fp.formulary.name, "copayment": fp.copayment}
             for fp in self.formularyproducts.all()
         ]
-     
 
 class ProductIngredient(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="product_ingredients")
