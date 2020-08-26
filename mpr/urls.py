@@ -24,7 +24,7 @@ class ProductSitemap(Sitemap):
         return LastUpdated.objects.last_updated().update_date
 
     def location(self, obj):
-        return reverse("home") + f"#related:{obj.nappi_code}"
+        return reverse("product_related", kwargs={"nappi_code": obj.nappi_code})
 
 admin.autodiscover()
 
