@@ -4,6 +4,7 @@ from django.conf import global_settings
 import dj_database_url
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+import sentry_sdk.utils
 
 SENTRY_DSN = env.get("SENTRY_DSN", None)
 if SENTRY_DSN is not None:
@@ -12,6 +13,8 @@ if SENTRY_DSN is not None:
         integrations=[DjangoIntegration()],
         traces_sample_rate = 1.0,
     )
+
+    sentry_sdk.utils.MAX_STRING_LENGTH = 8192
 
 
 DEBUG = env.get('DJANGO_DEBUG', 'true') == 'true'
