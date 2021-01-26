@@ -208,6 +208,7 @@ class Command(BaseCommand):
         count = 0
         fixed_name_count = 0
         filename = options["filename"]
+        seen_nappi_code = set()
 
         self.delete_products()
 
@@ -221,6 +222,9 @@ class Command(BaseCommand):
                 sys.stdout.flush()
 
             nappi_code = p["nappi_code"]
+            if nappi_code in seen_nappi_code:
+                continue
+            seen_nappi_code.add(nappi_code)
 
             if p["nappi_code"] in nappi_lookup:
                 nappi_product = nappi_lookup[nappi_code]
