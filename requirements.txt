@@ -5,7 +5,7 @@ analytics-python==0.4.3
 argparse==1.2.1
 dj-database-url==0.3.0
 django-ipware==0.1.0
-django-pipeline==1.6.14
+django-pipeline==2.0.8
 futures==2.2.0
 gunicorn>=19.5.0
 names==0.3.0
