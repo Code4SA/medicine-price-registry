@@ -116,15 +116,24 @@ class Command(BaseCommand):
         # clean_float(extract_func(idx, 16)),
         # extract_func(idx, 20)
 
+        nappi_code_raw = extract_func(idx, ColumnIndices.nappi_code)
         sep = clean_float(extract_func(idx, ColumnIndices.sep))
         name = extract_func(idx, ColumnIndices.name).title()
         pack_size = clean_float(extract_func(idx, ColumnIndices.pack_size))
         num_packs = clean_float(extract_func(idx, ColumnIndices.quantity), check_blank_is_1=True)
 
+        try:
+            nappi_code = str(int(nappi_code_raw))
+        except ValueError as e:
+            logger.warning(f"Skipping {name} as its nappi code is invalid: { nappi_code_raw }")
+            return
+
         if sep is None:
             logger.warning(f"Skipping {name} as it is missing an SEP")
+            return
         elif pack_size is None:
             logger.warning(f"Skipping {name} as it is missing a pack_size")
+            return
         elif num_packs is None:
             logger.warning(f"Skipping {name} as it is missing num_packs")
             return
@@ -132,7 +141,7 @@ class Command(BaseCommand):
         return {
             "applicant": to_empty(extract_func(idx, ColumnIndices.applicant_name)).title(),
             "regno": extract_func(idx, ColumnIndices.regno).lower(),
-            "nappi_code": str(int(extract_func(idx, ColumnIndices.nappi_code))),
+            "nappi_code": nappi_code,
             "schedule": extract_func(idx, ColumnIndices.schedule),
             "name": name,
             "dosage_form": to_empty(extract_func(idx, ColumnIndices.dosage_form)).title(),
@@ -188,7 +197,7 @@ class Command(BaseCommand):
                 ingredient_name = worksheet.cell_value(idx, ColumnIndices.ingredient_name).title()
                 unit = worksheet.cell_value(idx, ColumnIndices.unit)
                 if not isinstance(unit, str):
-                    print(f"Skipping {product['name'] } because ingredient { ingredient_name } on row { idx + 1 } is not a string.")
+                    logger.warning(f"Skipping {product['name'] } because ingredient { ingredient_name } on row { idx + 1 } is not a string.")
                     product = None # don't yield this product - we're missing an ingredient
                     continue
 
@@ -199,6 +208,7 @@ class Command(BaseCommand):
                 })
 
             except ValueError as e:
+                print(f"\n\nError on row { idx+1 }:\n")
                 import traceback; traceback.print_exc()
                 print(e)
                 print(worksheet.cell_value(idx, ColumnIndices.regno))
@@ -207,12 +217,6 @@ class Command(BaseCommand):
                 raise e
         if product: yield product
 
-
-
-    def delete_products(self):
-        while models.Product.objects.count():
-            ids = models.Product.objects.values_list('pk', flat=True)[:100]
-            models.Product.objects.filter(pk__in = ids).delete()
 
     @transaction.atomic
     def handle(self, *args, **options):
@@ -230,13 +234,13 @@ class Command(BaseCommand):
 
         count = 0
         fixed_name_count = 0
+        added_count = 0
+        updated_count = 0
         filename = options["filename"]
         seen_nappi_code = set()
 
-        self.delete_products()
-
-        # logger.info("Loading up nappi codes")
-        # nappi_lookup = nappi.nappi_lookup()
+        logger.info("Loading up nappi codes")
+        nappi_lookup = nappi.nappi_lookup()
 
         logger.info("Loading up sep file")
         for idx, p in enumerate(self.parse(filename)):
@@ -249,15 +253,15 @@ class Command(BaseCommand):
                 continue
             seen_nappi_code.add(nappi_code)
 
-            # if p["nappi_code"] in nappi_lookup:
-            #     nappi_product = nappi_lookup[nappi_code]
-            #     if nappi_product["description"] != p["name"]:
-            #         fixed_name_count += 1
-            #
-            #     p["name"] = nappi_product["description"]
-            #
-            #     if nappi_product["form"].strip() != "":
-            #         p["dosage_form"] = nappi_product["form"]
+            if p["nappi_code"] in nappi_lookup:
+                nappi_product = nappi_lookup[nappi_code]
+                if nappi_product["description"] != p["name"]:
+                    fixed_name_count += 1
+
+                p["name"] = nappi_product["description"]
+
+                if nappi_product["form"].strip() != "":
+                    p["dosage_form"] = nappi_product["form"]
 
             sep = float_or_none(p["sep"])
             num_packs = int_or_none(p["num_packs"])
@@ -265,12 +269,23 @@ class Command(BaseCommand):
             if None in [sep, num_packs, pack_size]:
                 continue
 
-            product = models.Product.objects.create(
+            product, created = models.Product.objects.update_or_create(
                 nappi_code=p["nappi_code"],
-                name=p["name"], regno=p["regno"], schedule=p["schedule"],
-                dosage_form=p["dosage_form"], pack_size=pack_size, num_packs=num_packs,
-                sep=sep, is_generic=p["is_generic"]
+                defaults={
+                    "name": p["name"],
+                    "regno": p["regno"],
+                    "schedule": p["schedule"],
+                    "dosage_form": p["dosage_form"],
+                    "pack_size": pack_size,
+                    "num_packs": num_packs,
+                    "sep": sep,
+                    "is_generic": p["is_generic"],
+                }
             )
+            if created:
+                added_count += 1
+            else:
+                updated_count += 1
 
             for i in p["ingredients"]:
                 ingredient_name = fix_ingredient_name(p["nappi_code"], i["name"])
@@ -279,5 +294,13 @@ class Command(BaseCommand):
                 models.ProductIngredient.objects.get_or_create(
                     product=product, ingredient=ingredient, strength=i["strength"]
                 )
+
+        delete_queryset = models.Product.objects.exclude(nappi_code__in=seen_nappi_code)
+        delete_count = delete_queryset.count()
+        delete_queryset.delete()
+
         models.LastUpdated.objects.create()
         logger.info(f"Corrected {fixed_name_count} names")
+        logger.info(f"Added {added_count} products")
+        logger.info(f"Updated {updated_count} products")
+        logger.info(f"Deleted {delete_count} products")
