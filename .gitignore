@@ -1,3 +1,6 @@
+static
+data/nappi_codes
+
 .env
 .env3.6
 .env3.7

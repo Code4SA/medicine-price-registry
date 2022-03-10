@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+
+  web:
+    build:
+      context: .
+      args:
+        USER_ID: ${USER_ID:-1001}
+        GROUP_ID: ${GROUP_ID:-1001}
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    command: python manage.py runserver 0.0.0.0:8000
+    environment:
+      - DJANGO_DEBUG=true
+      - DJANGO_SECRET_KEY=not-secret-in-dev

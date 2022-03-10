@@ -17,7 +17,7 @@ def parse(document):
 
 
 def nappi_lookup():
-    data_file = os.path.join(settings.DATA_PATH, "nappi_codes", "nappi_codes.txt")
+    data_file = os.path.join(settings.DATA_PATH, "nappi_codes", "PUBDOM.TXT")
     lookup = {}
     for datum in parse(open(data_file, encoding="latin1")):
         lookup[datum["nappi_code"]] = datum

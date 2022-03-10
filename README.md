@@ -1,15 +1,43 @@
 Medicine Price Registry
 =======================
 
-Retail medicine prices are regulated in South Africa through the Single Exit Price Mechanism. These prices are published on a regular basis at http://www.mpr.gov.za. The information is only available in a large and unwieldy excel spreadsheet making it inaccessible to casual users. 
+Retail medicine prices are regulated in South Africa through the Single Exit Price Mechanism. These prices are published on a regular basis at http://www.mpr.gov.za. The information is only available in a large and unwieldy excel spreadsheet making it inaccessible to casual users.
 
 This projects builds an API and basic user interface to query this database. You can find a running instance at http://mpr.code4sa.org.
 
 A typical use-case would be for a consumer to look for alternative products for a particular medicine, often generic medicines can be much cheaper than the branded product.
 Another use-case allows consumers to ensure that they are not being overcharged for their medicines. This database publishes the maximum price at which a medicine can be sold. A pharmacy cannot legally increase the price of a particular medicine above the price listed here.
 
+
+Updating the database
+---------------------
+
+1. Download the latest public domain NAPPI file from https://www.medikredit.co.za/products-and-services/nappi/nappi-public-domain-file/
+
+   wget -O data/nappi_codes https://www.medikredit.co.za/wp-content/mk-data-files/nappi-pub/PUBDOM.zip
+   unzip data/nappi_codes/PUBDOM.zip -d data/nappi_codes/
+
+2. Download the latest SEP file
+
+  a. visit http://mpr.gov.za/
+  b. click on SEP Databases
+  c. Download the Database Of Medicine Prices file with the latest date
+  d. move it to the `data` directory
+
+3. Run the import
+
+    docker-compose run --rm web python manage.py loadsepdata data/LatestSEPDatabase....xlsx
+
+4. Check that the updates look sensible.
+
+5. Commit the changes to mpr.db in git
+
+6. Deploy the changes.
+
+
 API
-===
+---
+
 In addition to providing this simple web interface, we make available a rudimentary API that you can use to access the most up-to-date prices to be used in third party applications.
 
 ### Version 2
@@ -52,24 +80,23 @@ Downloading a dump of the entire database
 
 
 Contributing
-============
+------------
 
-To work on this project locally, you'll need the following:
-- Python
-- yuglify (sudo npm install -g yuglify)
-- virtualenv (optional)
+To work on this project locally, run
 
-Setting up your environment (if you're using virtualenv - which you should be):
+    docker-compose up
 
-    git clone https://github.com/Code4SA/medicine-price-registry.git
-    cd medicine-price-registry
-    virtualenv $VIRTUALENV_HOME/mpr # (i.e. put it wherever you usually put your virtual environments)
-    source $VIRTUALENV_HOME/mpr/bin/active # (or if you're using virtualenvwrapper you can mkvirtualenv mpr; workon mpr)
-    pip install -r requirements.txt
-    python manage.py runserver
+nodejs and yuglify are apparently needed, but somehow it still works locally?!
+
+On Linux, you probably want to set the environment variables `USER_ID=$(id -u)`
+and `GROUP_ID=$(id -g)` where you run docker-compose so that the container
+shares your UID and GID. This is important for the container to have permission
+to modify files owned by your host user (e.g. for python-black) and your host
+user to modify files created by the container (e.g. migrations).
+
 
 Deployment
-==========
+----------
 
 This app is hosted on dokku or Heroku.
 
@@ -85,15 +112,18 @@ To deploy to a new heroku instance:
 3. `heroku config:set DJANGO_DEBUG=false DJANGO_SECRET_KEY=some-secret-key`
 4. `git push heroku`
 
+
 TODO
-====
+----
 
 * Allow for searching of related products
 * Create a script that downloads the latest database instead of shipping a sqlite db with the repo
 * It might be useful to compare prices over time
 * Seems like there are some spelling errors in the database - e.g. paracetamol and paracetemol. Might need to clean the database through some sort of fuzzy match and possibly report those errors back to mpr
 
+
 Contributors
-============
+------------
+
 - Adi Eyal - @soapsudtycoon
 - Shaun O'Connell - @ndorfin

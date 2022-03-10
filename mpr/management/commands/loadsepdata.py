@@ -76,7 +76,7 @@ class Command(BaseCommand):
     help = "Populate database from mpr xls file"
 
     @staticmethod
-    def process_row(idx, extract_func):
+    def process_row(idx, extract_func, ColumnIndices):
         def clean_float(x, check_blank_is_1=False):
             try:
                 if type(x) == float:
@@ -105,41 +105,50 @@ class Command(BaseCommand):
             else:
                 return x
 
-        to_empty(extract_func(idx, 1)).title(),
-        extract_func(idx, 2).lower(),
-        extract_func(idx, 3),
-        extract_func(idx, 5),
-        extract_func(idx, 6).title(),
-        to_empty(extract_func(idx, 10)).title(),
-        clean_float(extract_func(idx, 11)),
-        clean_float(extract_func(idx, 12), check_blank_is_1=True),
-        clean_float(extract_func(idx, 16)),
-        extract_func(idx, 20)
+        # to_empty(extract_func(idx, ColumnIndices.applicant_name)).title(),
+        # extract_func(idx, ColumnIndices.regno).lower(),
+        # extract_func(idx, ColumnIndices.nappi_code),
+        # extract_func(idx, 5),
+        # extract_func(idx, 6).title(),
+        # to_empty(extract_func(idx, 10)).title(),
+        # clean_float(extract_func(idx, 11)),
+        # clean_float(extract_func(idx, 12), check_blank_is_1=True),
+        # clean_float(extract_func(idx, 16)),
+        # extract_func(idx, 20)
 
-        sep = clean_float(extract_func(idx, 16))
-        name = extract_func(idx, 6).title()
-        pack_size = clean_float(extract_func(idx, 11))
-        num_packs = clean_float(extract_func(idx, 12), check_blank_is_1=True)
+        nappi_code_raw = extract_func(idx, ColumnIndices.nappi_code)
+        sep = clean_float(extract_func(idx, ColumnIndices.sep))
+        name = extract_func(idx, ColumnIndices.name).title()
+        pack_size = clean_float(extract_func(idx, ColumnIndices.pack_size))
+        num_packs = clean_float(extract_func(idx, ColumnIndices.quantity), check_blank_is_1=True)
+
+        try:
+            nappi_code = str(int(nappi_code_raw))
+        except ValueError as e:
+            logger.warning(f"Skipping {name} as its nappi code is invalid: { nappi_code_raw }")
+            return
 
         if sep is None:
             logger.warning(f"Skipping {name} as it is missing an SEP")
+            return
         elif pack_size is None:
             logger.warning(f"Skipping {name} as it is missing a pack_size")
+            return
         elif num_packs is None:
             logger.warning(f"Skipping {name} as it is missing num_packs")
             return
 
         return {
-            "applicant": to_empty(extract_func(idx, 1)).title(),
-            "regno": extract_func(idx, 2).lower(),
-            "nappi_code": str(int(extract_func(idx, 3))),
-            "schedule": extract_func(idx, 5),
+            "applicant": to_empty(extract_func(idx, ColumnIndices.applicant_name)).title(),
+            "regno": extract_func(idx, ColumnIndices.regno).lower(),
+            "nappi_code": nappi_code,
+            "schedule": extract_func(idx, ColumnIndices.schedule),
             "name": name,
-            "dosage_form": to_empty(extract_func(idx, 10)).title(),
+            "dosage_form": to_empty(extract_func(idx, ColumnIndices.dosage_form)).title(),
             "pack_size": pack_size,
             "num_packs": num_packs,
             "sep": sep,
-            "is_generic": "Originator" if extract_func(idx, 20) == "originator" else  "Generic"
+            "is_generic": "Originator" if extract_func(idx, ColumnIndices.is_generic) == "originator" else  "Generic"
         }
 
     def add_arguments(self, parser):
@@ -149,10 +158,26 @@ class Command(BaseCommand):
         workbook = xlrd.open_workbook(filename)
         worksheet = workbook.sheet_by_index(0)
 
+        class ColumnIndices:
+            col_array = [cell.value for cell in worksheet.row(0)]
+            unit = col_array.index("Unit")
+            applicant_name = col_array.index("Applicant Name as Registered with MCC\SAHPRA")       # 1
+            regno = col_array.index("MCC\SAHPRA Medicine Reg. No.")         # 2
+            nappi_code = col_array.index("Nappi Code")               # 3
+            ingredient_name = col_array.index("Active Ingredients")
+            strength = col_array.index("Strength")
+            pack_size = col_array.index("Pack Size")                 # 11
+            quantity = col_array.index("Quantity")                   # 12
+            schedule = col_array.index("Medicine Schedule")          # 5
+            dosage_form = col_array.index("Dosage Form")             # 10
+            is_generic = col_array.index("Originator or Generic")    # 20
+            sep = col_array.index("SEP")                             # 16
+            name = col_array.index("Medicine Proprietary Name")      # 6
+
         product = None
         for idx in range(1, worksheet.nrows):
             try:
-                regno = worksheet.cell_value(idx, 2).lower()
+                regno = worksheet.cell_value(idx, ColumnIndices.regno).lower()
                 if "medicine" in regno:
                     continue
 
@@ -160,7 +185,7 @@ class Command(BaseCommand):
                     if product is not None:
                         yield product
 
-                    product = Command.process_row(idx, worksheet.cell_value)
+                    product = Command.process_row(idx, worksheet.cell_value, ColumnIndices)
                     if product is None:
                         continue
 
@@ -169,27 +194,29 @@ class Command(BaseCommand):
                 if product is None:
                     continue
 
+                ingredient_name = worksheet.cell_value(idx, ColumnIndices.ingredient_name).title()
+                unit = worksheet.cell_value(idx, ColumnIndices.unit)
+                if not isinstance(unit, str):
+                    logger.warning(f"Skipping {product['name'] } because ingredient { ingredient_name } on row { idx + 1 } is not a string.")
+                    product = None # don't yield this product - we're missing an ingredient
+                    continue
 
-                ingredient_name = worksheet.cell_value(idx, 7).title()
                 product["ingredients"].append({
                     "name" : name_change.get(ingredient_name.lower(), ingredient_name),
-                    "strength" : worksheet.cell_value(idx, 8),
-                    "unit" : worksheet.cell_value(idx, 9).lower(),
+                    "strength" : worksheet.cell_value(idx, ColumnIndices.strength),
+                    "unit" : unit.lower(),
                 })
 
             except ValueError as e:
+                print(f"\n\nError on row { idx+1 }:\n")
                 import traceback; traceback.print_exc()
                 print(e)
-                print(worksheet.cell_value(idx, 2))
-
+                print(worksheet.cell_value(idx, ColumnIndices.regno))
+            except Exception as e:
+                print(f"\n\nError on row { idx+1 }:\n")
+                raise e
         if product: yield product
-                
 
-
-    def delete_products(self):
-        while models.Product.objects.count():
-            ids = models.Product.objects.values_list('pk', flat=True)[:100]
-            models.Product.objects.filter(pk__in = ids).delete()
 
     @transaction.atomic
     def handle(self, *args, **options):
@@ -207,10 +234,10 @@ class Command(BaseCommand):
 
         count = 0
         fixed_name_count = 0
+        added_count = 0
+        updated_count = 0
         filename = options["filename"]
         seen_nappi_code = set()
-
-        self.delete_products()
 
         logger.info("Loading up nappi codes")
         nappi_lookup = nappi.nappi_lookup()
@@ -242,12 +269,23 @@ class Command(BaseCommand):
             if None in [sep, num_packs, pack_size]:
                 continue
 
-            product = models.Product.objects.create(
+            product, created = models.Product.objects.update_or_create(
                 nappi_code=p["nappi_code"],
-                name=p["name"], regno=p["regno"], schedule=p["schedule"],
-                dosage_form=p["dosage_form"], pack_size=pack_size, num_packs=num_packs,
-                sep=sep, is_generic=p["is_generic"]
+                defaults={
+                    "name": p["name"],
+                    "regno": p["regno"],
+                    "schedule": p["schedule"],
+                    "dosage_form": p["dosage_form"],
+                    "pack_size": pack_size,
+                    "num_packs": num_packs,
+                    "sep": sep,
+                    "is_generic": p["is_generic"],
+                }
             )
+            if created:
+                added_count += 1
+            else:
+                updated_count += 1
 
             for i in p["ingredients"]:
                 ingredient_name = fix_ingredient_name(p["nappi_code"], i["name"])
@@ -256,5 +294,13 @@ class Command(BaseCommand):
                 models.ProductIngredient.objects.get_or_create(
                     product=product, ingredient=ingredient, strength=i["strength"]
                 )
+
+        delete_queryset = models.Product.objects.exclude(nappi_code__in=seen_nappi_code)
+        delete_count = delete_queryset.count()
+        delete_queryset.delete()
+
         models.LastUpdated.objects.create()
         logger.info(f"Corrected {fixed_name_count} names")
+        logger.info(f"Added {added_count} products")
+        logger.info(f"Updated {updated_count} products")
+        logger.info(f"Deleted {delete_count} products")
