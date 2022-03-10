@@ -86,6 +86,7 @@ To work on this project locally, run
 
     docker-compose up
 
+nodejs and yuglify are apparently needed, but somehow it still works locally?!
 
 On Linux, you probably want to set the environment variables `USER_ID=$(id -u)`
 and `GROUP_ID=$(id -g)` where you run docker-compose so that the container
