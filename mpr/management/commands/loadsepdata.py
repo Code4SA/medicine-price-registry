@@ -76,7 +76,7 @@ class Command(BaseCommand):
     help = "Populate database from mpr xls file"
 
     @staticmethod
-    def process_row(idx, extract_func):
+    def process_row(idx, extract_func, ColumnIndices):
         def clean_float(x, check_blank_is_1=False):
             try:
                 if type(x) == float:
@@ -105,21 +105,21 @@ class Command(BaseCommand):
             else:
                 return x
 
-        to_empty(extract_func(idx, 1)).title(),
-        extract_func(idx, 2).lower(),
-        extract_func(idx, 3),
-        extract_func(idx, 5),
-        extract_func(idx, 6).title(),
-        to_empty(extract_func(idx, 10)).title(),
-        clean_float(extract_func(idx, 11)),
-        clean_float(extract_func(idx, 12), check_blank_is_1=True),
-        clean_float(extract_func(idx, 16)),
-        extract_func(idx, 20)
+        # to_empty(extract_func(idx, ColumnIndices.applicant_name)).title(),
+        # extract_func(idx, ColumnIndices.regno).lower(),
+        # extract_func(idx, ColumnIndices.nappi_code),
+        # extract_func(idx, 5),
+        # extract_func(idx, 6).title(),
+        # to_empty(extract_func(idx, 10)).title(),
+        # clean_float(extract_func(idx, 11)),
+        # clean_float(extract_func(idx, 12), check_blank_is_1=True),
+        # clean_float(extract_func(idx, 16)),
+        # extract_func(idx, 20)
 
-        sep = clean_float(extract_func(idx, 16))
-        name = extract_func(idx, 6).title()
-        pack_size = clean_float(extract_func(idx, 11))
-        num_packs = clean_float(extract_func(idx, 12), check_blank_is_1=True)
+        sep = clean_float(extract_func(idx, ColumnIndices.sep))
+        name = extract_func(idx, ColumnIndices.name).title()
+        pack_size = clean_float(extract_func(idx, ColumnIndices.pack_size))
+        num_packs = clean_float(extract_func(idx, ColumnIndices.quantity), check_blank_is_1=True)
 
         if sep is None:
             logger.warning(f"Skipping {name} as it is missing an SEP")
@@ -130,16 +130,16 @@ class Command(BaseCommand):
             return
 
         return {
-            "applicant": to_empty(extract_func(idx, 1)).title(),
-            "regno": extract_func(idx, 2).lower(),
-            "nappi_code": str(int(extract_func(idx, 3))),
-            "schedule": extract_func(idx, 5),
+            "applicant": to_empty(extract_func(idx, ColumnIndices.applicant_name)).title(),
+            "regno": extract_func(idx, ColumnIndices.regno).lower(),
+            "nappi_code": str(int(extract_func(idx, ColumnIndices.nappi_code))),
+            "schedule": extract_func(idx, ColumnIndices.schedule),
             "name": name,
-            "dosage_form": to_empty(extract_func(idx, 10)).title(),
+            "dosage_form": to_empty(extract_func(idx, ColumnIndices.dosage_form)).title(),
             "pack_size": pack_size,
             "num_packs": num_packs,
             "sep": sep,
-            "is_generic": "Originator" if extract_func(idx, 20) == "originator" else  "Generic"
+            "is_generic": "Originator" if extract_func(idx, ColumnIndices.is_generic) == "originator" else  "Generic"
         }
 
     def add_arguments(self, parser):
@@ -149,10 +149,26 @@ class Command(BaseCommand):
         workbook = xlrd.open_workbook(filename)
         worksheet = workbook.sheet_by_index(0)
 
+        class ColumnIndices:
+            col_array = [cell.value for cell in worksheet.row(0)]
+            unit = col_array.index("Unit")
+            applicant_name = col_array.index("Applicant Name")       # 1
+            regno = col_array.index("MCC Medicine Reg. No.")         # 2
+            nappi_code = col_array.index("Nappi Code")               # 3
+            ingredient_name = col_array.index("Active Ingredients")
+            strength = col_array.index("Strength")
+            pack_size = col_array.index("Pack Size")                 # 11
+            quantity = col_array.index("Quantity")                   # 12
+            schedule = col_array.index("Medicine Schedule")          # 5
+            dosage_form = col_array.index("Dosage Form")             # 10
+            is_generic = col_array.index("Originator or Generic")    # 20
+            sep = col_array.index("SEP")                             # 16
+            name = col_array.index("Medicine Proprietary Name")      # 6
+
         product = None
         for idx in range(1, worksheet.nrows):
             try:
-                regno = worksheet.cell_value(idx, 2).lower()
+                regno = worksheet.cell_value(idx, ColumnIndices.regno).lower()
                 if "medicine" in regno:
                     continue
 
@@ -160,7 +176,7 @@ class Command(BaseCommand):
                     if product is not None:
                         yield product
 
-                    product = Command.process_row(idx, worksheet.cell_value)
+                    product = Command.process_row(idx, worksheet.cell_value, ColumnIndices)
                     if product is None:
                         continue
 
@@ -170,20 +186,20 @@ class Command(BaseCommand):
                     continue
 
 
-                ingredient_name = worksheet.cell_value(idx, 7).title()
+                ingredient_name = worksheet.cell_value(idx, ColumnIndices.ingredient_name).title()
                 product["ingredients"].append({
                     "name" : name_change.get(ingredient_name.lower(), ingredient_name),
-                    "strength" : worksheet.cell_value(idx, 8),
-                    "unit" : worksheet.cell_value(idx, 9).lower(),
+                    "strength" : worksheet.cell_value(idx, ColumnIndices.strength),
+                    "unit" : worksheet.cell_value(idx, ColumnIndices.unit).lower(),
                 })
 
             except ValueError as e:
                 import traceback; traceback.print_exc()
                 print(e)
-                print(worksheet.cell_value(idx, 2))
+                print(worksheet.cell_value(idx, ColumnIndices.regno))
 
         if product: yield product
-                
+
 
 
     def delete_products(self):
@@ -212,8 +228,8 @@ class Command(BaseCommand):
 
         self.delete_products()
 
-        logger.info("Loading up nappi codes")
-        nappi_lookup = nappi.nappi_lookup()
+        # logger.info("Loading up nappi codes")
+        # nappi_lookup = nappi.nappi_lookup()
 
         logger.info("Loading up sep file")
         for idx, p in enumerate(self.parse(filename)):
@@ -226,15 +242,15 @@ class Command(BaseCommand):
                 continue
             seen_nappi_code.add(nappi_code)
 
-            if p["nappi_code"] in nappi_lookup:
-                nappi_product = nappi_lookup[nappi_code]
-                if nappi_product["description"] != p["name"]:
-                    fixed_name_count += 1
-
-                p["name"] = nappi_product["description"]
-
-                if nappi_product["form"].strip() != "":
-                    p["dosage_form"] = nappi_product["form"]
+            # if p["nappi_code"] in nappi_lookup:
+            #     nappi_product = nappi_lookup[nappi_code]
+            #     if nappi_product["description"] != p["name"]:
+            #         fixed_name_count += 1
+            #
+            #     p["name"] = nappi_product["description"]
+            #
+            #     if nappi_product["form"].strip() != "":
+            #         p["dosage_form"] = nappi_product["form"]
 
             sep = float_or_none(p["sep"])
             num_packs = int_or_none(p["num_packs"])
