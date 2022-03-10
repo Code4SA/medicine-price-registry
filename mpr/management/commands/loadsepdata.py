@@ -152,8 +152,8 @@ class Command(BaseCommand):
         class ColumnIndices:
             col_array = [cell.value for cell in worksheet.row(0)]
             unit = col_array.index("Unit")
-            applicant_name = col_array.index("Applicant Name")       # 1
-            regno = col_array.index("MCC Medicine Reg. No.")         # 2
+            applicant_name = col_array.index("Applicant Name as Registered with MCC\SAHPRA")       # 1
+            regno = col_array.index("MCC\SAHPRA Medicine Reg. No.")         # 2
             nappi_code = col_array.index("Nappi Code")               # 3
             ingredient_name = col_array.index("Active Ingredients")
             strength = col_array.index("Strength")
@@ -185,19 +185,26 @@ class Command(BaseCommand):
                 if product is None:
                     continue
 
-
                 ingredient_name = worksheet.cell_value(idx, ColumnIndices.ingredient_name).title()
+                unit = worksheet.cell_value(idx, ColumnIndices.unit)
+                if not isinstance(unit, str):
+                    print(f"Skipping {product['name'] } because ingredient { ingredient_name } on row { idx + 1 } is not a string.")
+                    product = None # don't yield this product - we're missing an ingredient
+                    continue
+
                 product["ingredients"].append({
                     "name" : name_change.get(ingredient_name.lower(), ingredient_name),
                     "strength" : worksheet.cell_value(idx, ColumnIndices.strength),
-                    "unit" : worksheet.cell_value(idx, ColumnIndices.unit).lower(),
+                    "unit" : unit.lower(),
                 })
 
             except ValueError as e:
                 import traceback; traceback.print_exc()
                 print(e)
                 print(worksheet.cell_value(idx, ColumnIndices.regno))
-
+            except Exception as e:
+                print(f"\n\nError on row { idx+1 }:\n")
+                raise e
         if product: yield product
 
 
