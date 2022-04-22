@@ -1,0 +1,20 @@
+main: MPR CI
+
+on:
+  push:
+  pull_request:
+  schedule:
+    - cron: '0 0 * * 0' # weekly
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Run tests
+      run: |
+        docker-compose run --rm test python manage.py collectstatic --no-input
+        docker-compose run --rm test
