@@ -14,7 +14,7 @@ Updating the database
 
 1. Download the latest public domain NAPPI file from https://www.medikredit.co.za/products-and-services/nappi/nappi-public-domain-file/
 
-       wget -O data/nappi_codes https://www.medikredit.co.za/wp-content/mk-data-files/nappi-pub/PUBDOM.zip
+       wget https://www.medikredit.co.za/wp-content/mk-data-files/nappi-pub/PUBDOM.zip -P data/nappi_codes
        unzip data/nappi_codes/PUBDOM.zip -d data/nappi_codes/
 
 2. Download the latest SEP file

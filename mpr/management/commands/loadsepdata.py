@@ -138,18 +138,21 @@ class Command(BaseCommand):
             logger.warning(f"Skipping {name} as it is missing num_packs")
             return
 
-        return {
-            "applicant": to_empty(extract_func(idx, ColumnIndices.applicant_name)).title(),
-            "regno": extract_func(idx, ColumnIndices.regno).lower(),
-            "nappi_code": nappi_code,
-            "schedule": extract_func(idx, ColumnIndices.schedule),
-            "name": name,
-            "dosage_form": to_empty(extract_func(idx, ColumnIndices.dosage_form)).title(),
-            "pack_size": pack_size,
-            "num_packs": num_packs,
-            "sep": sep,
-            "is_generic": "Originator" if extract_func(idx, ColumnIndices.is_generic) == "originator" else  "Generic"
-        }
+        try:
+            return {
+                "applicant": to_empty(extract_func(idx, ColumnIndices.applicant_name)).title(),
+                "regno": extract_func(idx, ColumnIndices.regno).lower(),
+                "nappi_code": nappi_code,
+                "schedule": extract_func(idx, ColumnIndices.schedule),
+                "name": name,
+                "dosage_form": to_empty(extract_func(idx, ColumnIndices.dosage_form)).title(),
+                "pack_size": pack_size,
+                "num_packs": num_packs,
+                "sep": sep,
+                "is_generic": "Originator" if extract_func(idx, ColumnIndices.is_generic) == "originator" else  "Generic"
+            }
+        except Exception as error:
+            print(f" {name} error: {error}")
 
     def add_arguments(self, parser):
         parser.add_argument('filename', type=str)
