@@ -180,11 +180,11 @@ class Command(BaseCommand):
         product = None
         for idx in range(1, worksheet.nrows):
             try:
-                regno = worksheet.cell_value(idx, ColumnIndices.regno).lower()
+                regno = worksheet.cell_value(idx, ColumnIndices.regno).lower().strip()
                 if "medicine" in regno:
                     continue
 
-                if regno.strip() != "":
+                if regno != "":
                     if product is not None:
                         yield product
 
@@ -210,7 +210,7 @@ class Command(BaseCommand):
                     "unit" : unit.lower(),
                 })
 
-            except ValueError as e:
+            except (ValueError, AttributeError) as e:
                 print(f"\n\nError on row { idx+1 }:\n")
                 import traceback; traceback.print_exc()
                 print(e)
