@@ -1,4 +1,4 @@
-FROM python:3.6.15-buster
+FROM python:3.9.17-buster
 
 ENV PIP_NO_CACHE_DIR off
 ENV PIP_DISABLE_PIP_VERSION_CHECK on
