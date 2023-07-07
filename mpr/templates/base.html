@@ -2,13 +2,6 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8">
-    {% block title %}<title>MPR (Medicine Price Registry) - OpenUp</title>{% endblock %}
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="google-site-verification" content="_lWgnvin7w-6I_YOY23q3dI9E0pFAD8N6kQRPQda63g" />
-    {% load pipeline %}
-    {% stylesheet 'mpr' %}
-
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-93649482-17"></script>
     <script>
@@ -16,10 +9,16 @@
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
 
-        gtag('config', 'UA-93649482-17');
+        gtag('config', 'G-51XEKC2HZQ');
 
         window.gtag = gtag;
     </script>
+    <meta charset="UTF-8">
+    {% block title %}<title>MPR (Medicine Price Registry) - OpenUp</title>{% endblock %}
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="google-site-verification" content="_lWgnvin7w-6I_YOY23q3dI9E0pFAD8N6kQRPQda63g" />
+    {% load pipeline %}
+    {% stylesheet 'mpr' %}
     <script src="https://browser.sentry-cdn.com/5.21.4/bundle.min.js"></script>
     <script>
       var isLocalhost = (location.hostname.indexOf("localhost") >= 0)

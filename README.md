@@ -20,13 +20,16 @@ Updating the database
 2. Download the latest SEP file
 
   a. visit http://mpr.gov.za/
+
   b. click on SEP Databases
+
   c. Download the Database Of Medicine Prices file with the latest date
+
   d. move it to the `data` directory
 
 3. Run the import
 
-    docker-compose run --rm web python manage.py loadsepdata data/LatestSEPDatabase....xlsx
+        docker-compose run --rm web python manage.py loadsepdata data/LatestSEPDatabase....xlsx
 
 4. Check that the updates look sensible.
 

@@ -40,7 +40,8 @@ ALLOWED_HOSTS = [
     'mpr.openup.org.za',
     'localhost',
     '127.0.0.1',
-    'medicineprices.org.za'
+    'medicineprices.org.za',
+    '172.17.0.26'
 ]
 
 # Local time zone for this installation. Choices can be found here:

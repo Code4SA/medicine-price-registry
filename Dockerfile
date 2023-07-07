@@ -1,4 +1,4 @@
-FROM python:3.6.15-buster
+FROM nikolaik/python-nodejs:python3.9-nodejs14
 
 ENV PIP_NO_CACHE_DIR off
 ENV PIP_DISABLE_PIP_VERSION_CHECK on
@@ -26,17 +26,10 @@ RUN pip install -r /app/requirements.txt
 
 COPY . /app
 
-ARG USER_ID=1001
-ARG GROUP_ID=1001
-
-RUN set -ex; \
-  addgroup --gid $GROUP_ID --system django; \
-  adduser --system --uid $USER_ID --gid $GROUP_ID django; \
-  chown -R django:django /app
-
-USER django
-
 WORKDIR /app
+RUN npm install -g yuglify@2.0.0
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 5000
+
 CMD /app/bin/start.sh

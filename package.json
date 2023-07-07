@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "npm": "^6.7.0",
+    "npm": "^9.8.0",
     "yuglify": "2.0.0"
   },
   "engines": {

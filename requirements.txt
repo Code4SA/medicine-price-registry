@@ -1,4 +1,4 @@
-django==2.2.15
+django==2.2.28
 cffi
 urllib3[secure]
 analytics-python==0.4.3

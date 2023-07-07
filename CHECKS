@@ -1,0 +1,4 @@
+# Used by Dokku for zero downtime deploys
+WAIT=10
+ATTEMPTS=10
+/
