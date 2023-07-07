@@ -1,7 +1,6 @@
-version: '3'
+version: "3"
 
 services:
-
   web:
     build:
       context: .
@@ -16,4 +15,3 @@ services:
     environment:
       - DJANGO_DEBUG=true
       - DJANGO_SECRET_KEY=not-secret-in-dev
-      - SENTRY_DSN=https://639ea42e375d455bb5bc4190a98523c2@o242378.ingest.sentry.io/5401164
