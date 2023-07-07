@@ -1,3 +1,4 @@
+from . import loganalytics
 import os
 from os import environ as env
 from django.conf import global_settings
@@ -5,13 +6,14 @@ import dj_database_url
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
 import sentry_sdk.utils
+from socket import gethostname, gethostbyname
 
 SENTRY_DSN = env.get("SENTRY_DSN", None)
 if SENTRY_DSN is not None:
     sentry_sdk.init(
         dsn=SENTRY_DSN,
         integrations=[DjangoIntegration()],
-        traces_sample_rate = 1.0,
+        traces_sample_rate=1.0,
     )
 
     sentry_sdk.utils.MAX_STRING_LENGTH = 8192
@@ -41,7 +43,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     'medicineprices.org.za',
-    '172.17.0.26'
+    gethostname(), gethostbyname(gethostname()),
 ]
 
 # Local time zone for this installation. Choices can be found here:
@@ -153,7 +155,7 @@ INSTALLED_APPS = (
     'pipeline',
     'mpr',
     'dataprocessing',
-#    'behave_django',
+    #    'behave_django',
 )
 
 STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
@@ -161,29 +163,29 @@ STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 PIPELINE = {
     'ENABLED': env.get("DJANGO_PIPELINE_ENABLED", True),
     'JAVASCRIPT': {
-        'mprbase' : {
+        'mprbase': {
             'source_filenames': (
-              'js/jquery-1.10.2.js',
-              'js/bootstrap.js',
-              'js/jquery.ba-hashchange.js',
-              'js/medloader.js',
+                'js/jquery-1.10.2.js',
+                'js/bootstrap.js',
+                'js/jquery.ba-hashchange.js',
+                'js/medloader.js',
             ),
             'output_filename': 'js/mprbase.js',
         },
     },
-    'STYLESHEETS' : {
-        'mpr' : {
+    'STYLESHEETS': {
+        'mpr': {
             'source_filenames': (
-              'css/bootstrap.css',
-              #'css/bootstrap-theme.css',
-              'css/custom.css',
+                'css/bootstrap.css',
+                # 'css/bootstrap-theme.css',
+                'css/custom.css',
             ),
             'output_filename': 'css/mpr.css',
         }
     },
-    'CSS_COMPRESSOR' : 'pipeline.compressors.yuglify.YuglifyCompressor',
-    'JS_COMPRESSOR' : 'pipeline.compressors.yuglify.YuglifyCompressor',
-    'DISABLE_WRAPPER' : True
+    'CSS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
+    'JS_COMPRESSOR': 'pipeline.compressors.yuglify.YuglifyCompressor',
+    'DISABLE_WRAPPER': True
 }
 
 # A sample logging configuration. The only tangible logging
@@ -196,8 +198,8 @@ LOGGING = {
     'disable_existing_loggers': False,
     'formatters': {
         'verbose': {
-            'format' : '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',
-            'datefmt' : '%d/%b/%Y %H:%M:%S'
+            'format': '[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s',
+            'datefmt': '%d/%b/%Y %H:%M:%S'
         },
         'simple': {
             'format': '%(levelname)s %(message)s'
@@ -237,7 +239,7 @@ LOGGING = {
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
-        'TIMEOUT' : 60*60*24*7
+        'TIMEOUT': 60*60*24*7
     }
 }
 
@@ -245,8 +247,8 @@ SEGMENT_IO_KEY = env.get('SEGMENT_IO_KEY')
 SESSION = 'django.contrib.sessions.backends.signed_cookies'
 
 PRICE_PARAMETERS = {
-    "VAT" : 1.15,
-    "prices" : [
+    "VAT": 1.15,
+    "prices": [
         (118.80, 0.46, 15.80),
         (315.53, 0.33, 30.24),
         (1104.40, 0.15, 86.11),
@@ -256,7 +258,6 @@ PRICE_PARAMETERS = {
 
 LATEST_GAZETTE = "https://search.opengazettes.org.za/text/37304?dq=single%20exit%20price&page=27"
 
-from . import loganalytics
 if DEBUG:
     ANALYTICS = loganalytics.test_log_analytics
 else:
