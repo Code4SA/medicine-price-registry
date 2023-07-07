@@ -41,7 +41,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     'medicineprices.org.za',
-    '172.17.0.22'
+    '172.17.0.26'
 ]
 
 # Local time zone for this installation. Choices can be found here:
