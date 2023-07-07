@@ -26,17 +26,10 @@ RUN pip install -r /app/requirements.txt
 
 COPY . /app
 
-ARG USER_ID=1001
-ARG GROUP_ID=1001
-
-RUN set -ex; \
-  addgroup --gid $GROUP_ID --system django; \
-  adduser --system --uid $USER_ID --gid $GROUP_ID django; \
-  chown -R django:django /app
-
-#USER django
-
 WORKDIR /app
+RUN npm install -g yuglify@2.0.0
+RUN python manage.py collectstatic --noinput
 
 EXPOSE 5000
+
 CMD /app/bin/start.sh
