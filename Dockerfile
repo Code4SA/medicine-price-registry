@@ -34,7 +34,7 @@ RUN set -ex; \
   adduser --system --uid $USER_ID --gid $GROUP_ID django; \
   chown -R django:django /app
 
-USER django
+#USER django
 
 WORKDIR /app
 
