@@ -1,4 +1,5 @@
 {% load math %}
+{% load static %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -13,13 +14,12 @@
     {% block title %}<title>MPR (Medicine Price Registry) - OpenUp</title>{% endblock %}
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="google-site-verification" content="_lWgnvin7w-6I_YOY23q3dI9E0pFAD8N6kQRPQda63g" />
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.ico' %}"/>
     {% load pipeline %}
     {% stylesheet 'mpr' %}
     <script src="https://browser.sentry-cdn.com/5.21.4/bundle.min.js"></script>
     <script>
-      var isLocalhost = (location.hostname.indexOf("localhost") >= 0)
-      if (!isLocalhost)
-        Sentry.init({ dsn: 'https://639ea42e375d455bb5bc4190a98523c2@o242378.ingest.sentry.io/5401164' });
+      Sentry.init({ dsn: 'https://639ea42e375d455bb5bc4190a98523c2@o242378.ingest.sentry.io/5401164' });
     </script>
 
 
