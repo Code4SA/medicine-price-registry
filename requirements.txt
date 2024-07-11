@@ -13,5 +13,5 @@ python-dateutil==2.2
 requests==2.27.1
 six==1.8.0
 whitenoise==1.0.4
-xlrd==0.9.2
+xlrd==2.0.0
 sentry-sdk==1.14.0
