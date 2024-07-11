@@ -19,9 +19,9 @@ Updating the database
 
 2. Download the latest SEP file
 
-  a. visit http://mpr.gov.za/
+  a. visit https://www.health.gov.za/nhi-pee/
 
-  b. click on SEP Databases
+  b. click on Databases
 
   c. Download the Database Of Medicine Prices file with the latest date
 
