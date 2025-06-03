@@ -29,7 +29,7 @@ Updating the database
 
 3. Run the import
 
-        docker-compose run --rm web python manage.py loadsepdata data/LatestSEPDatabase....xlsx
+        docker compose run --rm web python manage.py loadsepdata data/LatestSEPDatabase....xlsx
 
 4. Check that the updates look sensible.
 
@@ -87,12 +87,12 @@ Contributing
 
 To work on this project locally, run
 
-    docker-compose up
+    docker compose up
 
 nodejs and yuglify are apparently needed, but somehow it still works locally?!
 
 On Linux, you probably want to set the environment variables `USER_ID=$(id -u)`
-and `GROUP_ID=$(id -g)` where you run docker-compose so that the container
+and `GROUP_ID=$(id -g)` where you run docker compose so that the container
 shares your UID and GID. This is important for the container to have permission
 to modify files owned by your host user (e.g. for python-black) and your host
 user to modify files created by the container (e.g. migrations).
@@ -105,8 +105,8 @@ This app is hosted on dokku or Heroku.
 
 To deploy to an existing dokku (or heroku) server:
 
-1. `git remote add dokku dokku@dokku.code4sa.org:mpr`
-2. `git push dokku`
+1. `git remote add dokku dokku@dokku10.openup.org.za:mpr`
+2. `git push dokku master`
 
 To deploy to a new heroku instance:
 
