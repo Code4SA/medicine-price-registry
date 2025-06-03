@@ -105,7 +105,7 @@ This app is hosted on dokku or Heroku.
 
 To deploy to an existing dokku (or heroku) server:
 
-1. `git remote add dokku dokku@dokku10.openup.org.za:mpr`
+1. `git remote add dokku dokku@dokku10.openup.org.za:medicineprices-prod`
 2. `git push dokku master`
 
 To deploy to a new heroku instance:
