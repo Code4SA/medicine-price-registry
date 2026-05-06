@@ -24,7 +24,7 @@ PROJECT_ROOT = os.path.dirname(os.path.realpath(__name__))
 DATA_PATH = os.path.join(PROJECT_ROOT, "data")
 
 ADMINS = (
-    ('Adi Eyal', 'adi@openup.org.za'),
+    ('Michael Glenister', 'michael@openup.org.za'),
 )
 
 MANAGERS = ADMINS
@@ -37,9 +37,7 @@ DATABASES = {
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = [
-    'code4sa-mpr.herokuapp.com',
     'mpr.code4sa.org',
-    'mpr.openup.org.za',
     'localhost',
     '127.0.0.1',
     'medicineprices.org.za',
