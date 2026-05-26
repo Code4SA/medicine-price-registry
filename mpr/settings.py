@@ -60,10 +60,6 @@ SITE_ID = 1
 # to load the internationalization machinery.
 USE_I18N = True
 
-# If you set this to False, Django will not format dates, numbers and
-# calendars according to the current locale.
-USE_L10N = True
-
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
@@ -114,6 +110,7 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'mpr.context_processors.settings_context'
@@ -156,7 +153,16 @@ INSTALLED_APPS = (
     #    'behave_django',
 )
 
-STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "pipeline.storage.PipelineStorage",
+    },
+}
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 PIPELINE = {
     'ENABLED': env.get("DJANGO_PIPELINE_ENABLED", True),
