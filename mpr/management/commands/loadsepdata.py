@@ -162,7 +162,7 @@ class Command(BaseCommand):
         worksheet = workbook.sheet_by_index(0)
 
         class ColumnIndices:
-            col_array = [cell.value for cell in worksheet.row(0)]
+            col_array = [cell.value for cell in worksheet.row(1)]
             unit = col_array.index("Unit")
             applicant_name = col_array.index("Applicant Name as Registered with MCC\SAHPRA")       # 1
             regno = col_array.index("MCC\SAHPRA Medicine Reg. No.")         # 2
@@ -178,7 +178,7 @@ class Command(BaseCommand):
             name = col_array.index("Medicine Proprietary Name")      # 6
 
         product = None
-        for idx in range(1, worksheet.nrows):
+        for idx in range(2, worksheet.nrows):
             try:
                 regno = worksheet.cell_value(idx, ColumnIndices.regno).lower().strip()
                 if "medicine" in regno:
